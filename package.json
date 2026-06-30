@@ -1,7 +1,7 @@
 {
-  "name": "opencode-i18n-commands",
+  "name": "opencode-i18n",
   "version": "0.1.0",
-  "description": "OpenCode Commands palette i18n plugin with English, Simplified Chinese, and Traditional Chinese language choices.",
+  "description": "OpenCode TUI i18n plugin with English, Simplified Chinese, and Traditional Chinese language choices.",
   "license": "MIT",
   "type": "module",
   "dependencies": {

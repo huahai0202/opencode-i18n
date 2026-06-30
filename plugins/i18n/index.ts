@@ -48,7 +48,7 @@ type CommandQuery = {
   [key: string]: unknown
 }
 
-const KEYMAP_PATCHED = "__opencodeI18nCommandsPatched"
+const KEYMAP_PATCHED = "__opencodeI18nPatched"
 
 type PatchableKeymap = {
   getCommands(query?: CommandQuery): readonly KeymapCommand[]
@@ -61,8 +61,8 @@ type PatchedKeymap = PatchableKeymap & {
 
 const CONFIG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..")
 const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
-const STATE_PATH = path.join(STATE_ROOT, "i18n-commands-state.json")
-const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n-commands.json")
+const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
+const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n.json")
 
 function readJsonFile<T>(file: string): T | undefined {
   try {
@@ -367,7 +367,7 @@ const tui: TuiPlugin = async (api) => {
 }
 
 const plugin = {
-  id: "opencode-i18n-commands",
+  id: "opencode-i18n",
   tui,
 } satisfies TuiPluginModule
 

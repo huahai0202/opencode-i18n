@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $SourceRoot = $PSScriptRoot
-$PluginEntry = "./plugins/i18n-commands/index.ts"
+$PluginEntry = "./plugins/i18n/index.ts"
 
 function Copy-ProjectItem {
   param(
@@ -82,10 +82,10 @@ function Merge-PackageJson {
 
 New-Item -ItemType Directory -Force $ConfigRoot | Out-Null
 
-Copy-ProjectItem "plugins\i18n-commands"
-Copy-ProjectItem "tools\i18n-commands-state.ts"
-Copy-ProjectItem "commands\i18n-commands.md"
-Copy-ProjectItem "i18n\i18n-commands.json"
+Copy-ProjectItem "plugins\i18n"
+Copy-ProjectItem "tools\i18n-state.ts"
+Copy-ProjectItem "commands\i18n.md"
+Copy-ProjectItem "i18n\i18n.json"
 
 Merge-TuiConfig
 Merge-PackageJson
@@ -104,5 +104,5 @@ if (-not $SkipNpmInstall) {
   }
 }
 
-Write-Host "Installed OpenCode Commands i18n to $ConfigRoot"
-Write-Host "Restart OpenCode, then run /i18n-commands and choose English, 简体中文, or 繁體中文."
+Write-Host "Installed OpenCode i18n to $ConfigRoot"
+Write-Host "Restart OpenCode, then run /i18n and choose English, 简体中文, or 繁體中文."

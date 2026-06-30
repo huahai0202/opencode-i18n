@@ -28,9 +28,9 @@ type LocaleInfo = {
 }
 
 const CONFIG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n-commands.json")
+const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n.json")
 const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
-const STATE_PATH = path.join(STATE_ROOT, "i18n-commands-state.json")
+const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
 
 async function readJsonFile<T>(file: string): Promise<T | undefined> {
   try {
@@ -153,24 +153,24 @@ function statusMessage(state: I18nState, info: LocaleInfo) {
   const updated = state.updatedAt ? `\n最后切换时间: ${state.updatedAt}` : ""
 
   return [
-    `OpenCode Commands 本地化标题: ${status}${updated}`,
+    `OpenCode 界面本地化: ${status}${updated}`,
     `当前语言: ${formatLocale(info.activeLocale, info)}`,
     `语言包: ${CONFIG_PATH}`,
     `状态文件: ${STATE_PATH}`,
     formatAvailableLocales(info),
     "",
     "可用命令:",
-    "/i18n-commands on 或 /i18n-commands 开 - 开启本地化标题",
-    "/i18n-commands off 或 /i18n-commands 关 - 关闭本地化标题",
-    "/i18n-commands toggle 或 /i18n-commands 切换 - 切换开关",
-    "/i18n-commands - 选择语言",
+    "/i18n on 或 /i18n 开 - 开启本地化标题",
+    "/i18n off 或 /i18n 关 - 关闭本地化标题",
+    "/i18n toggle 或 /i18n 切换 - 切换开关",
+    "/i18n - 选择语言",
     "",
-    "提示: 如果 Commands 菜单没有立即刷新，请重启 OpenCode。",
+    "提示: 如果界面没有立即刷新，请重启 OpenCode。",
   ].join("\n")
 }
 
 export default tool({
-  description: "管理 OpenCode Commands 本地化标题开关和语言。",
+  description: "管理 OpenCode 界面本地化开关和语言。",
   args: {
     action: tool.schema.enum(ACTIONS).describe("操作: status, set, toggle, locale, locales"),
     enabled: tool.schema.boolean().optional().describe("action=set 时使用，true 为开启，false 为关闭"),
