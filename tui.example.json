@@ -1,0 +1,5 @@
+{
+  "plugin": [
+    "./plugins/i18n-commands/index.ts"
+  ]
+}

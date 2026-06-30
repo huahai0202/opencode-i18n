@@ -1,0 +1,73 @@
+# OpenCode Commands i18n
+
+OpenCode TUI Commands 面板标题本地化插件。
+
+支持语言：
+
+- `English`：原始英文，不改标题和描述
+- `简体中文`
+- `繁體中文`
+
+安装后运行 `/i18n-commands`，用选项切换语言。选择中文会自动开启本地化；选择 `English` 会回到原始英文。
+
+## 一句提示词安装
+
+把下面这一句发给 OpenCode：
+
+```text
+请从 https://github.com/huahai0202/opencode-i18n-commands 安装 OpenCode Commands i18n 插件：克隆仓库，运行仓库里的 install.ps1 或按 README 手动复制文件到我的全局 OpenCode 配置目录，保留我已有配置并合并 tui.json 的 plugin 列表；完成后告诉我重启 OpenCode，并运行 /i18n-commands 选择 English、简体中文或繁體中文。
+```
+
+## 手动安装
+
+Windows PowerShell：
+
+```powershell
+git clone https://github.com/huahai0202/opencode-i18n-commands.git
+cd opencode-i18n-commands
+.\install.ps1
+```
+
+脚本会安装到：
+
+```text
+%USERPROFILE%\.config\opencode
+```
+
+它会复制这些文件：
+
+- `plugins/i18n-commands/index.ts`
+- `tools/i18n-commands-state.ts`
+- `commands/i18n-commands.md`
+- `i18n/i18n-commands.json`
+
+并合并：
+
+- `tui.json` 的 `plugin` 列表
+- `package.json` 的 `@opencode-ai/plugin` 依赖
+
+## 使用
+
+```text
+/i18n-commands
+```
+
+打开语言选择。
+
+```text
+/i18n-commands status
+/i18n-commands on
+/i18n-commands off
+/i18n-commands toggle
+```
+
+管理开关状态。
+
+如果 Commands 菜单没有立即刷新，请重启 OpenCode。
+
+## 文件说明
+
+- `plugins/i18n-commands/index.ts`：TUI 插件，读取语言包和状态，改写 Commands 标题/已有描述。
+- `tools/i18n-commands-state.ts`：状态工具，负责开关和语言选择。
+- `commands/i18n-commands.md`：OpenCode 自定义 command。
+- `i18n/i18n-commands.json`：语言包，可继续扩展新语言。
