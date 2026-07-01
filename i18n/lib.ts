@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs"
-import { readFile } from "node:fs/promises"
+import { readdirSync, readFileSync } from "node:fs"
+import { readdir, readFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -132,25 +132,59 @@ export function normalizeState(state: unknown): I18nState {
 }
 
 function normalizeIndexConfig(config: unknown): I18nIndexConfig | undefined {
-  if (!isObject(config) || !Array.isArray(config.locales)) return undefined
+  if (!isObject(config)) return undefined
 
-  const locales = config.locales.filter((locale): locale is string => typeof locale === "string" && locale.trim().length > 0)
-  if (locales.length === 0) return undefined
+  const locales = Array.isArray(config.locales)
+    ? config.locales.filter((locale): locale is string => typeof locale === "string" && locale.trim().length > 0)
+    : []
 
   const defaultLocale = typeof config.defaultLocale === "string" && locales.includes(config.defaultLocale) ? config.defaultLocale : undefined
   return { defaultLocale, locales }
 }
 
-function buildConfig(index: I18nIndexConfig | undefined, readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {
+function localeCodeFromFile(file: string) {
+  return file.endsWith(".json") ? file.slice(0, -".json".length) : undefined
+}
+
+function mergeLocaleNames(indexLocales: readonly LocaleCode[], discoveredLocales: readonly LocaleCode[]) {
+  return Array.from(new Set([...indexLocales, ...discoveredLocales])).filter(Boolean)
+}
+
+function discoverLocalesSync() {
+  try {
+    return readdirSync(LOCALES_ROOT, { withFileTypes: true })
+      .filter((entry) => entry.isFile())
+      .map((entry) => localeCodeFromFile(entry.name))
+      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+      .sort((a, b) => a.localeCompare(b))
+  } catch {
+    return []
+  }
+}
+
+async function discoverLocales() {
+  try {
+    return (await readdir(LOCALES_ROOT, { withFileTypes: true }))
+      .filter((entry) => entry.isFile())
+      .map((entry) => localeCodeFromFile(entry.name))
+      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+      .sort((a, b) => a.localeCompare(b))
+  } catch {
+    return []
+  }
+}
+
+function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: readonly LocaleCode[], readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {
   if (!index) return undefined
 
   const locales: Record<LocaleCode, I18nLocaleConfig> = {}
-  for (const locale of index.locales) {
+  for (const locale of mergeLocaleNames(index.locales, discoveredLocales)) {
     locales[locale] = normalizeLocaleConfig(readLocale(locale), locale)
   }
 
   if (Object.keys(locales).length === 0) return undefined
-  return { defaultLocale: index.defaultLocale, locales }
+  const defaultLocale = index.defaultLocale && locales[index.defaultLocale] ? index.defaultLocale : undefined
+  return { defaultLocale, locales }
 }
 
 export function readStateSync(): I18nState {
@@ -163,15 +197,16 @@ export async function readState(): Promise<I18nState> {
 
 export function readConfigSync(): I18nConfig | undefined {
   const index = normalizeIndexConfig(readJsonFileSync<unknown>(CONFIG_PATH))
-  return buildConfig(index, (locale) => readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)))
+  return buildConfig(index, discoverLocalesSync(), (locale) => readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)))
 }
 
 export async function readConfig(): Promise<I18nConfig | undefined> {
   const index = normalizeIndexConfig(await readJsonFile<unknown>(CONFIG_PATH))
   if (!index) return undefined
 
+  const localeNames = mergeLocaleNames(index.locales, await discoverLocales())
   const entries = await Promise.all(
-    index.locales.map(async (locale) => [
+    localeNames.map(async (locale) => [
       locale,
       normalizeLocaleConfig(await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)), locale),
     ] as const),

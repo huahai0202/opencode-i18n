@@ -87,5 +87,5 @@ cd opencode-i18n
 - `tools/i18n-state.ts`：状态工具，负责开关和语言选择。
 - `i18n/lib.ts`：共享路径、状态读取和语言解析逻辑。
 - `commands/i18n.md`：OpenCode 自定义 command。
-- `i18n/config.json`：语言包索引和默认语言。
-- `i18n/locales/*.json`：独立语言包。新增语言时添加一个 locale JSON，并把语言代码加入 `config.json` 的 `locales` 列表。
+- `i18n/config.json`：默认语言和内置语言排序。
+- `i18n/locales/*.json`：独立语言包。新增语言时只要添加一个 locale JSON 即可被自动识别；如果想调整显示顺序，可把语言代码加入 `config.json` 的 `locales` 列表。
