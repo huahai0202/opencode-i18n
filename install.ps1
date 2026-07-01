@@ -7,8 +7,11 @@ $ErrorActionPreference = "Stop"
 
 $SourceRoot = $PSScriptRoot
 $PluginEntry = "./plugins/i18n/index.ts"
+$StateRoot = Join-Path ($env:XDG_STATE_HOME ?? (Join-Path $HOME ".local\state")) "opencode"
+$OldStatePath = Join-Path $StateRoot "i18n-commands-state.json"
+$NewStatePath = Join-Path $StateRoot "i18n-state.json"
 
-function Copy-ProjectItem {
+function Copy-ProjectFile {
   param(
     [Parameter(Mandatory = $true)][string]$RelativePath
   )
@@ -18,7 +21,16 @@ function Copy-ProjectItem {
   $targetParent = Split-Path -Parent $target
 
   New-Item -ItemType Directory -Force $targetParent | Out-Null
-  Copy-Item -LiteralPath $source -Destination $target -Recurse -Force
+  Copy-Item -LiteralPath $source -Destination $target -Force
+}
+
+function Migrate-StateFile {
+  if ((Test-Path -LiteralPath $NewStatePath) -or -not (Test-Path -LiteralPath $OldStatePath)) {
+    return
+  }
+
+  New-Item -ItemType Directory -Force $StateRoot | Out-Null
+  Copy-Item -LiteralPath $OldStatePath -Destination $NewStatePath -Force
 }
 
 function Read-JsonObject {
@@ -82,13 +94,14 @@ function Merge-PackageJson {
 
 New-Item -ItemType Directory -Force $ConfigRoot | Out-Null
 
-Copy-ProjectItem "plugins\i18n"
-Copy-ProjectItem "tools\i18n-state.ts"
-Copy-ProjectItem "commands\i18n.md"
-Copy-ProjectItem "i18n\i18n.json"
+Copy-ProjectFile "plugins\i18n\index.ts"
+Copy-ProjectFile "tools\i18n-state.ts"
+Copy-ProjectFile "commands\i18n.md"
+Copy-ProjectFile "i18n\i18n.json"
 
 Merge-TuiConfig
 Merge-PackageJson
+Migrate-StateFile
 
 if (-not $SkipNpmInstall) {
   $npm = Get-Command npm -ErrorAction SilentlyContinue

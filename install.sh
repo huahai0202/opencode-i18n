@@ -2,7 +2,10 @@
 set -euo pipefail
 
 CONFIG_ROOT="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
+STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/opencode"
 SKIP_NPM_INSTALL=0
+OLD_STATE_PATH="$STATE_ROOT/i18n-commands-state.json"
+NEW_STATE_PATH="$STATE_ROOT/i18n-state.json"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -29,7 +32,7 @@ copy_item() {
   local src="$SOURCE_ROOT/$rel"
   local dst="$CONFIG_ROOT/$rel"
   mkdir -p "$(dirname "$dst")"
-  cp -R "$src" "$dst"
+  cp "$src" "$dst"
 }
 
 merge_tui_json() {
@@ -73,15 +76,31 @@ with open(path, "w") as f:
 PYEOF
 }
 
+migrate_state_file() {
+  python3 - "$OLD_STATE_PATH" "$NEW_STATE_PATH" <<'PYEOF'
+import os
+import shutil
+import sys
+
+old_path, new_path = sys.argv[1], sys.argv[2]
+if os.path.exists(new_path) or not os.path.exists(old_path):
+    raise SystemExit(0)
+
+os.makedirs(os.path.dirname(new_path), exist_ok=True)
+shutil.copy2(old_path, new_path)
+PYEOF
+}
+
 mkdir -p "$CONFIG_ROOT"
 
-copy_item "plugins/i18n"
+copy_item "plugins/i18n/index.ts"
 copy_item "tools/i18n-state.ts"
 copy_item "commands/i18n.md"
 copy_item "i18n/i18n.json"
 
 merge_tui_json "$CONFIG_ROOT/tui.json"
 merge_package_json "$CONFIG_ROOT/package.json"
+migrate_state_file
 
 if [[ "$SKIP_NPM_INSTALL" -eq 0 ]]; then
   if command -v npm &>/dev/null; then
