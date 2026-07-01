@@ -34,7 +34,6 @@ type Messages = {
   stateFile: string
   availableCommands: string
   question: string
-  optionDescriptions: Record<string, string>
   commandOn: string
   commandOff: string
   commandToggle: string
@@ -65,11 +64,6 @@ const MESSAGES: Record<string, Messages> = {
     stateFile: "State file",
     availableCommands: "Available commands",
     question: "Choose OpenCode interface language",
-    optionDescriptions: {
-      en: "Switch to the original English interface",
-      "zh-Hans": "Switch to the Simplified Chinese interface",
-      "zh-Hant": "Switch to the Traditional Chinese interface",
-    },
     commandOn: "/i18n on - enable localized titles",
     commandOff: "/i18n off - disable localized titles",
     commandToggle: "/i18n toggle - toggle localization",
@@ -98,11 +92,6 @@ const MESSAGES: Record<string, Messages> = {
     stateFile: "状态文件",
     availableCommands: "可用命令",
     question: "选择 OpenCode 界面语言",
-    optionDescriptions: {
-      en: "切换到英文界面",
-      "zh-Hans": "切换到简体中文界面",
-      "zh-Hant": "切换到繁体中文界面",
-    },
     commandOn: "/i18n on 或 /i18n 开 - 开启本地化标题",
     commandOff: "/i18n off 或 /i18n 关 - 关闭本地化标题",
     commandToggle: "/i18n toggle 或 /i18n 切换 - 切换开关",
@@ -131,11 +120,6 @@ const MESSAGES: Record<string, Messages> = {
     stateFile: "狀態檔案",
     availableCommands: "可用命令",
     question: "選擇 OpenCode 介面語言",
-    optionDescriptions: {
-      en: "切換到英文介面",
-      "zh-Hans": "切換到簡體中文介面",
-      "zh-Hant": "切換到繁體中文介面",
-    },
     commandOn: "/i18n on 或 /i18n 開 - 開啟本地化標題",
     commandOff: "/i18n off 或 /i18n 關 - 關閉本地化標題",
     commandToggle: "/i18n toggle 或 /i18n 切換 - 切換開關",
@@ -155,6 +139,10 @@ function messages(locale: LocaleCode | undefined) {
 
 async function readLocaleInfo(state: I18nState): Promise<LocaleInfo> {
   return localeInfo(await readConfig(), state)
+}
+
+function localeConfig(info: LocaleInfo, locale: LocaleCode | undefined) {
+  return locale ? info.config?.locales[locale] : undefined
 }
 
 async function writeState(patch: Partial<Pick<I18nState, "enabled" | "locale">>): Promise<I18nState> {
@@ -185,15 +173,20 @@ function formatAvailableLocales(info: LocaleInfo, text: Messages) {
 
 function localesMessage(state: I18nState, info: LocaleInfo) {
   const text = messages(info.activeLocale)
+  const activeConfig = localeConfig(info, info.activeLocale)
+  const fallbackConfig = localeConfig(info, "en")
   if (info.available.length === 0) return text.noLocales
   const current = formatLocale(info.activeLocale, info, text)
   const questionData = {
     locale: info.activeLocale ?? "",
-    question: `${text.question} (${text.currentLanguage}: ${current})`,
+    question: `${activeConfig?.language_picker.question ?? text.question} (${text.currentLanguage}: ${current})`,
     options: info.available.map((locale) => ({
       label: info.labels.get(locale) ?? locale,
       locale,
-      description: text.optionDescriptions[locale] ?? locale,
+      description:
+        activeConfig?.language_picker.option_descriptions[locale] ??
+        fallbackConfig?.language_picker.option_descriptions[locale] ??
+        `Switch to ${info.labels.get(locale) ?? locale}`,
     })),
   }
 

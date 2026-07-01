@@ -1,5 +1,13 @@
 {
   "name": "繁體中文",
+  "language_picker": {
+    "question": "選擇 OpenCode 介面語言",
+    "option_descriptions": {
+      "en": "切換到英文介面",
+      "zh-Hans": "切換到簡體中文介面",
+      "zh-Hant": "切換到繁體中文介面"
+    }
+  },
   "commands": {
     "Suggested": {
       "Share session": "分享會話",

@@ -15,6 +15,10 @@ export type I18nState = {
 
 export type I18nLocaleConfig = {
   name: string
+  language_picker: {
+    question?: string
+    option_descriptions: Record<string, string>
+  }
   commands: Record<string, Record<string, string>>
   descriptions: Record<string, string>
   slash_commands: Record<string, string>
@@ -35,6 +39,7 @@ export type LocaleInfo = {
   activeLocale?: LocaleCode
   available: LocaleCode[]
   labels: Map<LocaleCode, string>
+  config?: I18nConfig
 }
 
 type JsonObject = Record<string, unknown>
@@ -89,12 +94,26 @@ function commandGroups(value: unknown): Record<string, Record<string, string>> {
   return result
 }
 
+function languagePicker(value: unknown): I18nLocaleConfig["language_picker"] {
+  if (!isObject(value)) {
+    return {
+      option_descriptions: {},
+    }
+  }
+
+  return {
+    question: typeof value.question === "string" && value.question.trim() ? value.question.trim() : undefined,
+    option_descriptions: stringRecord(value.option_descriptions),
+  }
+}
+
 function normalizeLocaleConfig(value: unknown, fallbackName: string): I18nLocaleConfig {
   const locale = isObject(value) ? value : {}
   const name = typeof locale.name === "string" && locale.name.trim() ? locale.name.trim() : fallbackName
 
   return {
     name,
+    language_picker: languagePicker(locale.language_picker),
     commands: commandGroups(locale.commands),
     descriptions: stringRecord(locale.descriptions),
     slash_commands: stringRecord(locale.slash_commands),
@@ -191,6 +210,7 @@ export function localeInfo(config: I18nConfig | undefined, state: I18nState): Lo
     activeLocale: resolveLocale(config, state),
     available,
     labels,
+    config,
   }
 }
 

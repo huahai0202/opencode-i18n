@@ -1,5 +1,13 @@
 {
   "name": "English",
+  "language_picker": {
+    "question": "Choose OpenCode interface language",
+    "option_descriptions": {
+      "en": "Switch to the original English interface",
+      "zh-Hans": "Switch to the Simplified Chinese interface",
+      "zh-Hant": "Switch to the Traditional Chinese interface"
+    }
+  },
   "commands": {},
   "slash_commands": {},
   "descriptions": {}
