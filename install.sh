@@ -27,6 +27,13 @@ done
 SOURCE_ROOT="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ENTRY="./plugins/i18n/index.ts"
 
+require_node() {
+  if ! command -v node &>/dev/null; then
+    echo "Error: node is required to merge OpenCode JSON config. Install Node.js, then rerun this script." >&2
+    exit 1
+  fi
+}
+
 copy_item() {
   local rel="$1"
   local src="$SOURCE_ROOT/$rel"
@@ -36,66 +43,65 @@ copy_item() {
 }
 
 merge_tui_json() {
-  python3 - "$1" "$PLUGIN_ENTRY" <<'PYEOF'
-import json, sys
-path, entry = sys.argv[1], sys.argv[2]
-try:
-    with open(path) as f:
-        data = json.load(f)
-except (FileNotFoundError, json.JSONDecodeError):
-    data = {}
-plugins = data.get("plugin", [])
-if not isinstance(plugins, list):
-    plugins = [plugins] if plugins else []
-if entry not in plugins:
-    plugins.append(entry)
-data["plugin"] = plugins
-with open(path, "w") as f:
-    json.dump(data, f, indent=2, ensure_ascii=False)
-    f.write("\n")
-PYEOF
+  node - "$1" "$PLUGIN_ENTRY" <<'EOF'
+const fs = require("fs")
+const [path, entry] = process.argv.slice(2)
+
+let data = {}
+try {
+  data = JSON.parse(fs.readFileSync(path, "utf8"))
+} catch {}
+
+let plugins = Array.isArray(data.plugin) ? data.plugin : data.plugin ? [data.plugin] : []
+if (!plugins.includes(entry)) plugins.push(entry)
+
+data.plugin = plugins
+fs.mkdirSync(require("path").dirname(path), { recursive: true })
+fs.writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`, "utf8")
+EOF
 }
 
 merge_package_json() {
-  python3 - "$1" <<'PYEOF'
-import json, sys
-path = sys.argv[1]
-try:
-    with open(path) as f:
-        data = json.load(f)
-except (FileNotFoundError, json.JSONDecodeError):
-    data = {}
-deps = data.get("dependencies", {})
-if not isinstance(deps, dict):
-    deps = {}
-deps.setdefault("@opencode-ai/plugin", "^1.17.11")
-data["dependencies"] = deps
-with open(path, "w") as f:
-    json.dump(data, f, indent=2, ensure_ascii=False)
-    f.write("\n")
-PYEOF
+  node - "$1" <<'EOF'
+const fs = require("fs")
+const pathModule = require("path")
+const [path] = process.argv.slice(2)
+
+let data = {}
+try {
+  data = JSON.parse(fs.readFileSync(path, "utf8"))
+} catch {}
+
+const deps = data.dependencies && typeof data.dependencies === "object" && !Array.isArray(data.dependencies)
+  ? data.dependencies
+  : {}
+if (!deps["@opencode-ai/plugin"]) deps["@opencode-ai/plugin"] = "^1.17.11"
+
+data.dependencies = deps
+fs.mkdirSync(pathModule.dirname(path), { recursive: true })
+fs.writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`, "utf8")
+EOF
 }
 
 migrate_state_file() {
-  python3 - "$OLD_STATE_PATH" "$NEW_STATE_PATH" <<'PYEOF'
-import os
-import shutil
-import sys
+  node - "$OLD_STATE_PATH" "$NEW_STATE_PATH" <<'EOF'
+const fs = require("fs")
+const pathModule = require("path")
+const [oldPath, newPath] = process.argv.slice(2)
 
-old_path, new_path = sys.argv[1], sys.argv[2]
-if os.path.exists(new_path) or not os.path.exists(old_path):
-    raise SystemExit(0)
+if (fs.existsSync(newPath) || !fs.existsSync(oldPath)) process.exit(0)
 
-os.makedirs(os.path.dirname(new_path), exist_ok=True)
-shutil.copy2(old_path, new_path)
-PYEOF
+fs.mkdirSync(pathModule.dirname(newPath), { recursive: true })
+fs.copyFileSync(oldPath, newPath)
+EOF
 }
 
 mkdir -p "$CONFIG_ROOT"
+require_node
 
 copy_item "plugins/i18n/index.ts"
 copy_item "tools/i18n-state.ts"
-copy_item "shared/i18n.ts"
+copy_item "i18n/lib.ts"
 copy_item "commands/i18n.md"
 copy_item "i18n/i18n.json"
 

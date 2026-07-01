@@ -5,7 +5,6 @@
       "name": "English",
       "commands": {},
       "slash_commands": {},
-      "shortcuts": {},
       "descriptions": {}
     },
     "zh-Hans": {
@@ -238,23 +237,6 @@
         "/status": "查看状态",
         "/org": "切换组织（别名: /orgs, /switch-org）",
         "/workspaces": "管理工作区"
-      },
-      "shortcuts": {
-        "ctrl+x c": "压缩会话上下文",
-        "ctrl+x d": "切换工具详情",
-        "ctrl+x e": "打开编辑器",
-        "ctrl+x q": "退出应用",
-        "ctrl+x x": "导出会话记录",
-        "ctrl+x h": "显示帮助",
-        "ctrl+x i": "创建 AGENTS.md",
-        "ctrl+x m": "切换模型",
-        "ctrl+x n": "新建会话",
-        "ctrl+x r": "重做",
-        "ctrl+x l": "切换会话",
-        "ctrl+x s": "分享会话",
-        "ctrl+x t": "切换主题",
-        "ctrl+x u": "撤销上一条消息",
-        "ctrl+p": "命令面板"
       },
       "descriptions": {
         "Move session": "移动到另一个项目目录",
@@ -502,23 +484,6 @@
         "/status": "檢視狀態",
         "/org": "切換組織（別名: /orgs, /switch-org）",
         "/workspaces": "管理工作區"
-      },
-      "shortcuts": {
-        "ctrl+x c": "壓縮會話上下文",
-        "ctrl+x d": "切換工具詳細資訊",
-        "ctrl+x e": "開啟編輯器",
-        "ctrl+x q": "結束應用程式",
-        "ctrl+x x": "匯出會話記錄",
-        "ctrl+x h": "顯示說明",
-        "ctrl+x i": "建立 AGENTS.md",
-        "ctrl+x m": "切換模型",
-        "ctrl+x n": "新增會話",
-        "ctrl+x r": "重做",
-        "ctrl+x l": "切換會話",
-        "ctrl+x s": "分享會話",
-        "ctrl+x t": "切換主題",
-        "ctrl+x u": "復原上一則訊息",
-        "ctrl+p": "指令面板"
       },
       "descriptions": {
         "Move session": "移動到另一個專案目錄",

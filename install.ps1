@@ -88,7 +88,10 @@ function Merge-PackageJson {
     $package | Add-Member -Force -NotePropertyName dependencies -NotePropertyValue ([pscustomobject]@{})
   }
 
-  $package.dependencies | Add-Member -Force -NotePropertyName "@opencode-ai/plugin" -NotePropertyValue "^1.17.11"
+  if ($null -eq $package.dependencies."@opencode-ai/plugin") {
+    $package.dependencies | Add-Member -NotePropertyName "@opencode-ai/plugin" -NotePropertyValue "^1.17.11"
+  }
+
   Write-JsonObject $path $package
 }
 
@@ -96,7 +99,7 @@ New-Item -ItemType Directory -Force $ConfigRoot | Out-Null
 
 Copy-ProjectFile "plugins\i18n\index.ts"
 Copy-ProjectFile "tools\i18n-state.ts"
-Copy-ProjectFile "shared\i18n.ts"
+Copy-ProjectFile "i18n\lib.ts"
 Copy-ProjectFile "commands\i18n.md"
 Copy-ProjectFile "i18n\i18n.json"
 

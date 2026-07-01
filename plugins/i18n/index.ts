@@ -1,5 +1,5 @@
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@opencode-ai/plugin/tui"
-import { readConfigSync, readStateSync, resolveLocale, type I18nLocaleConfig } from "../../shared/i18n.ts"
+import { readConfigSync, readStateSync, resolveLocale, type I18nLocaleConfig } from "../../i18n/lib.ts"
 
 type TranslationSnapshot = {
   enabled: boolean
@@ -54,11 +54,9 @@ function readTranslations(localeConfig: I18nLocaleConfig | undefined) {
   const translations = new Map<string, string>()
 
   for (const [category, commands] of Object.entries(localeConfig?.commands ?? {})) {
-    if (!commands || typeof commands !== "object") continue
-
     for (const [english, chinese] of Object.entries(commands)) {
       if (!english || english.startsWith("_")) continue
-      if (typeof chinese !== "string" || !chinese.trim()) continue
+      if (!chinese.trim()) continue
 
       if (translations.has(english) && category !== "Suggested") continue
 
@@ -74,7 +72,7 @@ function readStringMap(values: Record<string, string> | undefined) {
 
   for (const [key, value] of Object.entries(values ?? {})) {
     if (!key || key.startsWith("_")) continue
-    if (typeof value !== "string" || !value.trim()) continue
+    if (!value.trim()) continue
 
     result.set(key, value.trim())
   }
@@ -94,7 +92,7 @@ function readSlashDescriptions(localeConfig: I18nLocaleConfig | undefined) {
 
   for (const [slash, description] of Object.entries(localeConfig?.slash_commands ?? {})) {
     if (!slash || slash.startsWith("_")) continue
-    if (typeof description !== "string" || !description.trim()) continue
+    if (!description.trim()) continue
 
     const normalized = normalizeSlashName(slash)
     if (normalized) descriptions.set(normalized, description.trim())
