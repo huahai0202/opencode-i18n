@@ -21,7 +21,21 @@ function Copy-ProjectFile {
   $targetParent = Split-Path -Parent $target
 
   New-Item -ItemType Directory -Force $targetParent | Out-Null
-  Copy-Item -LiteralPath $source -Destination $target -Force
+  if (Test-Path -LiteralPath $source -PathType Container) {
+    New-Item -ItemType Directory -Force $target | Out-Null
+    Get-ChildItem -LiteralPath $source -Force | ForEach-Object {
+      Copy-Item -LiteralPath $_.FullName -Destination $target -Recurse -Force
+    }
+  } else {
+    Copy-Item -LiteralPath $source -Destination $target -Force
+  }
+}
+
+function Remove-LegacyI18nFile {
+  $legacyPath = Join-Path $ConfigRoot "i18n\i18n.json"
+  if (Test-Path -LiteralPath $legacyPath -PathType Leaf) {
+    Remove-Item -LiteralPath $legacyPath -Force
+  }
 }
 
 function Migrate-StateFile {
@@ -99,10 +113,10 @@ New-Item -ItemType Directory -Force $ConfigRoot | Out-Null
 
 Copy-ProjectFile "plugins\i18n\index.ts"
 Copy-ProjectFile "tools\i18n-state.ts"
-Copy-ProjectFile "i18n\lib.ts"
 Copy-ProjectFile "commands\i18n.md"
-Copy-ProjectFile "i18n\i18n.json"
+Copy-ProjectFile "i18n"
 
+Remove-LegacyI18nFile
 Merge-TuiConfig
 Merge-PackageJson
 Migrate-StateFile

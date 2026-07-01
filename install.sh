@@ -39,7 +39,16 @@ copy_item() {
   local src="$SOURCE_ROOT/$rel"
   local dst="$CONFIG_ROOT/$rel"
   mkdir -p "$(dirname "$dst")"
-  cp "$src" "$dst"
+  if [[ -d "$src" ]]; then
+    mkdir -p "$dst"
+    cp -R "$src"/. "$dst"/
+  else
+    cp "$src" "$dst"
+  fi
+}
+
+remove_legacy_i18n_file() {
+  rm -f "$CONFIG_ROOT/i18n/i18n.json"
 }
 
 merge_tui_json() {
@@ -101,10 +110,10 @@ require_node
 
 copy_item "plugins/i18n/index.ts"
 copy_item "tools/i18n-state.ts"
-copy_item "i18n/lib.ts"
 copy_item "commands/i18n.md"
-copy_item "i18n/i18n.json"
+copy_item "i18n"
 
+remove_legacy_i18n_file
 merge_tui_json "$CONFIG_ROOT/tui.json"
 merge_package_json "$CONFIG_ROOT/package.json"
 migrate_state_file

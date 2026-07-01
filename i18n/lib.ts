@@ -25,6 +25,11 @@ export type I18nConfig = {
   locales: Record<LocaleCode, I18nLocaleConfig>
 }
 
+type I18nIndexConfig = {
+  defaultLocale?: LocaleCode
+  locales: LocaleCode[]
+}
+
 export type LocaleInfo = {
   defaultLocale?: LocaleCode
   activeLocale?: LocaleCode
@@ -37,7 +42,8 @@ type JsonObject = Record<string, unknown>
 const MODULE_ROOT = path.dirname(fileURLToPath(import.meta.url))
 
 export const CONFIG_ROOT = path.resolve(MODULE_ROOT, "..")
-export const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n.json")
+export const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "config.json")
+export const LOCALES_ROOT = path.join(CONFIG_ROOT, "i18n", "locales")
 export const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
 export const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
 
@@ -106,18 +112,26 @@ export function normalizeState(state: unknown): I18nState {
   }
 }
 
-export function normalizeConfig(config: unknown): I18nConfig | undefined {
-  if (!isObject(config) || !isObject(config.locales)) return undefined
+function normalizeIndexConfig(config: unknown): I18nIndexConfig | undefined {
+  if (!isObject(config) || !Array.isArray(config.locales)) return undefined
+
+  const locales = config.locales.filter((locale): locale is string => typeof locale === "string" && locale.trim().length > 0)
+  if (locales.length === 0) return undefined
+
+  const defaultLocale = typeof config.defaultLocale === "string" && locales.includes(config.defaultLocale) ? config.defaultLocale : undefined
+  return { defaultLocale, locales }
+}
+
+function buildConfig(index: I18nIndexConfig | undefined, readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {
+  if (!index) return undefined
 
   const locales: Record<LocaleCode, I18nLocaleConfig> = {}
-  for (const [locale, value] of Object.entries(config.locales)) {
-    locales[locale] = normalizeLocaleConfig(value, locale)
+  for (const locale of index.locales) {
+    locales[locale] = normalizeLocaleConfig(readLocale(locale), locale)
   }
 
   if (Object.keys(locales).length === 0) return undefined
-
-  const defaultLocale = typeof config.defaultLocale === "string" && locales[config.defaultLocale] ? config.defaultLocale : undefined
-  return { defaultLocale, locales }
+  return { defaultLocale: index.defaultLocale, locales }
 }
 
 export function readStateSync(): I18nState {
@@ -129,11 +143,24 @@ export async function readState(): Promise<I18nState> {
 }
 
 export function readConfigSync(): I18nConfig | undefined {
-  return normalizeConfig(readJsonFileSync<unknown>(CONFIG_PATH))
+  const index = normalizeIndexConfig(readJsonFileSync<unknown>(CONFIG_PATH))
+  return buildConfig(index, (locale) => readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)))
 }
 
 export async function readConfig(): Promise<I18nConfig | undefined> {
-  return normalizeConfig(await readJsonFile<unknown>(CONFIG_PATH))
+  const index = normalizeIndexConfig(await readJsonFile<unknown>(CONFIG_PATH))
+  if (!index) return undefined
+
+  const entries = await Promise.all(
+    index.locales.map(async (locale) => [
+      locale,
+      normalizeLocaleConfig(await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)), locale),
+    ] as const),
+  )
+  const locales = Object.fromEntries(entries) as Record<LocaleCode, I18nLocaleConfig>
+
+  if (Object.keys(locales).length === 0) return undefined
+  return { defaultLocale: index.defaultLocale, locales }
 }
 
 export function localeNames(config: I18nConfig | undefined) {
