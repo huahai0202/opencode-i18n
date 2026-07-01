@@ -33,6 +33,8 @@ type Messages = {
   languagePack: string
   stateFile: string
   availableCommands: string
+  question: string
+  optionDescriptions: Record<string, string>
   commandOn: string
   commandOff: string
   commandToggle: string
@@ -62,6 +64,12 @@ const MESSAGES: Record<string, Messages> = {
     languagePack: "Language pack",
     stateFile: "State file",
     availableCommands: "Available commands",
+    question: "Choose OpenCode interface language",
+    optionDescriptions: {
+      en: "Switch to the original English interface",
+      "zh-Hans": "Switch to the Simplified Chinese interface",
+      "zh-Hant": "Switch to the Traditional Chinese interface",
+    },
     commandOn: "/i18n on - enable localized titles",
     commandOff: "/i18n off - disable localized titles",
     commandToggle: "/i18n toggle - toggle localization",
@@ -89,6 +97,12 @@ const MESSAGES: Record<string, Messages> = {
     languagePack: "语言包",
     stateFile: "状态文件",
     availableCommands: "可用命令",
+    question: "选择 OpenCode 界面语言",
+    optionDescriptions: {
+      en: "切换到英文界面",
+      "zh-Hans": "切换到简体中文界面",
+      "zh-Hant": "切换到繁体中文界面",
+    },
     commandOn: "/i18n on 或 /i18n 开 - 开启本地化标题",
     commandOff: "/i18n off 或 /i18n 关 - 关闭本地化标题",
     commandToggle: "/i18n toggle 或 /i18n 切换 - 切换开关",
@@ -116,6 +130,12 @@ const MESSAGES: Record<string, Messages> = {
     languagePack: "語言包",
     stateFile: "狀態檔案",
     availableCommands: "可用命令",
+    question: "選擇 OpenCode 介面語言",
+    optionDescriptions: {
+      en: "切換到英文介面",
+      "zh-Hans": "切換到簡體中文介面",
+      "zh-Hant": "切換到繁體中文介面",
+    },
     commandOn: "/i18n on 或 /i18n 開 - 開啟本地化標題",
     commandOff: "/i18n off 或 /i18n 關 - 關閉本地化標題",
     commandToggle: "/i18n toggle 或 /i18n 切換 - 切換開關",
@@ -166,9 +186,19 @@ function formatAvailableLocales(info: LocaleInfo, text: Messages) {
 function localesMessage(state: I18nState, info: LocaleInfo) {
   const text = messages(info.activeLocale)
   if (info.available.length === 0) return text.noLocales
+  const current = formatLocale(info.activeLocale, info, text)
+  const questionData = {
+    locale: info.activeLocale ?? "",
+    question: `${text.question} (${text.currentLanguage}: ${current})`,
+    options: info.available.map((locale) => ({
+      label: info.labels.get(locale) ?? locale,
+      locale,
+      description: text.optionDescriptions[locale] ?? locale,
+    })),
+  }
 
   return [
-    `${text.currentLanguage}: ${formatLocale(info.activeLocale, info, text)}`,
+    `${text.currentLanguage}: ${current}`,
     `${text.localization}: ${state.enabled ? text.enabled : text.disabled}`,
     `${text.availableLanguages}:`,
     ...info.available.map((locale) => {
@@ -180,6 +210,9 @@ function localesMessage(state: I18nState, info: LocaleInfo) {
       const suffix = markers.length > 0 ? ` (${markers.join(", ")})` : ""
       return `- ${label} => ${locale}${suffix}`
     }),
+    "",
+    "QUESTION_DATA:",
+    JSON.stringify(questionData),
   ].join("\n")
 }
 
