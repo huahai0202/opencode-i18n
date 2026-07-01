@@ -270,15 +270,26 @@ function searchFields(query: CommandQuery | undefined) {
   return fields.length > 0 ? fields : ["title", "name", "desc"]
 }
 
+function pushString(values: string[], value: unknown) {
+  if (typeof value === "string") values.push(value)
+}
+
 function fieldValues(command: KeymapCommand, fields: readonly string[]) {
   const values: string[] = []
 
   for (const field of fields) {
-    const value = command[field]
-    if (typeof value === "string") values.push(value)
+    pushString(values, command[field])
+
+    if (field === "title" || field === "name") {
+      pushString(values, command.i18nOriginalTitle)
+    }
+
+    if (field === "desc") {
+      pushString(values, command.i18nOriginalDesc)
+    }
   }
 
-  return values.map(normalizeSearch)
+  return Array.from(new Set(values.map(normalizeSearch)))
 }
 
 function localizedSearch(query: CommandQuery | undefined) {
