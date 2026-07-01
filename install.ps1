@@ -96,6 +96,7 @@ New-Item -ItemType Directory -Force $ConfigRoot | Out-Null
 
 Copy-ProjectFile "plugins\i18n\index.ts"
 Copy-ProjectFile "tools\i18n-state.ts"
+Copy-ProjectFile "shared\i18n.ts"
 Copy-ProjectFile "commands\i18n.md"
 Copy-ProjectFile "i18n\i18n.json"
 

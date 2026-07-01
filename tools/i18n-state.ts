@@ -1,108 +1,23 @@
 import { tool } from "@opencode-ai/plugin"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
-import os from "node:os"
-import path from "node:path"
-import { fileURLToPath } from "node:url"
+import { mkdir, writeFile } from "node:fs/promises"
+import {
+  CONFIG_PATH,
+  STATE_PATH,
+  STATE_ROOT,
+  localeInfo,
+  readConfig,
+  readState,
+  resolveLocaleInput,
+  type I18nState,
+  type LocaleInfo,
+} from "../shared/i18n.ts"
 
 const ACTIONS = ["status", "set", "toggle", "locale", "locales"] as const
 
 type Action = (typeof ACTIONS)[number]
 
-type I18nState = {
-  version: number
-  enabled: boolean
-  locale?: string
-  updatedAt?: string
-}
-
-type I18nConfig = {
-  defaultLocale?: unknown
-  locales?: Record<string, { name?: unknown }>
-}
-
-type LocaleInfo = {
-  defaultLocale?: string
-  activeLocale?: string
-  available: string[]
-  labels: Map<string, string>
-}
-
-const CONFIG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n.json")
-const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
-const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
-
-async function readJsonFile<T>(file: string): Promise<T | undefined> {
-  try {
-    return JSON.parse(await readFile(file, "utf8")) as T
-  } catch {
-    return undefined
-  }
-}
-
-function normalizeState(state: Partial<I18nState> | undefined): I18nState {
-  return {
-    version: 1,
-    enabled: state?.enabled === true,
-    locale: typeof state?.locale === "string" ? state.locale : undefined,
-    updatedAt: typeof state?.updatedAt === "string" ? state.updatedAt : undefined,
-  }
-}
-
-async function readState(): Promise<I18nState> {
-  return normalizeState(await readJsonFile<Partial<I18nState>>(STATE_PATH))
-}
-
-function localeNames(config: I18nConfig | undefined) {
-  const locales = config?.locales
-  return locales && typeof locales === "object" ? Object.keys(locales) : []
-}
-
-function resolveLocale(config: I18nConfig | undefined, state: I18nState) {
-  const available = localeNames(config)
-  if (available.length === 0) return state.locale
-  if (state.locale && available.includes(state.locale)) return state.locale
-
-  const defaultLocale = typeof config?.defaultLocale === "string" ? config.defaultLocale : undefined
-  if (defaultLocale && available.includes(defaultLocale)) return defaultLocale
-
-  return available[0]
-}
-
-function resolveLocaleInput(locale: string, info: LocaleInfo) {
-  const value = locale.trim()
-  const normalizedLower = value.toLocaleLowerCase()
-
-  for (const available of info.available) {
-    if (available === value || available.toLocaleLowerCase() === normalizedLower) return available
-  }
-
-  for (const available of info.available) {
-    const label = info.labels.get(available)
-    if (label === locale || label?.toLocaleLowerCase() === locale.toLocaleLowerCase()) return available
-  }
-
-  return value
-}
-
 async function readLocaleInfo(state: I18nState): Promise<LocaleInfo> {
-  const config = await readJsonFile<I18nConfig>(CONFIG_PATH)
-  const available = localeNames(config)
-  const labels = new Map<string, string>()
-
-  for (const locale of available) {
-    const name = config?.locales?.[locale]?.name
-    labels.set(locale, typeof name === "string" && name.trim() ? name.trim() : locale)
-  }
-
-  const defaultLocale = typeof config?.defaultLocale === "string" ? config.defaultLocale : undefined
-
-  return {
-    defaultLocale: defaultLocale && available.includes(defaultLocale) ? defaultLocale : undefined,
-    activeLocale: resolveLocale(config, state),
-    available,
-    labels,
-  }
+  return localeInfo(await readConfig(), state)
 }
 
 async function writeState(patch: Partial<Pick<I18nState, "enabled" | "locale">>): Promise<I18nState> {

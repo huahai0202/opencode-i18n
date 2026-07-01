@@ -54,6 +54,7 @@ cd opencode-i18n
 
 - `plugins/i18n/index.ts`
 - `tools/i18n-state.ts`
+- `shared/i18n.ts`
 - `commands/i18n.md`
 - `i18n/i18n.json`
 
@@ -85,5 +86,6 @@ cd opencode-i18n
 
 - `plugins/i18n/index.ts`：TUI 插件，读取语言包和状态，改写界面标题/已有描述。
 - `tools/i18n-state.ts`：状态工具，负责开关和语言选择。
+- `shared/i18n.ts`：共享路径、状态读取和语言解析逻辑。
 - `commands/i18n.md`：OpenCode 自定义 command。
 - `i18n/i18n.json`：语言包，可继续扩展新语言。

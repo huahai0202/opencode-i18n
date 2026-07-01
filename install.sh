@@ -95,6 +95,7 @@ mkdir -p "$CONFIG_ROOT"
 
 copy_item "plugins/i18n/index.ts"
 copy_item "tools/i18n-state.ts"
+copy_item "shared/i18n.ts"
 copy_item "commands/i18n.md"
 copy_item "i18n/i18n.json"
 

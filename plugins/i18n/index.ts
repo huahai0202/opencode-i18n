@@ -1,25 +1,5 @@
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@opencode-ai/plugin/tui"
-import { readFileSync } from "node:fs"
-import os from "node:os"
-import path from "node:path"
-import { fileURLToPath } from "node:url"
-
-type I18nState = {
-  enabled?: unknown
-  locale?: unknown
-}
-
-type I18nLocaleConfig = {
-  name?: unknown
-  commands?: Record<string, Record<string, string>>
-  descriptions?: Record<string, string>
-  slash_commands?: Record<string, string>
-}
-
-type I18nConfig = {
-  defaultLocale?: unknown
-  locales?: Record<string, I18nLocaleConfig>
-}
+import { readConfigSync, readStateSync, resolveLocale, type I18nLocaleConfig } from "../../shared/i18n.ts"
 
 type TranslationSnapshot = {
   enabled: boolean
@@ -59,45 +39,13 @@ type PatchedKeymap = PatchableKeymap & {
   [KEYMAP_PATCHED]?: boolean
 }
 
-const CONFIG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..")
-const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
-const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
-const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "i18n.json")
-
-function readJsonFile<T>(file: string): T | undefined {
-  try {
-    return JSON.parse(readFileSync(file, "utf8")) as T
-  } catch {
-    return undefined
-  }
-}
-
 function readEnabled() {
-  const state = readJsonFile<I18nState>(STATE_PATH)
-  return state?.enabled === true
-}
-
-function localeNames(config: I18nConfig | undefined) {
-  const locales = config?.locales
-  return locales && typeof locales === "object" ? Object.keys(locales) : []
-}
-
-function resolveLocale(config: I18nConfig | undefined, state: I18nState | undefined) {
-  const locales = localeNames(config)
-  if (locales.length === 0) return undefined
-
-  const stateLocale = typeof state?.locale === "string" ? state.locale : undefined
-  if (stateLocale && locales.includes(stateLocale)) return stateLocale
-
-  const defaultLocale = typeof config?.defaultLocale === "string" ? config.defaultLocale : undefined
-  if (defaultLocale && locales.includes(defaultLocale)) return defaultLocale
-
-  return locales[0]
+  return readStateSync().enabled
 }
 
 function readLocaleConfig() {
-  const config = readJsonFile<I18nConfig>(CONFIG_PATH)
-  const state = readJsonFile<I18nState>(STATE_PATH)
+  const config = readConfigSync()
+  const state = readStateSync()
   const locale = resolveLocale(config, state)
   return locale ? config?.locales?.[locale] : undefined
 }
