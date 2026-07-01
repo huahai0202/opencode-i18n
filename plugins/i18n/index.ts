@@ -49,14 +49,27 @@ type CommandQuery = {
 }
 
 const KEYMAP_PATCHED = "__opencodeI18nPatched"
+const COMMAND_PALETTE = "command.palette.show"
 
 type PatchableKeymap = {
   getCommands(query?: CommandQuery): readonly KeymapCommand[]
   getCommandEntries(query?: CommandQuery): readonly CommandEntry[]
+  getCommandBindings?(query?: { visibility?: string; commands?: readonly string[] }): { get(command: string): readonly unknown[] | undefined }
+  dispatchCommand?(command: string, ...args: unknown[]): unknown
 }
 
 type PatchedKeymap = PatchableKeymap & {
   [KEYMAP_PATCHED]?: boolean
+}
+
+type PaletteOption = {
+  title: string
+  titleView: string
+  description?: string
+  category?: string
+  footer?: string
+  value: string
+  i18nCommandName: string
 }
 
 const CONFIG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..")
@@ -333,12 +346,112 @@ function filterEntries(entries: readonly CommandEntry[], query: CommandQuery | u
   return limitResults(filtered, query)
 }
 
+function commandTitle(command: KeymapCommand) {
+  return typeof command.title === "string" ? command.title : command.name
+}
+
+function commandDescription(command: KeymapCommand) {
+  return typeof command.desc === "string" && command.desc.trim() ? command.desc : undefined
+}
+
+function originalTitle(command: KeymapCommand) {
+  return typeof command.i18nOriginalTitle === "string" ? command.i18nOriginalTitle : commandTitle(command)
+}
+
+function searchableTitle(command: KeymapCommand) {
+  return Array.from(new Set([commandTitle(command), originalTitle(command)].filter(Boolean))).join(" ")
+}
+
+function isPaletteCommand(command: KeymapCommand) {
+  return command.hidden !== true && command.name !== COMMAND_PALETTE
+}
+
+function isSuggested(command: KeymapCommand) {
+  const suggested = command.suggested
+  if (typeof suggested === "boolean") return suggested
+  if (typeof suggested !== "function") return false
+
+  try {
+    return suggested() === true
+  } catch {
+    return false
+  }
+}
+
+function formatBindings(api: TuiPluginApi, bindings: readonly unknown[] | undefined) {
+  if (!bindings) return undefined
+
+  try {
+    return api.keys.formatBindings(bindings as never)
+  } catch {
+    return undefined
+  }
+}
+
+function paletteOptions(api: TuiPluginApi) {
+  const entries = api.keymap.getCommandEntries({
+    namespace: "palette",
+    visibility: "reachable",
+    filter: isPaletteCommand,
+  })
+  const commandNames = entries.map((entry: CommandEntry) => entry.command.name)
+  const bindings = api.keymap.getCommandBindings?.({
+    visibility: "registered",
+    commands: commandNames,
+  })
+
+  const options = entries.map((entry: CommandEntry): PaletteOption & { i18nSuggested: boolean } => {
+    const command = entry.command
+    const name = command.name
+    const title = commandTitle(command)
+
+    return {
+      title: searchableTitle(command),
+      titleView: title,
+      description: commandDescription(command),
+      category: typeof command.category === "string" ? command.category : undefined,
+      footer: formatBindings(api, bindings?.get(name) ?? (entry.bindings as readonly unknown[] | undefined)),
+      value: name,
+      i18nCommandName: name,
+      i18nSuggested: isSuggested(command),
+    }
+  })
+
+  const suggested = options
+    .filter((option: PaletteOption & { i18nSuggested: boolean }) => option.i18nSuggested)
+    .map((option: PaletteOption & { i18nSuggested: boolean }) => ({
+      ...option,
+      category: "Suggested",
+      value: `suggested:${option.value}`,
+    }))
+
+  return [...suggested, ...options]
+}
+
+function openCommandPalette(api: TuiPluginApi, dispatchCommand: (command: string, ...args: unknown[]) => unknown) {
+  api.ui.dialog.replace(() =>
+    api.ui.DialogSelect<string>({
+      title: "Commands",
+      placeholder: "Search",
+      options: paletteOptions(api),
+      onSelect(option: unknown) {
+        const commandName = (option as PaletteOption).i18nCommandName
+        if (!commandName) return
+
+        api.ui.dialog.clear()
+        dispatchCommand(commandName)
+      },
+    }),
+  )
+}
+
 function patchKeymap(api: TuiPluginApi) {
   const keymap = api.keymap as unknown as PatchedKeymap
   if (keymap[KEYMAP_PATCHED]) return
 
   const getCommands = keymap.getCommands
   const getCommandEntries = keymap.getCommandEntries
+  const dispatchCommand = keymap.dispatchCommand?.bind(keymap)
 
   keymap.getCommands = (query?: CommandQuery) => {
     const snapshot = readSnapshot()
@@ -364,11 +477,20 @@ function patchKeymap(api: TuiPluginApi) {
     return translateEntries(getCommandEntries(query), snapshot)
   }
 
+  if (dispatchCommand) {
+    keymap.dispatchCommand = (command: string, ...args: unknown[]) => {
+      if (command === COMMAND_PALETTE && readSnapshot().enabled) return openCommandPalette(api, dispatchCommand)
+
+      return dispatchCommand(command, ...args)
+    }
+  }
+
   keymap[KEYMAP_PATCHED] = true
 
   api.lifecycle.onDispose(() => {
     keymap.getCommands = getCommands
     keymap.getCommandEntries = getCommandEntries
+    if (dispatchCommand) keymap.dispatchCommand = dispatchCommand
     keymap[KEYMAP_PATCHED] = false
   })
 }

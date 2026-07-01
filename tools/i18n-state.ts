@@ -135,6 +135,8 @@ function localesMessage(state: I18nState, info: LocaleInfo) {
   if (info.available.length === 0) return "未找到语言包。"
 
   return [
+    `当前语言: ${formatLocale(info.activeLocale, info)}`,
+    `本地化: ${state.enabled ? "已开启" : "已关闭"}`,
     "可用语言:",
     ...info.available.map((locale) => {
       const label = info.labels.get(locale) ?? locale
