@@ -125,6 +125,8 @@
       "Open command palette": "打开命令面板",
       "Plugins": "插件",
       "Install plugin": "安装插件",
+      "Show tips": "显示提示",
+      "Hide tips": "隐藏提示",
       "Show key bindings": "显示快捷键",
       "First key binding": "第一个快捷键",
       "Last key binding": "最后一个快捷键",
@@ -212,6 +214,7 @@
     "/connect": "连接模型服务商",
     "/compact": "压缩会话上下文（别名: /summarize）",
     "/details": "切换工具详情显示",
+    "/diff": "打开差异视图",
     "/editor": "打开外部编辑器",
     "/exit": "退出应用（别名: /quit, /q）",
     "/export": "导出会话全文",
@@ -232,9 +235,12 @@
     "/copy": "复制会话全文",
     "/agents": "切换智能体",
     "/mcps": "切换 MCP",
+    "/skills": "选择技能",
     "/variants": "切换模型变体",
     "/status": "查看状态",
     "/org": "切换组织（别名: /orgs, /switch-org）",
+    "/warp": "切换当前会话使用的工作区",
+    "/move": "移动会话到另一个项目目录",
     "/workspaces": "管理工作区"
   },
   "descriptions": {
@@ -248,6 +254,7 @@
     "Page key bindings down": "向下翻页快捷键提示面板",
     "First key binding": "跳到第一个快捷键",
     "Last key binding": "跳到最后一个快捷键",
+    "Show tips": "切换提示层",
     "Show key bindings": "切换快捷键提示层",
     "Toggle key bindings layout": "在停靠和覆盖模式之间切换快捷键提示",
     "Toggle pending key preview": "在覆盖模式下自动显示待按键序列的快捷键提示"
