@@ -5,7 +5,22 @@
     "option_descriptions": {
       "en": "Switch to the original English interface",
       "zh-Hans": "Switch to the Simplified Chinese interface",
-      "zh-Hant": "Switch to the Traditional Chinese interface"
+      "zh-Hant": "Switch to the Traditional Chinese interface",
+      "ko": "Switch to the Korean interface",
+      "de": "Switch to the German interface",
+      "es": "Switch to the Spanish interface",
+      "fr": "Switch to the French interface",
+      "da": "Switch to the Danish interface",
+      "ja": "Switch to the Japanese interface",
+      "pl": "Switch to the Polish interface",
+      "ru": "Switch to the Russian interface",
+      "uk": "Switch to the Ukrainian interface",
+      "bs": "Switch to the Bosnian interface",
+      "ar": "Switch to the Arabic interface",
+      "no": "Switch to the Norwegian interface",
+      "pt-BR": "Switch to the Brazilian Portuguese interface",
+      "th": "Switch to the Thai interface",
+      "tr": "Switch to the Turkish interface"
     }
   },
   "commands": {},
