@@ -1,5 +1,12 @@
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@opencode-ai/plugin/tui"
-import { readConfigSync, readStateSync, resolveLocale, type I18nLocaleConfig } from "../../i18n/lib.ts"
+import {
+  localeInfo,
+  readConfigSync,
+  readStateSync,
+  resolveLocale,
+  writeState,
+  type I18nLocaleConfig,
+} from "../../i18n/lib.ts"
 
 type TranslationSnapshot = {
   enabled: boolean
@@ -229,8 +236,66 @@ function patchKeymap(api: TuiPluginApi) {
   })
 }
 
+function registerI18nCommand(api: TuiPluginApi) {
+  api.keymap.registerLayer({
+    commands: [
+      {
+        name: "i18n.open",
+        title: "Open i18n language picker",
+        desc: "Choose the OpenCode interface language",
+        category: "System",
+        namespace: "palette",
+        slashName: "i18n",
+        run: () => openLanguagePicker(api),
+      },
+    ],
+  })
+}
+
+function openLanguagePicker(api: TuiPluginApi) {
+  const config = readConfigSync()
+  const state = readStateSync()
+  const info = localeInfo(config, state)
+  const active = info.activeLocale
+  const enabled = state.enabled
+
+  const toggleLabel = enabled ? "Disable localization" : "Enable localization"
+  const options = [
+    {
+      title: `${toggleLabel}  ${enabled ? "ON" : "OFF"}`,
+      value: "__toggle__",
+      description: enabled ? "Turn off localized titles" : "Turn on localized titles",
+    },
+    ...info.available.map((locale) => ({
+      title: `${info.labels.get(locale) ?? locale}${locale === active ? "  ✓" : ""}`,
+      value: locale,
+      description: `Switch to ${info.labels.get(locale) ?? locale}`,
+    })),
+  ]
+
+  api.ui.dialog.setSize("medium")
+  api.ui.dialog.replace(() =>
+    api.ui.DialogSelect({
+      title: "OpenCode i18n",
+      placeholder: "Search languages...",
+      options,
+      onSelect(opt: { value: string }) {
+        api.ui.dialog.clear()
+        if (opt.value === "__toggle__") {
+          void writeState({ enabled: !enabled })
+          api.ui.toast({ message: enabled ? "Localization disabled" : "Localization enabled" })
+          return
+        }
+        void writeState({ locale: opt.value, enabled: opt.value !== "en" })
+        api.ui.toast({ message: `Switched to ${info.labels.get(opt.value) ?? opt.value}` })
+      },
+    }),
+  )
+}
+
 const tui: TuiPlugin = async (api) => {
   patchKeymap(api)
+  registerI18nCommand(api)
 }
 
 const plugin = {

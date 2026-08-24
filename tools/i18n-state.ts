@@ -1,13 +1,12 @@
 import { tool } from "@opencode-ai/plugin"
-import { mkdir, writeFile } from "node:fs/promises"
 import {
   CONFIG_PATH,
   STATE_PATH,
-  STATE_ROOT,
   localeInfo,
   readConfig,
   readState,
   resolveLocaleInput,
+  writeState,
   type I18nState,
   type LocaleCode,
   type LocaleInfo,
@@ -143,20 +142,6 @@ async function readLocaleInfo(state: I18nState): Promise<LocaleInfo> {
 
 function localeConfig(info: LocaleInfo, locale: LocaleCode | undefined) {
   return locale ? info.config?.locales[locale] : undefined
-}
-
-async function writeState(patch: Partial<Pick<I18nState, "enabled" | "locale">>): Promise<I18nState> {
-  const current = await readState()
-  const state: I18nState = {
-    version: 1,
-    enabled: patch.enabled ?? current.enabled,
-    locale: patch.locale ?? current.locale,
-    updatedAt: new Date().toISOString(),
-  }
-
-  await mkdir(STATE_ROOT, { recursive: true })
-  await writeFile(STATE_PATH, `${JSON.stringify(state, null, 2)}\n`, "utf8")
-  return state
 }
 
 function formatLocale(locale: string | undefined, info: LocaleInfo, text: Messages) {

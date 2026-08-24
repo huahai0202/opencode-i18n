@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from "node:fs"
-import { readdir, readFile } from "node:fs/promises"
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -234,6 +234,20 @@ export function readStateSync(): I18nState {
 
 export async function readState(): Promise<I18nState> {
   return normalizeState(await readJsonFile<unknown>(STATE_PATH))
+}
+
+export async function writeState(patch: Partial<Pick<I18nState, "enabled" | "locale">>): Promise<I18nState> {
+  const current = await readState()
+  const state: I18nState = {
+    version: 1,
+    enabled: patch.enabled ?? current.enabled,
+    locale: patch.locale ?? current.locale,
+    updatedAt: new Date().toISOString(),
+  }
+
+  await mkdir(STATE_ROOT, { recursive: true })
+  await writeFile(STATE_PATH, `${JSON.stringify(state, null, 2)}\n`, "utf8")
+  return state
 }
 
 export function readConfigSync(): I18nConfig | undefined {

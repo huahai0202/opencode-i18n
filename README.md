@@ -82,7 +82,7 @@ cd opencode-i18n
 /i18n
 ```
 
-打开语言选择。
+打开语言选择对话框（由 TUI 插件注册，npm 安装后直接可用）。选择语言即切换，也可在对话框里开关本地化。
 
 ```text
 /i18n status
@@ -91,16 +91,16 @@ cd opencode-i18n
 /i18n toggle
 ```
 
-管理开关状态。
+管理开关状态（这些带参数形式走服务端命令，需要 `commands/i18n.md` 已安装；npm 安装时请手动放到 `~/.config/opencode/commands/`，或直接让 AI 调用 `i18n-state` 工具）。
 
 如果界面没有立即刷新，请重启 OpenCode。
 
 ## 文件说明
 
-- `plugins/i18n/index.ts`：TUI 插件，读取语言包和状态，改写界面标题/已有描述。
+- `plugins/i18n/index.ts`：TUI 插件，读取语言包和状态，改写界面标题/已有描述；并注册 `/i18n` 命令（语言选择对话框）。
 - `plugins/i18n/server.ts`：server 插件，向 OpenCode 注册 `i18n-state` 工具（npm 安装模式下工具不会自动从 `tools/` 加载）。
 - `tools/i18n-state.ts`：状态工具，负责开关和语言选择。
 - `i18n/lib.ts`：共享路径、状态读取和语言解析逻辑。配置优先读用户目录 `~/.config/opencode/i18n/`，缺失时回退到包内默认数据。
-- `commands/i18n.md`：OpenCode 自定义 command（复制式安装时随脚本复制；npm 安装时请手动放到 `~/.config/opencode/commands/` 或直接调用 `i18n-state` 工具）。
+- `commands/i18n.md`：OpenCode 自定义 command（复制式安装时随脚本复制；npm 安装时请手动放到 `~/.config/opencode/commands/` 以支持 `/i18n on` 等带参形式）。
 - `i18n/config.json`：默认语言和内置语言排序。
 - `i18n/locales/*.json`：独立语言包。新增语言时只要添加一个 locale JSON 即可被自动识别；如果想调整显示顺序，可把语言代码加入 `config.json` 的 `locales` 列表。
