@@ -22,7 +22,7 @@ OpenCode TUI 界面本地化插件。
 
 说明：
 
-- 插件已发布到 npm，安装方式和 `opencode-visual-cache` 等插件完全一致。
+- 插件已发布到 npm，可直接从命令面板安装。
 - 安装会自动写入 `opencode.json`（server 端）和 `tui.json`（TUI 端）的 `plugin` 列表。
 - 插件自带默认语言包（`i18n/locales/*.json`），开箱即用。
 - 如需自定义语言包，把文件放到 `~/.config/opencode/i18n/locales/` 即可覆盖默认值。
