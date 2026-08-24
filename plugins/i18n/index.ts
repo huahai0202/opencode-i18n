@@ -257,37 +257,23 @@ function openLanguagePicker(api: TuiPluginApi) {
   const state = readStateSync()
   const info = localeInfo(config, state)
   const active = info.activeLocale
-  const enabled = state.enabled
 
-  const toggleLabel = enabled ? "Disable localization" : "Enable localization"
-  const options = [
-    {
-      title: `${toggleLabel}  ${enabled ? "ON" : "OFF"}`,
-      value: "__toggle__",
-      description: enabled ? "Turn off localized titles" : "Turn on localized titles",
-    },
-    ...info.available.map((locale) => ({
-      title: `${info.labels.get(locale) ?? locale}${locale === active ? "  ✓" : ""}`,
-      value: locale,
-      description: `Switch to ${info.labels.get(locale) ?? locale}`,
-    })),
-  ]
+  const options = info.available.map((locale) => ({
+    title: `${info.labels.get(locale) ?? locale}${locale === active ? "  ✓" : ""}`,
+    value: locale,
+    description: `切换到 ${info.labels.get(locale) ?? locale}`,
+  }))
 
   api.ui.dialog.setSize("medium")
   api.ui.dialog.replace(() =>
     api.ui.DialogSelect({
-      title: "OpenCode i18n",
-      placeholder: "Search languages...",
+      title: "OpenCode 界面语言",
+      placeholder: "搜索语言...",
       options,
       onSelect(opt: { value: string }) {
         api.ui.dialog.clear()
-        if (opt.value === "__toggle__") {
-          void writeState({ enabled: !enabled })
-          api.ui.toast({ message: enabled ? "Localization disabled" : "Localization enabled" })
-          return
-        }
         void writeState({ locale: opt.value, enabled: opt.value !== "en" })
-        api.ui.toast({ message: `Switched to ${info.labels.get(opt.value) ?? opt.value}` })
+        api.ui.toast({ message: `已切换到 ${info.labels.get(opt.value) ?? opt.value}` })
       },
     }),
   )
