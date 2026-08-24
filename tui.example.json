@@ -1,5 +1,0 @@
-{
-  "plugin": [
-    "./plugins/i18n/index.ts"
-  ]
-}
