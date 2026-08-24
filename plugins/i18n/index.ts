@@ -241,8 +241,8 @@ function registerI18nCommand(api: TuiPluginApi) {
     commands: [
       {
         name: "i18n.open",
-        title: "Open i18n language picker",
-        desc: "Choose the OpenCode interface language",
+        title: "界面语言",
+        desc: "切换 OpenCode 界面语言",
         category: "System",
         namespace: "palette",
         slashName: "i18n",
