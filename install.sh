@@ -110,7 +110,6 @@ require_node
 
 copy_item "plugins/i18n/index.ts"
 copy_item "tools/i18n-state.ts"
-copy_item "commands/i18n.md"
 copy_item "i18n"
 
 remove_legacy_i18n_file

@@ -113,7 +113,6 @@ New-Item -ItemType Directory -Force $ConfigRoot | Out-Null
 
 Copy-ProjectFile "plugins\i18n\index.ts"
 Copy-ProjectFile "tools\i18n-state.ts"
-Copy-ProjectFile "commands\i18n.md"
 Copy-ProjectFile "i18n"
 
 Remove-LegacyI18nFile
