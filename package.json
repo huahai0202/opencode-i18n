@@ -1,6 +1,6 @@
 {
   "name": "opencode-i18n",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenCode TUI i18n plugin — localize the interface into 简体中文 / 繁體中文 and more, with one-command install.",
   "license": "MIT",
   "type": "module",
