@@ -111,6 +111,7 @@
     "System": {
       "Show command palette": "显示命令面板",
       "View status": "查看状态",
+      "View debug info": "查看调试信息",
       "Switch theme": "切换主题",
       "Switch to light mode": "切换到浅色模式",
       "Switch to dark mode": "切换到深色模式",
@@ -253,6 +254,7 @@
     "/skills": "选择技能",
     "/variants": "切换模型变体",
     "/status": "查看状态",
+    "/debug": "查看调试信息",
     "/org": "切换组织（别名: /orgs, /switch-org）",
     "/warp": "切换当前会话使用的工作区",
     "/move": "移动会话到另一个项目目录",

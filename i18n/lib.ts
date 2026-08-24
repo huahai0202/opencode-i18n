@@ -46,9 +46,25 @@ type JsonObject = Record<string, unknown>
 
 const MODULE_ROOT = path.dirname(fileURLToPath(import.meta.url))
 
-export const CONFIG_ROOT = path.resolve(MODULE_ROOT, "..")
+/**
+ * Package root. When installed as an npm plugin this is the package directory
+ * (bundled default data). When installed by copying files into the config
+ * directory it is the config directory itself.
+ */
+export const PACKAGE_ROOT = path.resolve(MODULE_ROOT, "..")
+
+function resolveConfigRoot() {
+  const env = process.env.OPENCODE_CONFIG_DIR
+  if (env) return path.resolve(env)
+  return path.join(os.homedir(), ".config", "opencode")
+}
+
+/** User config root. User-customized i18n data takes priority over bundled defaults. */
+export const CONFIG_ROOT = resolveConfigRoot()
 export const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "config.json")
 export const LOCALES_ROOT = path.join(CONFIG_ROOT, "i18n", "locales")
+export const PACKAGE_CONFIG_PATH = path.join(PACKAGE_ROOT, "i18n", "config.json")
+export const PACKAGE_LOCALES_ROOT = path.join(PACKAGE_ROOT, "i18n", "locales")
 export const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
 export const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
 
@@ -150,9 +166,27 @@ function mergeLocaleNames(indexLocales: readonly LocaleCode[], discoveredLocales
   return Array.from(new Set([...indexLocales, ...discoveredLocales])).filter(Boolean)
 }
 
-function discoverLocalesSync() {
+function discoverLocalesInSync(root: string) {
   try {
-    return readdirSync(LOCALES_ROOT, { withFileTypes: true })
+    return readdirSync(root, { withFileTypes: true })
+      .filter((entry) => entry.isFile())
+      .map((entry) => localeCodeFromFile(entry.name))
+      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+      .sort((a, b) => a.localeCompare(b))
+  } catch {
+    return []
+  }
+}
+
+function discoverLocalesSync() {
+  return Array.from(new Set([...discoverLocalesInSync(LOCALES_ROOT), ...discoverLocalesInSync(PACKAGE_LOCALES_ROOT)])).sort(
+    (a, b) => a.localeCompare(b),
+  )
+}
+
+async function discoverLocalesIn(root: string) {
+  try {
+    return (await readdir(root, { withFileTypes: true }))
       .filter((entry) => entry.isFile())
       .map((entry) => localeCodeFromFile(entry.name))
       .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
@@ -163,15 +197,20 @@ function discoverLocalesSync() {
 }
 
 async function discoverLocales() {
-  try {
-    return (await readdir(LOCALES_ROOT, { withFileTypes: true }))
-      .filter((entry) => entry.isFile())
-      .map((entry) => localeCodeFromFile(entry.name))
-      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
-      .sort((a, b) => a.localeCompare(b))
-  } catch {
-    return []
-  }
+  const [user, pkg] = await Promise.all([discoverLocalesIn(LOCALES_ROOT), discoverLocalesIn(PACKAGE_LOCALES_ROOT)])
+  return Array.from(new Set([...user, ...pkg])).sort((a, b) => a.localeCompare(b))
+}
+
+function readLocaleFileSync(locale: LocaleCode) {
+  const user = readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
+  if (user !== undefined) return user
+  return readJsonFileSync<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+}
+
+async function readLocaleFile(locale: LocaleCode) {
+  const user = await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
+  if (user !== undefined) return user
+  return await readJsonFile<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
 }
 
 function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: readonly LocaleCode[], readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {
@@ -179,7 +218,9 @@ function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: read
 
   const locales: Record<LocaleCode, I18nLocaleConfig> = {}
   for (const locale of mergeLocaleNames(index.locales, discoveredLocales)) {
-    locales[locale] = normalizeLocaleConfig(readLocale(locale), locale)
+    const value = readLocale(locale)
+    if (value === undefined) continue
+    locales[locale] = normalizeLocaleConfig(value, locale)
   }
 
   if (Object.keys(locales).length === 0) return undefined
@@ -196,19 +237,19 @@ export async function readState(): Promise<I18nState> {
 }
 
 export function readConfigSync(): I18nConfig | undefined {
-  const index = normalizeIndexConfig(readJsonFileSync<unknown>(CONFIG_PATH))
-  return buildConfig(index, discoverLocalesSync(), (locale) => readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)))
+  const index = normalizeIndexConfig(readJsonFileSync<unknown>(CONFIG_PATH) ?? readJsonFileSync<unknown>(PACKAGE_CONFIG_PATH))
+  return buildConfig(index, discoverLocalesSync(), readLocaleFileSync)
 }
 
 export async function readConfig(): Promise<I18nConfig | undefined> {
-  const index = normalizeIndexConfig(await readJsonFile<unknown>(CONFIG_PATH))
+  const index = normalizeIndexConfig((await readJsonFile<unknown>(CONFIG_PATH)) ?? (await readJsonFile<unknown>(PACKAGE_CONFIG_PATH)))
   if (!index) return undefined
 
   const localeNames = mergeLocaleNames(index.locales, await discoverLocales())
   const entries = await Promise.all(
     localeNames.map(async (locale) => [
       locale,
-      normalizeLocaleConfig(await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`)), locale),
+      normalizeLocaleConfig(await readLocaleFile(locale), locale),
     ] as const),
   )
   const locales = Object.fromEntries(entries) as Record<LocaleCode, I18nLocaleConfig>

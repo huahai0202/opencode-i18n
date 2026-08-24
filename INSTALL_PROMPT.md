@@ -1,5 +1,15 @@
 # One-Prompt Install
 
+## npm 一键安装
+
+把下面这一句发给 OpenCode：
+
+```text
+运行 opencode plugin opencode-i18n 安装 OpenCode i18n 插件，完成后告诉我重启 OpenCode，并运行 /i18n 选择 English、简体中文或繁體中文。
+```
+
+## 复制式安装
+
 把下面这一句发给 OpenCode：
 
 ```text

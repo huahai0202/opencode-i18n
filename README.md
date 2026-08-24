@@ -10,6 +10,20 @@ OpenCode TUI 界面本地化插件。
 
 安装后运行 `/i18n`，用选项切换语言。选择中文会自动开启本地化；选择 `English` 会回到原始英文。
 
+## 一键安装（npm）
+
+```bash
+opencode plugin opencode-i18n
+```
+
+安装后重启 OpenCode，运行 `/i18n` 选择 English、简体中文或繁體中文。
+
+说明：
+
+- 该命令把插件安装到全局配置（`~/.config/opencode`），自动合并 `tui.json` 的 `plugin` 列表。
+- 插件自带默认语言包（`i18n/locales/*.json`），开箱即用。
+- 如需自定义语言包，把文件放到 `~/.config/opencode/i18n/locales/` 即可覆盖默认值。
+
 ## 一句提示词安装
 
 把下面这一句发给 OpenCode：
@@ -18,7 +32,7 @@ OpenCode TUI 界面本地化插件。
 请从 https://github.com/huahai0202/opencode-i18n 安装 OpenCode i18n 插件：克隆仓库，Windows 运行 install.ps1、macOS/Linux 运行 install.sh，或按 README 手动复制文件到我的全局 OpenCode 配置目录，保留我已有配置并合并 tui.json 的 plugin 列表；完成后告诉我重启 OpenCode，并运行 /i18n 选择 English、简体中文或繁體中文。
 ```
 
-## 手动安装
+## 手动安装（复制式）
 
 macOS / Linux：
 
@@ -84,8 +98,9 @@ cd opencode-i18n
 ## 文件说明
 
 - `plugins/i18n/index.ts`：TUI 插件，读取语言包和状态，改写界面标题/已有描述。
+- `plugins/i18n/server.ts`：server 插件，向 OpenCode 注册 `i18n-state` 工具（npm 安装模式下工具不会自动从 `tools/` 加载）。
 - `tools/i18n-state.ts`：状态工具，负责开关和语言选择。
-- `i18n/lib.ts`：共享路径、状态读取和语言解析逻辑。
-- `commands/i18n.md`：OpenCode 自定义 command。
+- `i18n/lib.ts`：共享路径、状态读取和语言解析逻辑。配置优先读用户目录 `~/.config/opencode/i18n/`，缺失时回退到包内默认数据。
+- `commands/i18n.md`：OpenCode 自定义 command（复制式安装时随脚本复制；npm 安装时请手动放到 `~/.config/opencode/commands/` 或直接调用 `i18n-state` 工具）。
 - `i18n/config.json`：默认语言和内置语言排序。
 - `i18n/locales/*.json`：独立语言包。新增语言时只要添加一个 locale JSON 即可被自动识别；如果想调整显示顺序，可把语言代码加入 `config.json` 的 `locales` 列表。
