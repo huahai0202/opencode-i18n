@@ -10,19 +10,28 @@ OpenCode TUI 界面本地化插件。
 
 安装后运行 `/i18n`，用选项切换语言。选择中文会自动开启本地化；选择 `English` 会回到原始英文。
 
-## 一键安装（npm）
+## 一键安装（命令面板）
 
-```bash
-opencode plugin opencode-i18n
-```
+在 OpenCode 中：
+
+1. 按 **`Ctrl + P`** 打开命令面板
+2. 搜索 **`install plugin`**
+3. 输入 **`opencode-i18n`**，回车
 
 安装后重启 OpenCode，运行 `/i18n` 选择 English、简体中文或繁體中文。
 
 说明：
 
-- 该命令把插件安装到全局配置（`~/.config/opencode`），自动合并 `tui.json` 的 `plugin` 列表。
+- 插件已发布到 npm，安装方式和 `opencode-visual-cache` 等插件完全一致。
+- 安装会自动写入 `opencode.json`（server 端）和 `tui.json`（TUI 端）的 `plugin` 列表。
 - 插件自带默认语言包（`i18n/locales/*.json`），开箱即用。
 - 如需自定义语言包，把文件放到 `~/.config/opencode/i18n/locales/` 即可覆盖默认值。
+
+也可以用命令行安装：
+
+```bash
+opencode plugin opencode-i18n
+```
 
 ## 一句提示词安装
 
