@@ -1,0 +1,364 @@
+import { readdirSync, readFileSync } from "node:fs"
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import os from "node:os"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
+export type LocaleCode = string
+
+export type I18nState = {
+  version: 1
+  enabled: boolean
+  locale?: LocaleCode
+  updatedAt?: string
+}
+
+export type I18nCommandEntry = {
+  /** English title variant -> localized title. Variants cover dynamic titles ("Hide sidebar"/"Show sidebar"). */
+  titles: Record<string, string>
+  /** Localized description (applies to every title variant of this command). */
+  description?: string
+}
+
+export type I18nLocaleConfig = {
+  name: string
+  language_picker: {
+    question?: string
+    option_descriptions: Record<string, string>
+  }
+  /** Keyed by stable command id, e.g. "session.new". */
+  commands: Record<string, I18nCommandEntry>
+  /** Localized command group names, e.g. "Agent" -> "智能体". */
+  groups: Record<string, string>
+  /**
+   * Legacy lookup tables, flattened at load time from the old pack format
+   * (title-keyed). Kept so older / custom packs keep working.
+   */
+  legacy: {
+    titles: Record<string, string>
+    descriptions: Record<string, string>
+  }
+  slash_commands: Record<string, string>
+}
+
+export type I18nConfig = {
+  defaultLocale?: LocaleCode
+  locales: Record<LocaleCode, I18nLocaleConfig>
+}
+
+type I18nIndexConfig = {
+  defaultLocale?: LocaleCode
+  locales: LocaleCode[]
+}
+
+export type LocaleInfo = {
+  defaultLocale?: LocaleCode
+  activeLocale?: LocaleCode
+  available: LocaleCode[]
+  labels: Map<LocaleCode, string>
+  config?: I18nConfig
+}
+
+type JsonObject = Record<string, unknown>
+
+const MODULE_ROOT = path.dirname(fileURLToPath(import.meta.url))
+
+/**
+ * Package root. When installed as an npm plugin this is the package directory
+ * (bundled default data). When installed by copying files into the config
+ * directory it is the config directory itself.
+ */
+export const PACKAGE_ROOT = path.resolve(MODULE_ROOT, "..")
+
+function resolveConfigRoot() {
+  const env = process.env.OPENCODE_CONFIG_DIR
+  if (env) return path.resolve(env)
+  return path.join(os.homedir(), ".config", "opencode")
+}
+
+/** User config root. User-customized i18n data takes priority over bundled defaults. */
+export const CONFIG_ROOT = resolveConfigRoot()
+export const CONFIG_PATH = path.join(CONFIG_ROOT, "i18n", "config.json")
+export const LOCALES_ROOT = path.join(CONFIG_ROOT, "i18n", "locales")
+export const PACKAGE_CONFIG_PATH = path.join(PACKAGE_ROOT, "i18n", "config.json")
+export const PACKAGE_LOCALES_ROOT = path.join(PACKAGE_ROOT, "i18n", "locales")
+export const STATE_ROOT = path.join(process.env.XDG_STATE_HOME ?? path.join(os.homedir(), ".local", "state"), "opencode")
+export const STATE_PATH = path.join(STATE_ROOT, "i18n-state.json")
+
+export function readJsonFileSync<T>(file: string): T | undefined {
+  try {
+    return JSON.parse(readFileSync(file, "utf8")) as T
+  } catch {
+    return undefined
+  }
+}
+
+export async function readJsonFile<T>(file: string): Promise<T | undefined> {
+  try {
+    return JSON.parse(await readFile(file, "utf8")) as T
+  } catch {
+    return undefined
+  }
+}
+
+function isObject(value: unknown): value is JsonObject {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function stringRecord(value: unknown): Record<string, string> {
+  if (!isObject(value)) return {}
+
+  const result: Record<string, string> = {}
+  for (const [key, item] of Object.entries(value)) {
+    if (typeof item === "string") result[key] = item
+  }
+
+  return result
+}
+
+function commandEntry(value: unknown): I18nCommandEntry {
+  if (!isObject(value)) return { titles: {} }
+  const description = typeof value.description === "string" && value.description.trim() ? value.description.trim() : undefined
+  return { titles: stringRecord(value.titles), description }
+}
+
+/**
+ * Accepts both formats:
+ * - current:  { "<id>": { titles: { "English": "..." }, description: "..." } }
+ * - legacy:   { "<group>": { "English title": "..." } }
+ * Legacy group buckets are flattened into `legacy.titles`.
+ */
+function commandTable(value: unknown): { commands: Record<string, I18nCommandEntry>; legacyTitles: Record<string, string> } {
+  const commands: Record<string, I18nCommandEntry> = {}
+  const legacyTitles: Record<string, string> = {}
+  if (!isObject(value)) return { commands, legacyTitles }
+
+  for (const [key, entry] of Object.entries(value)) {
+    if (isObject(entry) && ("titles" in entry || "description" in entry)) {
+      commands[key] = commandEntry(entry)
+      continue
+    }
+    // legacy: group bucket of title -> translation
+    for (const [title, translated] of Object.entries(stringRecord(entry))) {
+      if (!title || title.startsWith("_") || !translated.trim()) continue
+      if (!(title in legacyTitles)) legacyTitles[title] = translated.trim()
+    }
+  }
+
+  return { commands, legacyTitles }
+}
+
+function languagePicker(value: unknown): I18nLocaleConfig["language_picker"] {
+  if (!isObject(value)) {
+    return {
+      option_descriptions: {},
+    }
+  }
+
+  return {
+    question: typeof value.question === "string" && value.question.trim() ? value.question.trim() : undefined,
+    option_descriptions: stringRecord(value.option_descriptions),
+  }
+}
+
+function normalizeLocaleConfig(value: unknown, fallbackName: string): I18nLocaleConfig {
+  const locale = isObject(value) ? value : {}
+  const name = typeof locale.name === "string" && locale.name.trim() ? locale.name.trim() : fallbackName
+  const table = commandTable(locale.commands)
+
+  return {
+    name,
+    language_picker: languagePicker(locale.language_picker),
+    commands: table.commands,
+    groups: stringRecord(locale.groups),
+    legacy: {
+      titles: table.legacyTitles,
+      descriptions: stringRecord(locale.descriptions),
+    },
+    slash_commands: stringRecord(locale.slash_commands),
+  }
+}
+
+export function normalizeState(state: unknown): I18nState {
+  const raw = isObject(state) ? state : {}
+
+  return {
+    version: 1,
+    enabled: raw.enabled === true,
+    locale: typeof raw.locale === "string" ? raw.locale : undefined,
+    updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : undefined,
+  }
+}
+
+function normalizeIndexConfig(config: unknown): I18nIndexConfig | undefined {
+  if (!isObject(config)) return undefined
+
+  const locales = Array.isArray(config.locales)
+    ? config.locales.filter((locale): locale is string => typeof locale === "string" && locale.trim().length > 0)
+    : []
+
+  const defaultLocale = typeof config.defaultLocale === "string" && locales.includes(config.defaultLocale) ? config.defaultLocale : undefined
+  return { defaultLocale, locales }
+}
+
+function localeCodeFromFile(file: string) {
+  return file.endsWith(".json") ? file.slice(0, -".json".length) : undefined
+}
+
+function mergeLocaleNames(indexLocales: readonly LocaleCode[], discoveredLocales: readonly LocaleCode[]) {
+  return Array.from(new Set([...indexLocales, ...discoveredLocales])).filter(Boolean)
+}
+
+function discoverLocalesInSync(root: string) {
+  try {
+    return readdirSync(root, { withFileTypes: true })
+      .filter((entry) => entry.isFile())
+      .map((entry) => localeCodeFromFile(entry.name))
+      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+      .sort((a, b) => a.localeCompare(b))
+  } catch {
+    return []
+  }
+}
+
+function discoverLocalesSync() {
+  return Array.from(new Set([...discoverLocalesInSync(LOCALES_ROOT), ...discoverLocalesInSync(PACKAGE_LOCALES_ROOT)])).sort(
+    (a, b) => a.localeCompare(b),
+  )
+}
+
+async function discoverLocalesIn(root: string) {
+  try {
+    return (await readdir(root, { withFileTypes: true }))
+      .filter((entry) => entry.isFile())
+      .map((entry) => localeCodeFromFile(entry.name))
+      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+      .sort((a, b) => a.localeCompare(b))
+  } catch {
+    return []
+  }
+}
+
+async function discoverLocales() {
+  const [user, pkg] = await Promise.all([discoverLocalesIn(LOCALES_ROOT), discoverLocalesIn(PACKAGE_LOCALES_ROOT)])
+  return Array.from(new Set([...user, ...pkg])).sort((a, b) => a.localeCompare(b))
+}
+
+function readLocaleFileSync(locale: LocaleCode) {
+  const user = readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
+  if (user !== undefined) return user
+  return readJsonFileSync<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+}
+
+async function readLocaleFile(locale: LocaleCode) {
+  const user = await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
+  if (user !== undefined) return user
+  return await readJsonFile<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+}
+
+function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: readonly LocaleCode[], readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {
+  if (!index) return undefined
+
+  const locales: Record<LocaleCode, I18nLocaleConfig> = {}
+  for (const locale of mergeLocaleNames(index.locales, discoveredLocales)) {
+    const value = readLocale(locale)
+    if (value === undefined) continue
+    locales[locale] = normalizeLocaleConfig(value, locale)
+  }
+
+  if (Object.keys(locales).length === 0) return undefined
+  const defaultLocale = index.defaultLocale && locales[index.defaultLocale] ? index.defaultLocale : undefined
+  return { defaultLocale, locales }
+}
+
+export function readStateSync(): I18nState {
+  return normalizeState(readJsonFileSync<unknown>(STATE_PATH))
+}
+
+export async function readState(): Promise<I18nState> {
+  return normalizeState(await readJsonFile<unknown>(STATE_PATH))
+}
+
+export async function writeState(patch: Partial<Pick<I18nState, "enabled" | "locale">>): Promise<I18nState> {
+  const current = await readState()
+  const state: I18nState = {
+    version: 1,
+    enabled: patch.enabled ?? current.enabled,
+    locale: patch.locale ?? current.locale,
+    updatedAt: new Date().toISOString(),
+  }
+
+  await mkdir(STATE_ROOT, { recursive: true })
+  await writeFile(STATE_PATH, `${JSON.stringify(state, null, 2)}\n`, "utf8")
+  return state
+}
+
+export function readConfigSync(): I18nConfig | undefined {
+  const index = normalizeIndexConfig(readJsonFileSync<unknown>(CONFIG_PATH) ?? readJsonFileSync<unknown>(PACKAGE_CONFIG_PATH))
+  return buildConfig(index, discoverLocalesSync(), readLocaleFileSync)
+}
+
+export async function readConfig(): Promise<I18nConfig | undefined> {
+  const index = normalizeIndexConfig((await readJsonFile<unknown>(CONFIG_PATH)) ?? (await readJsonFile<unknown>(PACKAGE_CONFIG_PATH)))
+  if (!index) return undefined
+
+  const localeNames = mergeLocaleNames(index.locales, await discoverLocales())
+  const entries = await Promise.all(
+    localeNames.map(async (locale) => [
+      locale,
+      normalizeLocaleConfig(await readLocaleFile(locale), locale),
+    ] as const),
+  )
+  const locales = Object.fromEntries(entries) as Record<LocaleCode, I18nLocaleConfig>
+
+  if (Object.keys(locales).length === 0) return undefined
+  return { defaultLocale: index.defaultLocale, locales }
+}
+
+export function localeNames(config: I18nConfig | undefined) {
+  return Object.keys(config?.locales ?? {})
+}
+
+export function resolveLocale(config: I18nConfig | undefined, state: Pick<I18nState, "locale"> | undefined) {
+  const available = localeNames(config)
+  const stateLocale = state?.locale
+
+  if (available.length === 0) return stateLocale
+  if (stateLocale && available.includes(stateLocale)) return stateLocale
+  if (config?.defaultLocale && available.includes(config.defaultLocale)) return config.defaultLocale
+
+  return available[0]
+}
+
+export function localeInfo(config: I18nConfig | undefined, state: I18nState): LocaleInfo {
+  const available = localeNames(config)
+  const labels = new Map<LocaleCode, string>()
+
+  for (const locale of available) {
+    labels.set(locale, config?.locales[locale]?.name ?? locale)
+  }
+
+  return {
+    defaultLocale: config?.defaultLocale,
+    activeLocale: resolveLocale(config, state),
+    available,
+    labels,
+    config,
+  }
+}
+
+export function resolveLocaleInput(locale: string, info: LocaleInfo) {
+  const value = locale.trim()
+  const normalizedLower = value.toLocaleLowerCase()
+
+  for (const available of info.available) {
+    if (available === value || available.toLocaleLowerCase() === normalizedLower) return available
+  }
+
+  for (const available of info.available) {
+    const label = info.labels.get(available)
+    if (label === value || label?.toLocaleLowerCase() === normalizedLower) return available
+  }
+
+  return value
+}
