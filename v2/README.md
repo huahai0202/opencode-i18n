@@ -7,7 +7,9 @@ OpenCode 2 界面本地化插件。把 OpenCode 界面（命令面板标题、�
 - `English`：原始英文，不改标题和描述
 - `简体中文`（zh-Hans）
 - `繁體中文`（zh-Hant）
-- 以及 i18n/locales 下的其他语言包
+
+其他语言可自行添加：按同样格式编写语言包（如 `ja.json`）放到
+`~/.config/opencode/i18n/locales/`，重启后自动出现在语言列表中。
 
 安装后运行 `/i18n`，用选项切换语言。选择中文会自动开启本地化；选择 `English` 会回到原始英文。
 
