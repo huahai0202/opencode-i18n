@@ -12,6 +12,5 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   },
-  "include": ["src"],
-  "exclude": ["src/tui-v1.ts"]
+  "include": ["src"]
 }

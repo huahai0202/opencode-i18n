@@ -45,6 +45,9 @@ function commandSlashNames(command: KeymapCommand) {
 /** Interactive dialog/input layers where shadows would disturb typing aids. */
 function isInteractiveCommand(command: KeymapCommand) {
   const id = command.id ?? ""
+  // permission.mode is a plain palette toggle, not an interactive aid layer —
+  // without this exemption its translations can never apply.
+  if (id === "permission.mode") return false
   return /^(input|dialog|autocomplete|permission|question)\./.test(id)
 }
 

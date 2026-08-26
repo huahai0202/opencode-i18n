@@ -9,57 +9,80 @@
     }
   },
   "commands": {
-    "Suggested": {
-      "Share session": "分享会话",
-      "Switch session": "切换会话",
-      "New session": "新建会话",
-      "Switch model": "切换模型",
-      "Connect provider": "连接模型服务商"
-    },
-    "Session": {
-      "Share session": "分享会话",
-      "Copy share link": "复制分享链接",
-      "Rename session": "重命名会话",
-      "Jump to message": "跳转到消息",
-      "Fork session": "分叉会话",
-      "Compact session": "压缩会话上下文",
-      "Unshare session": "取消分享会话",
-      "Undo previous message": "撤销上一条消息",
-      "Redo": "重做",
-      "Hide sidebar": "隐藏侧边栏",
-      "Show sidebar": "显示侧边栏",
-      "Disable code concealment": "关闭代码隐藏",
-      "Enable code concealment": "开启代码隐藏",
-      "Hide timestamps": "隐藏时间戳",
-      "Show timestamps": "显示时间戳",
-      "Collapse thinking": "折叠思考过程",
-      "Expand thinking": "展开思考过程",
-      "Hide tool details": "隐藏工具详情",
-      "Show tool details": "显示工具详情",
-      "Toggle session scrollbar": "切换会话滚动条",
-      "Hide generic tool output": "隐藏常规工具输出",
-      "Show generic tool output": "显示常规工具输出",
-      "Copy last assistant message": "复制上一条助手回复",
-      "Copy session transcript": "复制会话记录",
-      "Export session transcript": "导出会话记录",
-      "Switch session": "切换会话",
-      "New session": "新建会话",
-      "Page up": "向上翻页",
-      "Page down": "向下翻页",
-      "Line up": "向上移动一行",
-      "Line down": "向下移动一行",
-      "Half page up": "向上滚动半页",
-      "Half page down": "向下滚动半页",
-      "First message": "第一条消息",
-      "Last message": "最后一条消息",
-      "Jump to last user message": "跳转到最后一条用户消息",
-      "Next message": "下一条消息",
-      "Previous message": "上一条消息",
+    "_Legacy": {
       "Background subagents": "后台子智能体",
+      "Cancel permission rejection": "取消拒绝权限",
+      "Clear answer edit": "清空答案编辑内容",
+      "Clear prompt or exit": "清空提示词或退出",
+      "Close diff viewer": "关闭差异视图",
+      "Collapse diff viewer item": "折叠差异项",
+      "Collapse thinking": "折叠思考过程",
+      "Connect provider": "连接模型服务商",
+      "Copy share link": "复制分享链接",
+      "Copy worktree path": "复制工作树路径",
+      "Cycle model variant": "下一个模型变体",
+      "Disable code concealment": "关闭代码隐藏",
+      "Disable paste summary": "关闭粘贴摘要",
+      "Disable session directory filtering": "关闭会话目录筛选",
+      "Enable animations": "启用动画",
+      "Enable code concealment": "开启代码隐藏",
+      "Enable diff wrapping": "开启差异换行",
+      "Enable file context": "开启文件上下文",
+      "Enable session directory filtering": "开启会话目录筛选",
+      "Enable terminal title": "启用终端标题",
+      "Expand all diff viewer folders": "展开所有差异视图文件夹",
+      "Expand diff viewer item": "展开差异项",
+      "First item": "第一项",
+      "First key binding": "第一个快捷键",
       "Go to child session": "进入子会话",
       "Go to parent session": "返回父会话",
+      "Hide generic tool output": "隐藏常规工具输出",
+      "Hide timestamps": "隐藏时间戳",
+      "Hide tips": "隐藏提示",
+      "Hide tool details": "隐藏工具详情",
+      "Install plugin": "安装插件",
+      "Jump to next diff file": "跳到下一个差异文件",
+      "Jump to next diff hunk": "跳到下一个差异块",
+      "Jump to previous diff file": "跳到上一个差异文件",
+      "Jump to previous diff hunk": "跳到上一个差异块",
+      "Last item": "最后一项",
+      "Last key binding": "最后一个快捷键",
+      "Manage queued prompts": "管理排队中的提示词",
+      "Manage workspaces": "管理工作区",
+      "Move diff viewer down": "向下移动差异视图",
+      "Move diff viewer up": "向上移动差异视图",
       "Next child session": "下一个子会话",
+      "Next item": "下一项",
+      "Next key binding group": "下一组快捷键",
+      "Open command palette": "打开命令面板",
+      "Other": "其他",
+      "Page diff viewer down": "向下翻页差异视图",
+      "Page diff viewer up": "向上翻页差异视图",
+      "Page key bindings down": "快捷键列表向下翻页",
+      "Page key bindings up": "快捷键列表向上翻页",
       "Previous child session": "上一个子会话",
+      "Previous item": "上一项",
+      "Previous key binding group": "上一组快捷键",
+      "Reject permission": "拒绝权限",
+      "Reject question": "拒绝回答",
+      "Remove editor context": "移除编辑器上下文",
+      "Scroll key bindings down": "快捷键列表向下滚动",
+      "Scroll key bindings up": "快捷键列表向上滚动",
+      "Select item": "选择当前项",
+      "Show generic tool output": "显示常规工具输出",
+      "Show key bindings": "显示快捷键",
+      "Show more diff viewer shortcuts": "显示更多差异视图快捷键",
+      "Show timestamps": "显示时间戳",
+      "Show tips": "显示提示",
+      "Show tool details": "显示工具详情",
+      "Stash list": "暂存提示词列表",
+      "Stash pop": "恢复暂存的提示词",
+      "Submit dialog prompt": "提交对话框输入",
+      "Suspend terminal": "挂起终端",
+      "Switch diff viewer focus": "切换差异视图焦点",
+      "Switch diff viewer source": "切换差异来源",
+      "Switch org": "切换组织",
+      "Switch to dark mode": "切换到深色模式",
       "Switch to session in quick slot 1": "切换到快捷位 1 的会话",
       "Switch to session in quick slot 2": "切换到快捷位 2 的会话",
       "Switch to session in quick slot 3": "切换到快捷位 3 的会话",
@@ -69,169 +92,578 @@
       "Switch to session in quick slot 7": "切换到快捷位 7 的会话",
       "Switch to session in quick slot 8": "切换到快捷位 8 的会话",
       "Switch to session in quick slot 9": "切换到快捷位 9 的会话",
-      "Open editor": "打开编辑器",
-      "Move session": "移动会话",
-      "Interrupt session": "中断会话",
-      "View subagents": "查看子智能体",
-      "Manage queued prompts": "管理排队中的提示词",
-      "Warp": "切换工作区"
-    },
-    "Agent": {
-      "Switch model": "切换模型",
-      "Switch agent": "切换智能体",
-      "MCP servers": "MCP 服务器",
       "Toggle MCPs": "切换 MCP",
-      "Variant cycle": "下一个变体",
-      "Switch model variant": "切换模型变体",
-      "Model cycle": "下一个模型",
-      "Model cycle reverse": "上一个模型",
-      "Favorite cycle": "下一个收藏项",
-      "Favorite cycle reverse": "上一个收藏项",
-      "Agent cycle": "下一个智能体",
-      "Agent cycle reverse": "上一个智能体"
-    },
-    "Provider": {
-      "Connect provider": "连接模型服务商",
-      "Connect an integration": "连接集成",
-      "Switch org": "切换组织"
-    },
-    "System": {
-      "Show command palette": "显示命令面板",
-      "View status": "查看状态",
-      "View debug info": "查看调试信息",
-      "Switch theme": "切换主题",
-      "Switch to light mode": "切换到浅色模式",
-      "Switch to dark mode": "切换到深色模式",
-      "Lock theme mode": "锁定主题模式",
-      "Unlock theme mode": "解锁主题模式",
-      "Help": "帮助",
-      "Open docs": "打开文档",
-      "Exit the app": "退出应用",
-      "Toggle debug panel": "切换调试面板",
-      "Toggle console": "切换控制台",
-      "Write heap snapshot": "写入堆快照",
-      "Suspend terminal": "挂起终端",
-      "Disable terminal title": "禁用终端标题",
-      "Enable terminal title": "启用终端标题",
-      "Disable animations": "禁用动画",
-      "Enable animations": "启用动画",
-      "Disable file context": "关闭文件上下文",
-      "Enable file context": "开启文件上下文",
-      "Disable diff wrapping": "关闭差异换行",
-      "Enable diff wrapping": "开启差异换行",
-      "Disable paste summary": "关闭粘贴摘要",
-      "Enable paste summary": "开启粘贴摘要",
-      "Disable session directory filtering": "关闭会话目录筛选",
-      "Enable session directory filtering": "开启会话目录筛选",
-      "Disable auto-approve permissions": "关闭自动批准权限",
-      "Enable auto-approve permissions": "开启自动批准权限",
-      "Open command palette": "打开命令面板",
-      "Plugins": "插件",
-      "Install plugin": "安装插件",
-      "Open settings": "打开设置",
-      "Pair device": "配对设备",
-      "Restart service": "重启服务",
-      "Open session or project": "打开会话或项目",
-      "Next tab": "下一个标签页",
-      "Previous tab": "上一个标签页",
-      "Next unread tab": "下一个未读标签页",
-      "Previous unread tab": "上一个未读标签页",
-      "Close tab": "关闭标签页",
-      "Reopen closed tab": "重新打开已关闭的标签页",
-      "Switch to tab 1": "切换到标签页 1",
-      "Switch to tab 2": "切换到标签页 2",
-      "Switch to tab 3": "切换到标签页 3",
-      "Switch to tab 4": "切换到标签页 4",
-      "Switch to tab 5": "切换到标签页 5",
-      "Switch to tab 6": "切换到标签页 6",
-      "Switch to tab 7": "切换到标签页 7",
-      "Switch to tab 8": "切换到标签页 8",
-      "Switch to tab 9": "切换到标签页 9",
-      "Switch to tab 10": "切换到标签页 10",
-      "Show tips": "显示提示",
-      "Hide tips": "隐藏提示",
-      "Show key bindings": "显示快捷键",
-      "First key binding": "第一个快捷键",
-      "Last key binding": "最后一个快捷键",
-      "Previous key binding group": "上一组快捷键",
-      "Next key binding group": "下一组快捷键",
-      "Page key bindings up": "快捷键列表向上翻页",
-      "Page key bindings down": "快捷键列表向下翻页",
-      "Scroll key bindings up": "快捷键列表向上滚动",
-      "Scroll key bindings down": "快捷键列表向下滚动",
-      "Toggle key bindings layout": "切换快捷键面板布局",
-      "Toggle pending key preview": "切换待定按键预览"
-    },
-    "Workspace": {
-      "Copy worktree path": "复制工作树路径",
-      "Manage workspaces": "管理工作区"
-    },
-    "Autocomplete": {
-      "Previous autocomplete item": "上一个补全项",
-      "Next autocomplete item": "下一个补全项",
-      "Hide autocomplete": "隐藏补全菜单",
-      "Select autocomplete item": "选择当前补全项",
-      "Complete autocomplete item": "补全当前项"
-    },
-    "Prompt": {
-      "Skills": "技能",
-      "Clear prompt": "清空提示词",
-      "Clear prompt or exit": "清空提示词或退出",
-      "Submit prompt": "提交提示词",
-      "Remove editor context": "移除编辑器上下文",
-      "Paste": "粘贴",
-      "Stash prompt": "暂存提示词",
-      "Stash pop": "恢复暂存的提示词",
-      "Stash list": "暂存提示词列表",
-      "Previous prompt history": "上一条提示词历史",
-      "Next prompt history": "下一条提示词历史"
-    },
-    "VCS": {
-      "Open diff viewer": "打开差异视图",
-      "Close diff viewer": "关闭差异视图",
-      "Move diff viewer up": "向上移动差异视图",
-      "Move diff viewer down": "向下移动差异视图",
-      "Page diff viewer up": "向上翻页差异视图",
-      "Page diff viewer down": "向下翻页差异视图",
-      "Toggle diff viewer item": "切换差异项",
-      "Expand diff viewer item": "展开差异项",
-      "Expand all diff viewer folders": "展开所有差异视图文件夹",
-      "Collapse diff viewer item": "折叠差异项",
-      "Jump to next diff hunk": "跳到下一个差异块",
-      "Jump to previous diff hunk": "跳到上一个差异块",
-      "Jump to next diff file": "跳到下一个差异文件",
-      "Jump to previous diff file": "跳到上一个差异文件",
-      "Toggle selected diff file reviewed": "切换所选差异文件已审阅状态",
-      "Switch diff viewer focus": "切换差异视图焦点",
       "Toggle diff viewer file tree": "切换差异视图文件树",
-      "Toggle single patch view": "切换单补丁视图",
-      "Switch diff viewer source": "切换差异来源",
+      "Toggle diff viewer item": "切换差异项",
       "Toggle diff viewer split or unified view": "切换分栏/统一视图",
-      "Show more diff viewer shortcuts": "显示更多差异视图快捷键"
+      "Toggle key bindings layout": "切换快捷键面板布局",
+      "Toggle pending key preview": "切换待定按键预览",
+      "Toggle permission fullscreen": "切换权限弹窗全屏",
+      "Toggle selected diff file reviewed": "切换所选差异文件已审阅状态",
+      "Toggle single patch view": "切换单补丁视图",
+      "Unlock theme mode": "解锁主题模式",
+      "Unshare session": "取消分享会话",
+      "View subagents": "查看子智能体",
+      "Warp": "切换工作区",
+      "Write heap snapshot": "写入堆快照"
     },
-    "Dialog": {
-      "Previous item": "上一项",
-      "Next item": "下一项",
-      "First item": "第一项",
-      "Last item": "最后一项",
-      "Select item": "选择当前项",
-      "Submit dialog prompt": "提交对话框输入"
+    "agent.cycle": {
+      "titles": {
+        "Agent cycle": "下一个智能体"
+      }
     },
-    "Permission": {
-      "Cancel permission rejection": "取消拒绝权限",
-      "Reject permission": "拒绝权限",
-      "Toggle permission fullscreen": "切换权限弹窗全屏"
+    "agent.cycle.reverse": {
+      "titles": {
+        "Agent cycle reverse": "上一个智能体"
+      }
     },
-    "Question": {
-      "Clear answer edit": "清空答案编辑内容",
-      "Reject question": "拒绝回答"
+    "agent.list": {
+      "titles": {
+        "Switch agent": "切换智能体"
+      }
     },
-    "Model": {
-      "Cycle model variant": "下一个模型变体"
+    "app.console": {
+      "titles": {
+        "Toggle console": "切换控制台"
+      }
     },
-    "Providers": {
-      "Other": "其他"
+    "app.debug": {
+      "titles": {
+        "Toggle debug panel": "切换调试面板"
+      }
+    },
+    "app.exit": {
+      "titles": {
+        "Exit the app": "退出应用"
+      }
+    },
+    "app.toggle.animations": {
+      "titles": {
+        "Disable animations": "禁用动画"
+      }
+    },
+    "app.toggle.diffwrap": {
+      "titles": {
+        "Disable diff wrapping": "关闭差异换行"
+      }
+    },
+    "app.toggle.file_context": {
+      "titles": {
+        "Disable file context": "关闭文件上下文"
+      }
+    },
+    "app.toggle.paste_summary": {
+      "titles": {
+        "Enable paste summary": "开启粘贴摘要"
+      }
+    },
+    "command.palette.show": {
+      "titles": {
+        "Show command palette": "显示命令面板"
+      }
+    },
+    "composer.subagent.down": {
+      "titles": {
+        "Next subagent": "下一个子智能体"
+      }
+    },
+    "composer.subagent.interrupt": {
+      "titles": {
+        "Interrupt subagent": "中断子智能体"
+      }
+    },
+    "composer.subagent.select": {
+      "titles": {
+        "Navigate to subagent": "跳转到子智能体"
+      }
+    },
+    "composer.subagent.toggle-activity": {
+      "titles": {
+        "Toggle active subagents": "切换活动子智能体"
+      }
+    },
+    "composer.subagent.up": {
+      "titles": {
+        "Previous subagent": "上一个子智能体"
+      }
+    },
+    "diff.open": {
+      "titles": {
+        "Open diff viewer": "打开差异视图"
+      }
+    },
+    "docs.open": {
+      "titles": {
+        "Open docs": "打开文档"
+      }
+    },
+    "help.show": {
+      "titles": {
+        "Help": "帮助"
+      }
+    },
+    "mcp.list": {
+      "titles": {
+        "MCP servers": "MCP 服务器"
+      }
+    },
+    "messages.copy": {
+      "titles": {
+        "Copy last assistant message": "复制上一条助手回复"
+      }
+    },
+    "model.cycle_favorite": {
+      "titles": {
+        "Favorite cycle": "下一个收藏项"
+      }
+    },
+    "model.cycle_favorite_reverse": {
+      "titles": {
+        "Favorite cycle reverse": "上一个收藏项"
+      }
+    },
+    "model.cycle_recent": {
+      "titles": {
+        "Model cycle": "下一个模型"
+      }
+    },
+    "model.cycle_recent_reverse": {
+      "titles": {
+        "Model cycle reverse": "上一个模型"
+      }
+    },
+    "model.list": {
+      "titles": {
+        "Switch model": "切换模型"
+      }
+    },
+    "open.menu": {
+      "titles": {
+        "Open session or project": "打开会话或项目"
+      }
+    },
+    "opencode.debug": {
+      "titles": {
+        "View debug info": "查看调试信息"
+      }
+    },
+    "opencode.settings": {
+      "titles": {
+        "Open settings": "打开设置"
+      }
+    },
+    "opencode.status": {
+      "titles": {
+        "View status": "查看状态"
+      }
+    },
+    "permission.mode": {
+      "titles": {
+        "Enable auto-approve permissions": "开启自动批准权限",
+        "Disable auto-approve permissions": "关闭自动批准权限"
+      },
+      "description": "切换当前会话的权限自动批准"
+    },
+    "plugins.list": {
+      "titles": {
+        "Plugins": "插件"
+      }
+    },
+    "prompt.autocomplete.complete": {
+      "titles": {
+        "Complete autocomplete item": "补全当前项"
+      }
+    },
+    "prompt.autocomplete.destructive": {
+      "titles": {
+        "Confirm autocomplete action": "确认自动补全操作"
+      }
+    },
+    "prompt.autocomplete.hide": {
+      "titles": {
+        "Hide autocomplete": "隐藏补全菜单"
+      }
+    },
+    "prompt.autocomplete.next": {
+      "titles": {
+        "Next autocomplete item": "下一个补全项"
+      }
+    },
+    "prompt.autocomplete.prev": {
+      "titles": {
+        "Previous autocomplete item": "上一个补全项"
+      }
+    },
+    "prompt.autocomplete.select": {
+      "titles": {
+        "Select autocomplete item": "选择当前补全项"
+      }
+    },
+    "prompt.clear": {
+      "titles": {
+        "Clear prompt": "清空提示词"
+      }
+    },
+    "prompt.editor": {
+      "titles": {
+        "Open editor": "打开编辑器"
+      }
+    },
+    "prompt.history.next": {
+      "titles": {
+        "Next prompt history": "下一条提示词历史"
+      }
+    },
+    "prompt.history.previous": {
+      "titles": {
+        "Previous prompt history": "上一条提示词历史"
+      }
+    },
+    "prompt.images.view": {
+      "titles": {
+        "View image attachments": "查看图片附件"
+      }
+    },
+    "prompt.paste": {
+      "titles": {
+        "Paste": "粘贴"
+      }
+    },
+    "prompt.queue": {
+      "titles": {
+        "Queue prompt": "排队提示词"
+      }
+    },
+    "prompt.skills": {
+      "titles": {
+        "Skills": "技能"
+      }
+    },
+    "prompt.stash": {
+      "titles": {
+        "Stash prompt": "暂存提示词"
+      }
+    },
+    "prompt.submit": {
+      "titles": {
+        "Submit prompt": "提交提示词"
+      }
+    },
+    "provider.connect": {
+      "titles": {
+        "Connect an integration": "连接集成"
+      }
+    },
+    "server.pair": {
+      "titles": {
+        "Pair device": "配对设备"
+      }
+    },
+    "service.restart": {
+      "titles": {
+        "Restart service": "重启服务"
+      }
+    },
+    "session.background": {
+      "titles": {
+        "Background blocking tools": "后台运行阻塞中的工具"
+      }
+    },
+    "session.cd": {
+      "titles": {
+        "Change working directory": "更改工作目录"
+      }
+    },
+    "session.child.first": {
+      "titles": {
+        "Toggle subagent picker": "切换子智能体选择器"
+      }
+    },
+    "session.compact": {
+      "titles": {
+        "Compact session": "压缩会话上下文"
+      }
+    },
+    "session.copy": {
+      "titles": {
+        "Copy session transcript": "复制会话记录"
+      }
+    },
+    "session.delete": {
+      "titles": {
+        "delete": "删除会话"
+      }
+    },
+    "session.export": {
+      "titles": {
+        "Export session transcript": "导出会话记录"
+      }
+    },
+    "session.first": {
+      "titles": {
+        "First message": "第一条消息"
+      }
+    },
+    "session.fork": {
+      "titles": {
+        "Fork session": "分叉会话"
+      }
+    },
+    "session.half.page.down": {
+      "titles": {
+        "Half page down": "向下滚动半页"
+      }
+    },
+    "session.half.page.up": {
+      "titles": {
+        "Half page up": "向上滚动半页"
+      }
+    },
+    "session.interrupt": {
+      "titles": {
+        "Interrupt session": "中断会话"
+      }
+    },
+    "session.last": {
+      "titles": {
+        "Last message": "最后一条消息"
+      }
+    },
+    "session.line.down": {
+      "titles": {
+        "Line down": "向下移动一行"
+      }
+    },
+    "session.line.up": {
+      "titles": {
+        "Line up": "向上移动一行"
+      }
+    },
+    "session.list": {
+      "titles": {
+        "Switch session": "切换会话"
+      }
+    },
+    "session.message.next": {
+      "titles": {
+        "Next message": "下一条消息"
+      }
+    },
+    "session.message.previous": {
+      "titles": {
+        "Previous message": "上一条消息"
+      }
+    },
+    "session.message.user.next": {
+      "titles": {
+        "Next user message": "下一条用户消息"
+      }
+    },
+    "session.message.user.previous": {
+      "titles": {
+        "Previous user message": "上一条用户消息"
+      }
+    },
+    "session.messages_last_user": {
+      "titles": {
+        "Jump to last user message": "跳转到最后一条用户消息"
+      }
+    },
+    "session.move": {
+      "titles": {
+        "Move session": "移动会话"
+      },
+      "description": "移动到另一个项目目录"
+    },
+    "session.new": {
+      "titles": {
+        "New session": "新建会话"
+      }
+    },
+    "session.page.down": {
+      "titles": {
+        "Page down": "向下翻页"
+      }
+    },
+    "session.page.up": {
+      "titles": {
+        "Page up": "向上翻页"
+      }
+    },
+    "session.redo": {
+      "titles": {
+        "Redo": "重做"
+      }
+    },
+    "session.rename": {
+      "titles": {
+        "Rename session": "重命名会话"
+      }
+    },
+    "session.share": {
+      "titles": {
+        "Share session": "分享会话"
+      }
+    },
+    "session.sidebar.toggle": {
+      "titles": {
+        "Hide sidebar": "隐藏侧边栏",
+        "Show sidebar": "显示侧边栏"
+      }
+    },
+    "session.tab.close": {
+      "titles": {
+        "Close tab": "关闭标签页"
+      }
+    },
+    "session.tab.next": {
+      "titles": {
+        "Next tab": "下一个标签页"
+      }
+    },
+    "session.tab.next_unread": {
+      "titles": {
+        "Next unread tab": "下一个未读标签页"
+      }
+    },
+    "session.tab.previous": {
+      "titles": {
+        "Previous tab": "上一个标签页"
+      }
+    },
+    "session.tab.previous_unread": {
+      "titles": {
+        "Previous unread tab": "上一个未读标签页"
+      }
+    },
+    "session.tab.reopen": {
+      "titles": {
+        "Reopen closed tab": "重新打开已关闭的标签页"
+      }
+    },
+    "session.tab.select.1": {
+      "titles": {
+        "Switch to tab 1": "切换到标签页 1"
+      }
+    },
+    "session.tab.select.10": {
+      "titles": {
+        "Switch to tab 10": "切换到标签页 10"
+      }
+    },
+    "session.tab.select.2": {
+      "titles": {
+        "Switch to tab 2": "切换到标签页 2"
+      }
+    },
+    "session.tab.select.3": {
+      "titles": {
+        "Switch to tab 3": "切换到标签页 3"
+      }
+    },
+    "session.tab.select.4": {
+      "titles": {
+        "Switch to tab 4": "切换到标签页 4"
+      }
+    },
+    "session.tab.select.5": {
+      "titles": {
+        "Switch to tab 5": "切换到标签页 5"
+      }
+    },
+    "session.tab.select.6": {
+      "titles": {
+        "Switch to tab 6": "切换到标签页 6"
+      }
+    },
+    "session.tab.select.7": {
+      "titles": {
+        "Switch to tab 7": "切换到标签页 7"
+      }
+    },
+    "session.tab.select.8": {
+      "titles": {
+        "Switch to tab 8": "切换到标签页 8"
+      }
+    },
+    "session.tab.select.9": {
+      "titles": {
+        "Switch to tab 9": "切换到标签页 9"
+      }
+    },
+    "session.timeline": {
+      "titles": {
+        "Jump to message": "跳转到消息"
+      }
+    },
+    "session.toggle.exploration_grouping": {
+      "titles": {
+        "Show tool calls individually": "单独显示工具调用"
+      }
+    },
+    "session.toggle.scrollbar": {
+      "titles": {
+        "Toggle session scrollbar": "切换会话滚动条"
+      }
+    },
+    "session.toggle.thinking": {
+      "titles": {
+        "Expand thinking": "展开思考过程"
+      }
+    },
+    "session.undo": {
+      "titles": {
+        "Undo previous message": "撤销上一条消息"
+      }
+    },
+    "terminal.title.toggle": {
+      "titles": {
+        "Disable terminal title": "禁用终端标题"
+      }
+    },
+    "theme.mode.lock": {
+      "titles": {
+        "Lock theme mode": "锁定主题模式"
+      }
+    },
+    "theme.switch": {
+      "titles": {
+        "Switch theme": "切换主题"
+      }
+    },
+    "theme.switch_mode": {
+      "titles": {
+        "Switch to light mode": "切换到浅色模式"
+      }
+    },
+    "variant.cycle": {
+      "titles": {
+        "Variant cycle": "下一个变体"
+      }
+    },
+    "variant.list": {
+      "titles": {
+        "Switch model variant": "切换模型变体"
+      }
     }
+  },
+  "groups": {
+    "Agent": "智能体",
+    "Autocomplete": "自动补全",
+    "Composer": "输入区",
+    "Dialog": "对话框",
+    "Integration": "集成",
+    "Prompt": "提示词",
+    "Session": "会话",
+    "System": "系统",
+    "VCS": "版本控制",
+    "Suggested": "建议",
+    "Workspace": "工作区",
+    "Model": "模型",
+    "Provider": "提供商",
+    "Providers": "提供商",
+    "Permission": "权限",
+    "Question": "询问"
   },
   "slash_commands": {
     "/connect": "连接模型服务商",
@@ -268,7 +700,6 @@
     "/workspaces": "管理工作区"
   },
   "descriptions": {
-    "Move session": "移动到另一个项目目录",
     "Warp": "切换当前会话使用的工作区",
     "Previous key binding group": "显示上一组快捷键提示",
     "Next key binding group": "显示下一组快捷键提示",
