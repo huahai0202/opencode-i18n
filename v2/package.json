@@ -1,11 +1,12 @@
 {
   "name": "opencode-i18n-v2",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OpenCode V2 i18n plugin — localize the OpenCode 2 interface into 简体中文 / 繁體中文 and more.",
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./server": "./src/index.ts",
     "./tui": "./src/tui.tsx"
   },
   "files": [
