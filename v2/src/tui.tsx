@@ -261,6 +261,7 @@ function dumpCommand(context: Context, originals: () => ReadonlyMap<string, Keym
     title: "Export i18n command list",
     description: "Write the current command list (ids, titles, descriptions) for language pack maintenance",
     group: "System",
+    palette: true,
     run: async () => {
       await writeDump(originals())
       context.ui.toast.show({ message: `i18n: ${originals().size} commands exported to ${DUMP_PATH}` })

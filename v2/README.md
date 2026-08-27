@@ -77,11 +77,20 @@ opencode2 plugin add opencode-i18n-v2
 ```
 
 
-### 命令清单导出（语言包维护）
+### 语言包维护工具
 
-TUI 运行中自动把当前命令清单（id、英文标题、描述、分组、斜杠命令）防抖写入
-`~/.config/opencode/i18n/commands-dump.json`；也可在命令面板执行
-**Export i18n command list** 手动导出。升级 OpenCode 后用它对齐语言包。
+`tools/extract-commands.ts`：直接读 OpenCode 源码（`anomalyco/opencode` 的 `beta` 分支）提取全量命令清单，
+合并运行时 dump 的动态标题变体，与语言包 diff 出缺失 id / 缺失变体 / 多余条目：
+
+```bash
+bun tools/extract-commands.ts --src <opencode-beta 源码路径>
+bun tools/extract-commands.ts --src <path> --skeleton zh-Hans   # 往语言包插空占位
+```{N}
+分工：源码求全（所有内置 id 和静态标题，固定 commit 与版本对应），dump 补动态标题变体。
+升级 OpenCode 后跑一次即可，不再需要逐一打开界面积攒命令。
+
+TUI 运行中也会自动把当前命令清单防抖写入 `~/.config/opencode/i18n/commands-dump.json`
+（命令面板可手动执行 **Export i18n command list**），作为源码提取之外的变体补充。
 
 ## 从 V1（opencode-i18n）迁移
 
