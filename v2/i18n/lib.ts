@@ -178,55 +178,57 @@ function localeCodeFromFile(file: string) {
   return file.endsWith(".json") ? file.slice(0, -".json".length) : undefined
 }
 
-function mergeLocaleNames(indexLocales: readonly LocaleCode[], discoveredLocales: readonly LocaleCode[]) {
-  return Array.from(new Set([...indexLocales, ...discoveredLocales])).filter(Boolean)
+function localeCodesIn(entries: { name: string; isFile(): boolean }[]) {
+  return entries
+    .filter((entry) => entry.isFile())
+    .map((entry) => localeCodeFromFile(entry.name))
+    .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+    .sort((a, b) => a.localeCompare(b))
 }
 
-function discoverLocalesInSync(root: string) {
-  try {
-    return readdirSync(root, { withFileTypes: true })
-      .filter((entry) => entry.isFile())
-      .map((entry) => localeCodeFromFile(entry.name))
-      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
-      .sort((a, b) => a.localeCompare(b))
-  } catch {
-    return []
-  }
+function mergeLocaleNames(...groups: readonly LocaleCode[][]) {
+  return Array.from(new Set(groups.flat())).filter(Boolean)
 }
+
+/** Read order is priority order: the user directory overrides bundled defaults. */
+const LOCALE_ROOTS = [LOCALES_ROOT, PACKAGE_LOCALES_ROOT] as const
 
 function discoverLocalesSync() {
-  return Array.from(new Set([...discoverLocalesInSync(LOCALES_ROOT), ...discoverLocalesInSync(PACKAGE_LOCALES_ROOT)])).sort(
-    (a, b) => a.localeCompare(b),
+  return mergeLocaleNames(
+    LOCALE_ROOTS.map((root) => {
+      try {
+        return localeCodesIn(readdirSync(root, { withFileTypes: true }))
+      } catch {
+        return []
+      }
+    }),
   )
 }
 
-async function discoverLocalesIn(root: string) {
-  try {
-    return (await readdir(root, { withFileTypes: true }))
-      .filter((entry) => entry.isFile())
-      .map((entry) => localeCodeFromFile(entry.name))
-      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
-      .sort((a, b) => a.localeCompare(b))
-  } catch {
-    return []
-  }
-}
-
 async function discoverLocales() {
-  const [user, pkg] = await Promise.all([discoverLocalesIn(LOCALES_ROOT), discoverLocalesIn(PACKAGE_LOCALES_ROOT)])
-  return Array.from(new Set([...user, ...pkg])).sort((a, b) => a.localeCompare(b))
+  return mergeLocaleNames(
+    await Promise.all(
+      LOCALE_ROOTS.map(async (root) => {
+        try {
+          return localeCodesIn(await readdir(root, { withFileTypes: true }))
+        } catch {
+          return [] as string[]
+        }
+      }),
+    ),
+  )
 }
 
 function readLocaleFileSync(locale: LocaleCode) {
-  const user = readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
-  if (user !== undefined) return user
-  return readJsonFileSync<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+  return LOCALE_ROOTS.map((root) => readJsonFileSync<unknown>(path.join(root, `${locale}.json`))).find((value) => value !== undefined)
 }
 
 async function readLocaleFile(locale: LocaleCode) {
-  const user = await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
-  if (user !== undefined) return user
-  return await readJsonFile<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+  for (const root of LOCALE_ROOTS) {
+    const value = await readJsonFile<unknown>(path.join(root, `${locale}.json`))
+    if (value !== undefined) return value
+  }
+  return undefined
 }
 
 function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: readonly LocaleCode[], readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {

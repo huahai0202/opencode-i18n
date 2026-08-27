@@ -1,13 +1,25 @@
 /**
- * 静态命令清单提取器：直接读 OpenCode 源码（beta 分支）和运行时 dump，
- * 得到完整的命令库存，并与语言包 diff 出缺失/多余/待翻变体。
+ * Static command inventory extractor for locale-pack maintenance.
  *
- * 用法（在 v2/ 目录下）：
- *   bun tools/extract-commands.ts --src <opencode 源码路径>
- *   bun tools/extract-commands.ts --src <path> --skeleton zh-Hans   # 往语言包插空占位
- *   bun tools/extract-commands.ts --src <path> --no-dump            # 只用源码，不合并 dump
+ * Reads the OpenCode source (anomalyco/opencode, beta branch) plus the
+ * runtime commands-dump.json, merges them into one inventory, and diffs it
+ * against each locale pack: missing ids / missing title variants /
+ * missing groups / stale ids.
  *
- * 分工：源码求全（所有 id + 静态标题），dump 补动态标题变体（show/hide 这类）。
+ * Division of labor: the source gives breadth (every built-in id and its
+ * static titles, pinned to a commit), the dump only adds dynamic title
+ * variants (show/hide style runtime strings).
+ *
+ * Heuristic by design — this is not a TSX parser. It regex-scans the
+ * keybind defaults table and brace-matches keymap command literals.
+ * Unbalanced braces inside strings/comments or fully dynamic titles will
+ * slip past silently; after upstream refactors, eyeball the diff once
+ * before trusting the report.
+ *
+ * Usage (run inside v2/):
+ *   bun tools/extract-commands.ts --src <opencode checkout>
+ *   bun tools/extract-commands.ts --src <path> --skeleton zh-Hans   # insert empty placeholders
+ *   bun tools/extract-commands.ts --src <path> --no-dump            # source only
  */
 
 import { existsSync, readFileSync } from "node:fs"
@@ -15,7 +27,7 @@ import { readdir } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 
-// ── 参数与路径 ──────────────────────────────────────────────────────────────
+// ── Args & paths ────────────────────────────────────────────────────────────
 
 const args = process.argv.slice(2)
 function opt(name: string) {
@@ -33,10 +45,10 @@ const DUMP_PATH = path.join(os.homedir(), ".config/opencode/i18n/commands-dump.j
 const NO_DUMP = args.includes("--no-dump")
 const SKELETON = opt("skeleton")
 
-// 与插件 collectable() 保持同一套过滤规则：交互层的 id 不翻译、不进清单
+// Same filter rules as the plugin's collectable(): interactive-layer ids are neither translated nor inventoried.
 const INTERACTIVE = /^(input|dialog|autocomplete|permission|question)\./
 
-// ── 源码静态提取 ────────────────────────────────────────────────────────────
+// ── Static source extraction ────────────────────────────────────────────────
 
 type Entry = { titles: Set<string>; description?: string; groups: Set<string>; palette: boolean; sources: Set<string> }
 const inventory = new Map<string, Entry>()
@@ -74,7 +86,7 @@ async function* walk(dir: string): AsyncGenerator<string> {
 }
 
 function objectAround(text: string, index: number): string | undefined {
-  // 从 id 位置向前找配对的 {
+  // walk back from the id position to the enclosing {
   let depth = 0
   let start = -1
   for (let i = index; i >= 0; i--) {
@@ -134,7 +146,7 @@ if (!NO_DUMP && existsSync(DUMP_PATH)) {
   }
 }
 
-// ── 与语言包 diff ───────────────────────────────────────────────────────────
+// ── Diff against locale packs ───────────────────────────────────────────────
 
 type LocalePack = {
   name: string
@@ -165,7 +177,7 @@ const report = (await loadLocales()).map(({ code, data }) => {
     const cmd = data.commands[id]
     const titles = [...e.titles].filter((t) => t && !t.startsWith("_"))
     if (!cmd) {
-      // dump 才出现的 id（第三方/本机插件命令）不属于核心语言包
+      // ids only seen via the dump (third-party / local plugin commands) do not belong to the core pack
       if (titles.length > 0 && e.sources.size > 0) missingIds.push(id)
     } else {
       for (const t of titles) if (!cmd.titles[t]?.trim()) missingVariants.push([id, t])
@@ -176,7 +188,7 @@ const report = (await loadLocales()).map(({ code, data }) => {
   return { code, missingIds, missingVariants, missingGroups: [...new Set(missingGroups)], stale }
 })
 
-// ── 输出 ────────────────────────────────────────────────────────────────────
+// ── Report ──────────────────────────────────────────────────────────────────
 
 console.log(`源码: ${SRC}  dump: ${NO_DUMP ? "(未用)" : DUMP_PATH}`)
 console.log(`静态清单: ${inventory.size} 个命令 (dump 贡献 ${dumpEntries} 条)\n`)
@@ -196,7 +208,7 @@ for (const r of report) {
   console.log()
 }
 
-// dump-only 命令 = 本机安装的第三方插件命令，仅供参考，不进核心语言包
+// dump-only commands = locally installed third-party plugin commands; informational, not part of the core pack
 const dumpOnly = [...inventory.entries()]
   .filter(([, e]) => e.sources.size === 0)
   .map(([id, e]) => `  ${id}  ${JSON.stringify([...e.titles])}`)
@@ -206,7 +218,7 @@ if (dumpOnly.length > 0) {
   console.log()
 }
 
-// ── 骨架写入 ────────────────────────────────────────────────────────────────
+// ── Skeleton write ──────────────────────────────────────────────────────────
 
 if (SKELETON) {
   const file = path.join(localesDir(), `${SKELETON}.json`)
