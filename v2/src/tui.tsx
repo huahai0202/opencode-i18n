@@ -20,10 +20,6 @@ const DUMP_PATH = path.join(CONFIG_ROOT, "i18n", "commands-dump.json")
 
 type Snapshot = {
   byId: Map<string, { titles: Map<string, string>; description?: string }>
-  /** Legacy fallback: english title -> localized title */
-  legacyTitles: Map<string, string>
-  /** Legacy fallback: english title -> localized description */
-  legacyDescriptions: Map<string, string>
   groups: Map<string, string>
   slashDescriptions: Map<string, string>
 }
@@ -77,8 +73,6 @@ function allTranslatedValues() {
       if (entry.description) values.add(entry.description.trim())
     }
     for (const value of Object.values(locale.groups)) values.add(value.trim())
-    for (const value of Object.values(locale.legacy.titles)) values.add(value.trim())
-    for (const value of Object.values(locale.legacy.descriptions)) values.add(value.trim())
     for (const value of Object.values(locale.slash_commands)) values.add(value.trim())
   }
   translatedValues = values
@@ -109,18 +103,6 @@ function readTranslationSnapshot(): Snapshot | undefined {
     byId.set(id, { titles, description: entry.description?.trim() || undefined })
   }
 
-  const legacyTitles = new Map<string, string>()
-  for (const [english, translated] of Object.entries(localeConfig.legacy.titles)) {
-    if (!english || english.startsWith("_") || !translated.trim()) continue
-    legacyTitles.set(english, translated.trim())
-  }
-
-  const legacyDescriptions = new Map<string, string>()
-  for (const [english, translated] of Object.entries(localeConfig.legacy.descriptions)) {
-    if (!english || english.startsWith("_") || !translated.trim()) continue
-    legacyDescriptions.set(english, translated.trim())
-  }
-
   const groups = new Map<string, string>()
   for (const [english, translated] of Object.entries(localeConfig.groups)) {
     if (!english || english.startsWith("_") || !translated.trim()) continue
@@ -134,7 +116,7 @@ function readTranslationSnapshot(): Snapshot | undefined {
     if (name) slashDescriptions.set(name, translated.trim())
   }
 
-  return { byId, legacyTitles, legacyDescriptions, groups, slashDescriptions }
+  return { byId, groups, slashDescriptions }
 }
 
 type DumpEntry = {
@@ -199,13 +181,10 @@ function translateCommand(command: KeymapCommand, snapshot: Snapshot): KeymapCom
   const english = typeof command.title === "string" ? command.title : undefined
   const entry = snapshot.byId.get(id)
 
-  const title =
-    (english ? entry?.titles.get(english) : undefined) ??
-    (english ? snapshot.legacyTitles.get(english) : undefined)
+  const title = english ? entry?.titles.get(english) : undefined
 
   const description =
     entry?.description ??
-    (english ? snapshot.legacyDescriptions.get(english) : undefined) ??
     commandSlashNames(command).map((name) => snapshot.slashDescriptions.get(name)).find(Boolean)
 
   const group = command.group ? snapshot.groups.get(command.group) : undefined

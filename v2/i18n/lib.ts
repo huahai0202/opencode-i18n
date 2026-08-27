@@ -30,14 +30,6 @@ export type I18nLocaleConfig = {
   commands: Record<string, I18nCommandEntry>
   /** Localized command group names, e.g. "Agent" -> "智能体". */
   groups: Record<string, string>
-  /**
-   * Legacy lookup tables, flattened at load time from the old pack format
-   * (title-keyed). Kept so older / custom packs keep working.
-   */
-  legacy: {
-    titles: Record<string, string>
-    descriptions: Record<string, string>
-  }
   slash_commands: Record<string, string>
 }
 
@@ -122,30 +114,16 @@ function commandEntry(value: unknown): I18nCommandEntry {
   return { titles: stringRecord(value.titles), description }
 }
 
-/**
- * Accepts both formats:
- * - current:  { "<id>": { titles: { "English": "..." }, description: "..." } }
- * - legacy:   { "<group>": { "English title": "..." } }
- * Legacy group buckets are flattened into `legacy.titles`.
- */
-function commandTable(value: unknown): { commands: Record<string, I18nCommandEntry>; legacyTitles: Record<string, string> } {
-  const commands: Record<string, I18nCommandEntry> = {}
-  const legacyTitles: Record<string, string> = {}
-  if (!isObject(value)) return { commands, legacyTitles }
-
-  for (const [key, entry] of Object.entries(value)) {
-    if (isObject(entry) && ("titles" in entry || "description" in entry)) {
-      commands[key] = commandEntry(entry)
-      continue
-    }
-    // legacy: group bucket of title -> translation
-    for (const [title, translated] of Object.entries(stringRecord(entry))) {
-      if (!title || title.startsWith("_") || !translated.trim()) continue
-      if (!(title in legacyTitles)) legacyTitles[title] = translated.trim()
-    }
-  }
-
-  return { commands, legacyTitles }
+/** Only the id-keyed format is supported: { "<id>": { titles: { "English": "..." }, description: "..." } }. */
+function commandTable(value: unknown): Record<string, I18nCommandEntry> {
+  if (!isObject(value)) return {}
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter((entry): entry is [string, JsonObject] =>
+        isObject(entry[1]) && ("titles" in entry[1] || "description" in entry[1]),
+      )
+      .map(([key, entry]) => [key, commandEntry(entry)]),
+  )
 }
 
 function languagePicker(value: unknown): I18nLocaleConfig["language_picker"] {
@@ -164,17 +142,12 @@ function languagePicker(value: unknown): I18nLocaleConfig["language_picker"] {
 function normalizeLocaleConfig(value: unknown, fallbackName: string): I18nLocaleConfig {
   const locale = isObject(value) ? value : {}
   const name = typeof locale.name === "string" && locale.name.trim() ? locale.name.trim() : fallbackName
-  const table = commandTable(locale.commands)
 
   return {
     name,
     language_picker: languagePicker(locale.language_picker),
-    commands: table.commands,
+    commands: commandTable(locale.commands),
     groups: stringRecord(locale.groups),
-    legacy: {
-      titles: table.legacyTitles,
-      descriptions: stringRecord(locale.descriptions),
-    },
     slash_commands: stringRecord(locale.slash_commands),
   }
 }
@@ -300,19 +273,11 @@ export function readConfigSync(): I18nConfig | undefined {
 
 export async function readConfig(): Promise<I18nConfig | undefined> {
   const index = normalizeIndexConfig((await readJsonFile<unknown>(CONFIG_PATH)) ?? (await readJsonFile<unknown>(PACKAGE_CONFIG_PATH)))
-  if (!index) return undefined
-
-  const localeNames = mergeLocaleNames(index.locales, await discoverLocales())
-  const entries = await Promise.all(
-    localeNames.map(async (locale) => [
-      locale,
-      normalizeLocaleConfig(await readLocaleFile(locale), locale),
-    ] as const),
+  const names = mergeLocaleNames(index?.locales ?? [], await discoverLocales())
+  const files = new Map(
+    await Promise.all(names.map(async (locale) => [locale, await readLocaleFile(locale)] as const)),
   )
-  const locales = Object.fromEntries(entries) as Record<LocaleCode, I18nLocaleConfig>
-
-  if (Object.keys(locales).length === 0) return undefined
-  return { defaultLocale: index.defaultLocale, locales }
+  return buildConfig(index, [], (locale) => files.get(locale))
 }
 
 export function localeNames(config: I18nConfig | undefined) {
