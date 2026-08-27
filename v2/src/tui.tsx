@@ -218,8 +218,16 @@ function translateCommand(command: KeymapCommand, snapshot: Snapshot): KeymapCom
   // still executes for palette, slash, and keyboard dispatch. Calling
   // command.run() here would re-dispatch by id and recurse into this
   // shadow forever.
+  //
+  // Omitting bind on a named command is not "unbound": the host auto-binds
+  // the command's configured keybinding (only bind: false disables that).
+  // The shadow lives in a global layer at priority 100, so it would inherit
+  // e.g. session.child.first's down arrow and steal keys from open dialogs
+  // (the false chain continues into the real subagent command instead of
+  // dialog.select.next). Explicit bind: false keeps shadows display-only.
   return {
     ...metadata,
+    bind: false,
     run: () => false,
     ...(title ? { title } : {}),
     ...(description ? { description } : {}),
