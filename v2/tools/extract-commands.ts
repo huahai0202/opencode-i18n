@@ -1,20 +1,30 @@
 /**
  * Static command inventory extractor for locale-pack maintenance.
  *
- * Reads the OpenCode source (anomalyco/opencode, beta branch) plus the
- * runtime commands-dump.json, merges them into one inventory, and diffs it
- * against each locale pack: missing ids / missing title variants /
- * missing groups / stale ids.
+ * Reads the OpenCode source (anomalyco/opencode, pinned to the installed
+ * release tag, e.g. v2.0.2) plus the runtime commands-dump.json, merges them
+ * into one inventory, and diffs it against each locale pack: missing ids /
+ * missing title variants / missing groups / stale ids.
  *
  * Division of labor: the source gives breadth (every built-in id and its
- * static titles, pinned to a commit), the dump only adds dynamic title
- * variants (show/hide style runtime strings).
+ * static titles, pinned to a tag), the dump only adds dynamic title
+ * variants (show/hide style runtime strings) and third-party commands.
+ *
+ * Two registration shapes are scanned:
+ * - keymap command literals (`id: "..."` with `run`) — the normal shape;
+ * - legacy block registrations (`name: "..."` + `title:`, mapped to keymap
+ *   commands later, used by app.tsx / prompt/index.tsx in 2.0.x).
+ * Objects that merely contain commands are excluded: `setup:` marks a
+ * Plugin.define body and `render:` marks a storybook Story — their nested
+ * `run`s belong to the inner commands, not to the plugin/story id.
+ * Ternary title expressions only yield literals from their arms (conditions
+ * like `mode() === "dark"` no longer leak pseudo-variants).
  *
  * Heuristic by design — this is not a TSX parser. It regex-scans the
- * keybind defaults table and brace-matches keymap command literals.
- * Unbalanced braces inside strings/comments or fully dynamic titles will
- * slip past silently; after upstream refactors, eyeball the diff once
- * before trusting the report.
+ * keybind defaults table and brace-matches command literals. Unbalanced
+ * braces inside strings/comments or fully dynamic titles will slip past
+ * silently; after upstream refactors, eyeball the diff once before trusting
+ * the report.
  *
  * Usage (run inside v2/):
  *   bun tools/extract-commands.ts --src <opencode checkout>
@@ -65,6 +75,56 @@ function literals(text: string): string[] {
   return [...text.matchAll(STR)].map((m) => m[1])
 }
 
+/**
+ * Splits a title expression into ternary arms at top nesting depth, so
+ * condition literals (`mode() === "dark"`, `wrap ?? "word"`) never leak in
+ * as title variants. Recurses for nested ternaries.
+ */
+function ternaryArms(expr: string): string[] {
+  let depth = 0
+  let inStr: string | undefined
+  let esc = false
+  let question = -1
+  let colon = -1
+  for (let i = 0; i < expr.length; i++) {
+    const c = expr[i]!
+    if (inStr) {
+      if (esc) esc = false
+      else if (c === "\\") esc = true
+      else if (c === inStr) inStr = undefined
+      continue
+    }
+    if (c === '"' || c === "'" || c === "`") {
+      inStr = c
+      continue
+    }
+    if (c === "(" || c === "[" || c === "{") {
+      depth++
+      continue
+    }
+    if (c === ")" || c === "]" || c === "}") {
+      depth--
+      continue
+    }
+    if (depth !== 0) continue
+    if (c === "?") {
+      if (expr[i + 1] === "?" || expr[i + 1] === "." || expr[i - 1] === "?") continue
+      if (question < 0) question = i
+      continue
+    }
+    if (c === ":" && question >= 0 && colon < 0) colon = i
+  }
+  if (question < 0) return [expr]
+  const thenArm = expr.slice(question + 1, colon >= 0 ? colon : expr.length)
+  const elseArm = colon >= 0 ? expr.slice(colon + 1) : ""
+  return [...ternaryArms(thenArm), ...ternaryArms(elseArm)]
+}
+
+function addTitles(entry: Entry | undefined, expr: string | undefined) {
+  if (!entry || !expr) return
+  for (const arm of ternaryArms(expr)) for (const t of literals(arm)) entry.titles.add(t)
+}
+
 /** 1) 默认键位表 config/keybind.ts："id": keybind("key", "Title") */
 {
   const file = path.join(TUI_SRC, "config/keybind.ts")
@@ -76,7 +136,7 @@ function literals(text: string): string[] {
   }
 }
 
-/** 2) 各层注册的命令字面量：包住 id 的配对花括号内提 title/description/group/slash */
+/** 2) 命令字面量（keymap 形状 id: + legacy 形状 name:）：配对花括号内提 title/description/group/slash */
 async function* walk(dir: string): AsyncGenerator<string> {
   for (const item of await readdir(dir, { withFileTypes: true })) {
     const full = path.join(dir, item.name)
@@ -113,18 +173,29 @@ function objectAround(text: string, index: number): string | undefined {
 for await (const file of walk(TUI_SRC)) {
   const rel = path.relative(TUI_SRC, file)
   const text = readFileSync(file, "utf8")
-  for (const m of text.matchAll(/\bid:\s*"([a-z][a-z0-9._-]+)"/g)) {
+  const matches = [
+    ...text.matchAll(/\bid:\s*"([a-z][a-z0-9._-]+)"/g),
+    ...text.matchAll(/\bname:\s*"([a-z][a-z0-9._-]+)"/g),
+  ]
+  for (const m of matches) {
     const id = m[1]
     const obj = objectAround(text, m.index!)
     if (!obj) continue
+    // Command literals carry an executor (`run:` / `run()` / `onSelect`). Containers
+    // are excluded: a `setup` or `render` member BEFORE the first run marks a
+    // Plugin.define body or storybook Story — their nested run/title strings belong
+    // to inner commands, never to the plugin/story id itself. Checks after the run
+    // position are ignored so `x.render()` calls inside a run body cannot
+    // disqualify a genuine command.
+    const run = /\b(?:run|onSelect)\s*[:(]/.exec(obj)
+    if (!run || /\b(?:setup|render)\s*[:(]/.test(obj.slice(0, run.index))) continue
     const e = entry(id)
     if (!e) continue
     e.sources.add(rel)
-    const titleExpr = obj.match(/\btitle:\s*([^,\n]{1,160})/)?.[1]
-    if (titleExpr) for (const t of literals(titleExpr)) e.titles.add(t)
-    const desc = obj.match(/\bdescription:\s*"((?:[^"\\]|\\.)*)"/)?.[1]
+    addTitles(e, obj.match(/\btitle:\s*([^,\n]{1,200})/)?.[1])
+    const desc = obj.match(/\bdesc(?:ription)?:\s*"((?:[^"\\]|\\.)*)"/)?.[1]
     if (desc && !e.description) e.description = desc
-    const grp = obj.match(/\bgroup:\s*"((?:[^"\\]|\\.)*)"/)?.[1]
+    const grp = obj.match(/\bgroup:\s*"((?:[^"\\]|\\.)*)"/)?.[1] ?? obj.match(/\bcategory:\s*"((?:[^"\\]|\\.)*)"/)?.[1]
     if (grp) e.groups.add(grp)
     if (/\bpalette:\s*true/.test(obj)) e.palette = true
   }

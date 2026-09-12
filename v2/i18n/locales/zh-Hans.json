@@ -27,6 +27,12 @@
         "List agents": "列出智能体"
       }
     },
+    "app.clear": {
+      "titles": {
+        "Clear the screen in mini": "清空 mini 模式屏幕",
+        "Clear screen": "清空屏幕"
+      }
+    },
     "app.console": {
       "titles": {
         "Toggle console": "切换控制台"
@@ -60,25 +66,29 @@
     "app.toggle.animations": {
       "titles": {
         "Disable animations": "禁用动画",
-        "Toggle animations": "切换动画"
+        "Toggle animations": "切换动画",
+        "Enable animations": "开启动画"
       }
     },
     "app.toggle.diffwrap": {
       "titles": {
         "Disable diff wrapping": "关闭差异换行",
-        "Toggle diff wrapping": "切换差异换行"
+        "Toggle diff wrapping": "切换差异换行",
+        "Enable diff wrapping": "开启差异换行"
       }
     },
     "app.toggle.file_context": {
       "titles": {
         "Disable file context": "关闭文件上下文",
-        "Toggle file context": "切换文件上下文"
+        "Toggle file context": "切换文件上下文",
+        "Enable file context": "开启文件上下文"
       }
     },
     "app.toggle.paste_summary": {
       "titles": {
         "Enable paste summary": "开启粘贴摘要",
-        "Toggle paste summary": "切换粘贴摘要"
+        "Toggle paste summary": "切换粘贴摘要",
+        "Disable paste summary": "关闭粘贴摘要"
       }
     },
     "command.palette.show": {
@@ -96,6 +106,11 @@
     "composer.shell.kill": {
       "titles": {
         "Kill shell command": "终止 shell 命令"
+      }
+    },
+    "composer.shell.select": {
+      "titles": {
+        "View shell output": "查看 shell 输出"
       }
     },
     "composer.shell.up": {
@@ -143,11 +158,6 @@
         "Previous terminal": "上一个终端"
       }
     },
-    "deployment": {
-      "titles": {
-        "Deployment architecture": "部署架构"
-      }
-    },
     "diff.close": {
       "titles": {
         "Close diff viewer": "关闭差异视图"
@@ -155,7 +165,8 @@
     },
     "diff.collapse": {
       "titles": {
-        "Collapse diff viewer item": "折叠差异项"
+        "Collapse diff viewer item": "折叠差异项",
+        "Deprecated: file tree is mouse-controlled": "已废弃：文件树由鼠标控制"
       }
     },
     "diff.down": {
@@ -165,17 +176,41 @@
     },
     "diff.expand": {
       "titles": {
-        "Expand diff viewer item": "展开差异项"
+        "Expand diff viewer item": "展开差异项",
+        "Deprecated: file tree is mouse-controlled": "已废弃：文件树由鼠标控制"
       }
     },
     "diff.expand_all": {
       "titles": {
-        "Expand all diff viewer folders": "展开所有差异视图文件夹"
+        "Expand all diff viewer folders": "展开所有差异视图文件夹",
+        "Deprecated: file tree is mouse-controlled": "已废弃：文件树由鼠标控制"
+      }
+    },
+    "diff.first": {
+      "titles": {
+        "Go to the start of the diff": "跳到差异开头"
+      }
+    },
+    "diff.half_page.down": {
+      "titles": {
+        "Scroll diff viewer down half a page": "差异视图向下滚动半页",
+        "Scroll down half a page": "向下滚动半页"
+      }
+    },
+    "diff.half_page.up": {
+      "titles": {
+        "Scroll diff viewer up half a page": "差异视图向上滚动半页",
+        "Scroll up half a page": "向上滚动半页"
       }
     },
     "diff.help": {
       "titles": {
         "Show more diff viewer shortcuts": "显示更多差异视图快捷键"
+      }
+    },
+    "diff.last": {
+      "titles": {
+        "Go to the end of the diff": "跳到差异末尾"
       }
     },
     "diff.mark_reviewed": {
@@ -225,7 +260,8 @@
     },
     "diff.switch_focus": {
       "titles": {
-        "Switch diff viewer focus": "切换差异视图焦点"
+        "Switch diff viewer focus": "切换差异视图焦点",
+        "Deprecated: keyboard navigation always controls the diff": "已废弃：始终由键盘导航控制差异视图"
       }
     },
     "diff.switch_source": {
@@ -235,7 +271,8 @@
     },
     "diff.toggle": {
       "titles": {
-        "Toggle diff viewer item": "切换差异项"
+        "Toggle diff viewer item": "切换差异项",
+        "Deprecated: file tree is mouse-controlled": "已废弃：文件树由鼠标控制"
       }
     },
     "diff.toggle_file_tree": {
@@ -271,11 +308,6 @@
         "List MCP servers": "列出 MCP 服务器"
       }
     },
-    "merman-layouts": {
-      "titles": {
-        "Mermaid layouts": "Mermaid 布局"
-      }
-    },
     "messages.copy": {
       "titles": {
         "Copy last assistant message": "复制上一条助手回复",
@@ -308,24 +340,21 @@
     },
     "model.dialog.favorite": {
       "titles": {
-        "Toggle model favorite status": "切换模型收藏"
+        "Toggle model favorite status": "切换模型收藏",
+        "Favorite": "收藏模型"
       }
     },
     "model.dialog.provider": {
       "titles": {
         "Open provider list from model dialog": "从模型对话框打开提供商列表",
-        "View all integrations": "查看所有集成"
+        "View all integrations": "查看所有集成",
+        "Connect an integration": "连接集成"
       }
     },
     "model.list": {
       "titles": {
         "Switch model": "切换模型",
         "List available models": "列出可用模型"
-      }
-    },
-    "nested-flow": {
-      "titles": {
-        "Nested directed groups": "嵌套有向分组"
       }
     },
     "open.menu": {
@@ -349,6 +378,11 @@
         "View status": "查看状态"
       }
     },
+    "opencode.update": {
+      "titles": {
+        "Update OpenCode": "更新 OpenCode"
+      }
+    },
     "pane.focus.left": {
       "titles": {
         "Focus session pane": "聚焦会话窗格"
@@ -356,7 +390,8 @@
     },
     "pane.focus.right": {
       "titles": {
-        "Focus terminal pane": "聚焦终端窗格"
+        "Focus terminal pane": "聚焦终端窗格",
+        "Focus right pane": "聚焦右侧窗格"
       }
     },
     "permission.mode": {
@@ -381,7 +416,8 @@
     "plugins.toggle": {
       "titles": {
         "Toggle plugin": "切换插件",
-        "disable": "禁用"
+        "disable": "禁用",
+        "enable": "启用"
       }
     },
     "prompt.autocomplete.complete": {
@@ -433,7 +469,8 @@
     },
     "prompt.editor_context.clear": {
       "titles": {
-        "Clear editor context": "清空编辑器上下文"
+        "Clear editor context": "清空编辑器上下文",
+        "Remove editor context": "移除编辑器上下文"
       }
     },
     "prompt.history.next": {
@@ -477,12 +514,14 @@
     },
     "prompt.stash.list": {
       "titles": {
-        "List stashed prompts": "列出暂存的提示词"
+        "List stashed prompts": "列出暂存的提示词",
+        "Stash list": "暂存列表"
       }
     },
     "prompt.stash.pop": {
       "titles": {
-        "Pop stashed prompt": "弹出暂存的提示词"
+        "Pop stashed prompt": "弹出暂存的提示词",
+        "Stash pop": "弹出暂存"
       }
     },
     "prompt.submit": {
@@ -498,7 +537,8 @@
     },
     "queued_prompt.delete": {
       "titles": {
-        "Delete queued prompt": "删除排队中的提示词"
+        "Delete queued prompt": "删除排队中的提示词",
+        "Delete pending prompt": "删除排队中的提示词"
       }
     },
     "server.pair": {
@@ -509,21 +549,6 @@
     "service.restart": {
       "titles": {
         "Restart service": "重启服务"
-      }
-    },
-    "session-location-missing": {
-      "titles": {
-        "Missing session directory": "会话目录缺失"
-      }
-    },
-    "session-preview-tabs": {
-      "titles": {
-        "Session preview tabs": "会话预览标签页"
-      }
-    },
-    "session-tabs": {
-      "titles": {
-        "Tabs": "标签页"
       }
     },
     "session.background": {
@@ -563,6 +588,11 @@
     "session.copy": {
       "titles": {
         "Copy session transcript": "复制会话记录"
+      }
+    },
+    "session.copy.id": {
+      "titles": {
+        "Copy session ID": "复制会话 ID"
       }
     },
     "session.delete": {
@@ -663,9 +693,10 @@
     },
     "session.move": {
       "titles": {
-        "Move session": "移动会话"
+        "Move session": "移动会话",
+        "Manage workspaces": "管理工作区"
       },
-      "description": "移动到另一个项目目录"
+      "description": "管理工作区"
     },
     "session.new": {
       "titles": {
@@ -698,7 +729,8 @@
     "session.queued_prompts": {
       "titles": {
         "Manage queued prompts": "管理排队中的提示词",
-        "View queued prompts": "查看排队中的提示词"
+        "View queued prompts": "查看排队中的提示词",
+        "View pending prompts": "查看排队中的提示词"
       }
     },
     "session.quick_switch.1": {
@@ -923,14 +955,9 @@
         "Delete stash entry": "删除暂存条目"
       }
     },
-    "state-composite": {
+    "stats.open": {
       "titles": {
-        "Nested composite lifecycle": "嵌套组合生命周期"
-      }
-    },
-    "state-feedback": {
-      "titles": {
-        "Dense state feedback": "密集状态反馈"
+        "Usage statistics": "使用统计"
       }
     },
     "terminal.close": {
@@ -951,7 +978,8 @@
     "terminal.title.toggle": {
       "titles": {
         "Disable terminal title": "禁用终端标题",
-        "Toggle terminal title": "切换终端标题"
+        "Toggle terminal title": "切换终端标题",
+        "Enable terminal title": "启用终端标题"
       }
     },
     "terminal.toggle": {
@@ -961,15 +989,11 @@
         "Show terminal pane": "显示终端窗格"
       }
     },
-    "theme-performance": {
-      "titles": {
-        "Theme performance": "主题性能"
-      }
-    },
     "theme.mode.lock": {
       "titles": {
         "Lock theme mode": "锁定主题模式",
-        "Lock or unlock theme mode": "锁定或解锁主题模式"
+        "Lock or unlock theme mode": "锁定或解锁主题模式",
+        "Unlock theme mode": "解锁主题模式"
       }
     },
     "theme.switch": {
@@ -981,7 +1005,8 @@
     "theme.switch_mode": {
       "titles": {
         "Switch to light mode": "切换到浅色模式",
-        "Switch between light and dark theme mode": "在明暗主题模式间切换"
+        "Switch between light and dark theme mode": "在明暗主题模式间切换",
+        "Switch to dark mode": "切换到深色模式"
       }
     },
     "variant.cycle": {
@@ -1076,13 +1101,11 @@
   "slash_commands": {
     "/connect": "连接模型服务商",
     "/compact": "压缩会话上下文（别名: /summarize）",
-    "/details": "切换工具详情显示",
     "/diff": "打开差异视图",
     "/editor": "打开外部编辑器",
     "/exit": "退出应用（别名: /quit, /q）",
     "/export": "导出会话全文",
     "/help": "显示帮助",
-    "/init": "创建或更新 AGENTS.md",
     "/models": "列出可用模型（别名: /mo）",
     "/new": "新建会话（别名: /clear）",
     "/redo": "重做",
@@ -1102,9 +1125,21 @@
     "/variants": "切换模型变体",
     "/status": "查看状态",
     "/debug": "查看调试信息",
-    "/org": "切换组织（别名: /orgs, /switch-org）",
-    "/warp": "切换当前会话使用的工作区",
-    "/move": "移动会话到另一个项目目录",
-    "/workspaces": "管理工作区"
+    "/clear": "新建会话",
+    "/continue": "切换会话",
+    "/open": "打开会话或项目",
+    "/projects": "打开会话或项目",
+    "/project": "打开会话或项目",
+    "/q": "退出应用",
+    "/quit": "退出应用",
+    "/restart": "重启服务",
+    "/resume": "切换会话",
+    "/settings": "打开设置",
+    "/stats": "查看使用统计",
+    "/terminal": "新建终端",
+    "/toggle-thinking": "切换思考过程可见性",
+    "/upgrade": "更新 OpenCode",
+    "/web": "配对设备",
+    "/worktrees": "管理工作区"
   }
 }

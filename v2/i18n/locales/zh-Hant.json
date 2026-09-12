@@ -27,6 +27,12 @@
         "List agents": "列出智慧體"
       }
     },
+    "app.clear": {
+      "titles": {
+        "Clear the screen in mini": "清空 mini 模式螢幕",
+        "Clear screen": "清空螢幕"
+      }
+    },
     "app.console": {
       "titles": {
         "Toggle console": "切換主控台"
@@ -60,25 +66,29 @@
     "app.toggle.animations": {
       "titles": {
         "Disable animations": "停用動畫",
-        "Toggle animations": "切換動畫"
+        "Toggle animations": "切換動畫",
+        "Enable animations": "啟用動畫"
       }
     },
     "app.toggle.diffwrap": {
       "titles": {
         "Disable diff wrapping": "停用差異換行",
-        "Toggle diff wrapping": "切換差異換行"
+        "Toggle diff wrapping": "切換差異換行",
+        "Enable diff wrapping": "啟用差異換行"
       }
     },
     "app.toggle.file_context": {
       "titles": {
         "Disable file context": "停用檔案上下文",
-        "Toggle file context": "切換檔案內容"
+        "Toggle file context": "切換檔案內容",
+        "Enable file context": "啟用檔案上下文"
       }
     },
     "app.toggle.paste_summary": {
       "titles": {
         "Enable paste summary": "啟用貼上摘要",
-        "Toggle paste summary": "切換貼上摘要"
+        "Toggle paste summary": "切換貼上摘要",
+        "Disable paste summary": "停用貼上摘要"
       }
     },
     "command.palette.show": {
@@ -96,6 +106,11 @@
     "composer.shell.kill": {
       "titles": {
         "Kill shell command": "終止 shell 命令"
+      }
+    },
+    "composer.shell.select": {
+      "titles": {
+        "View shell output": "檢視 shell 輸出"
       }
     },
     "composer.shell.up": {
@@ -143,11 +158,6 @@
         "Previous terminal": "上一個終端機"
       }
     },
-    "deployment": {
-      "titles": {
-        "Deployment architecture": "部署架構"
-      }
-    },
     "diff.close": {
       "titles": {
         "Close diff viewer": "關閉差異視圖"
@@ -155,7 +165,8 @@
     },
     "diff.collapse": {
       "titles": {
-        "Collapse diff viewer item": "折疊差異項目"
+        "Collapse diff viewer item": "折疊差異項目",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
       }
     },
     "diff.down": {
@@ -165,17 +176,41 @@
     },
     "diff.expand": {
       "titles": {
-        "Expand diff viewer item": "展開差異項目"
+        "Expand diff viewer item": "展開差異項目",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
       }
     },
     "diff.expand_all": {
       "titles": {
-        "Expand all diff viewer folders": "展開所有差異視圖資料夾"
+        "Expand all diff viewer folders": "展開所有差異視圖資料夾",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
+      }
+    },
+    "diff.first": {
+      "titles": {
+        "Go to the start of the diff": "跳至差異開頭"
+      }
+    },
+    "diff.half_page.down": {
+      "titles": {
+        "Scroll diff viewer down half a page": "差異視圖向下捲動半頁",
+        "Scroll down half a page": "向下捲動半頁"
+      }
+    },
+    "diff.half_page.up": {
+      "titles": {
+        "Scroll diff viewer up half a page": "差異視圖向上捲動半頁",
+        "Scroll up half a page": "向上捲動半頁"
       }
     },
     "diff.help": {
       "titles": {
         "Show more diff viewer shortcuts": "顯示更多差異視圖快捷鍵"
+      }
+    },
+    "diff.last": {
+      "titles": {
+        "Go to the end of the diff": "跳至差異結尾"
       }
     },
     "diff.mark_reviewed": {
@@ -225,7 +260,8 @@
     },
     "diff.switch_focus": {
       "titles": {
-        "Switch diff viewer focus": "切換差異視圖焦點"
+        "Switch diff viewer focus": "切換差異視圖焦點",
+        "Deprecated: keyboard navigation always controls the diff": "已棄用：永遠由鍵盤導覽控制差異視圖"
       }
     },
     "diff.switch_source": {
@@ -235,7 +271,8 @@
     },
     "diff.toggle": {
       "titles": {
-        "Toggle diff viewer item": "切換差異項目"
+        "Toggle diff viewer item": "切換差異項目",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
       }
     },
     "diff.toggle_file_tree": {
@@ -271,11 +308,6 @@
         "List MCP servers": "列出 MCP 伺服器"
       }
     },
-    "merman-layouts": {
-      "titles": {
-        "Mermaid layouts": "Mermaid 版面"
-      }
-    },
     "messages.copy": {
       "titles": {
         "Copy last assistant message": "複製最後一則助理回覆",
@@ -308,24 +340,21 @@
     },
     "model.dialog.favorite": {
       "titles": {
-        "Toggle model favorite status": "切換模型收藏"
+        "Toggle model favorite status": "切換模型收藏",
+        "Favorite": "收藏模型"
       }
     },
     "model.dialog.provider": {
       "titles": {
         "Open provider list from model dialog": "從模型對話方塊開啟提供者清單",
-        "View all integrations": "檢視所有整合"
+        "View all integrations": "檢視所有整合",
+        "Connect an integration": "連接整合"
       }
     },
     "model.list": {
       "titles": {
         "Switch model": "切換模型",
         "List available models": "列出可用模型"
-      }
-    },
-    "nested-flow": {
-      "titles": {
-        "Nested directed groups": "巢狀有向分組"
       }
     },
     "open.menu": {
@@ -349,6 +378,11 @@
         "View status": "檢視狀態"
       }
     },
+    "opencode.update": {
+      "titles": {
+        "Update OpenCode": "更新 OpenCode"
+      }
+    },
     "pane.focus.left": {
       "titles": {
         "Focus session pane": "聚焦會話窗格"
@@ -356,7 +390,8 @@
     },
     "pane.focus.right": {
       "titles": {
-        "Focus terminal pane": "聚焦終端窗格"
+        "Focus terminal pane": "聚焦終端窗格",
+        "Focus right pane": "聚焦右側窗格"
       }
     },
     "permission.mode": {
@@ -381,7 +416,8 @@
     "plugins.toggle": {
       "titles": {
         "Toggle plugin": "切換插件",
-        "disable": "停用"
+        "disable": "停用",
+        "enable": "啟用"
       }
     },
     "prompt.autocomplete.complete": {
@@ -433,7 +469,8 @@
     },
     "prompt.editor_context.clear": {
       "titles": {
-        "Clear editor context": "清空編輯器上下文"
+        "Clear editor context": "清空編輯器上下文",
+        "Remove editor context": "移除編輯器上下文"
       }
     },
     "prompt.history.next": {
@@ -477,12 +514,14 @@
     },
     "prompt.stash.list": {
       "titles": {
-        "List stashed prompts": "列出暫存的提示詞"
+        "List stashed prompts": "列出暫存的提示詞",
+        "Stash list": "暫存清單"
       }
     },
     "prompt.stash.pop": {
       "titles": {
-        "Pop stashed prompt": "取出暫存的提示詞"
+        "Pop stashed prompt": "取出暫存的提示詞",
+        "Stash pop": "取出暫存"
       }
     },
     "prompt.submit": {
@@ -498,7 +537,8 @@
     },
     "queued_prompt.delete": {
       "titles": {
-        "Delete queued prompt": "刪除佇列中的提示詞"
+        "Delete queued prompt": "刪除佇列中的提示詞",
+        "Delete pending prompt": "刪除佇列中的提示詞"
       }
     },
     "server.pair": {
@@ -509,21 +549,6 @@
     "service.restart": {
       "titles": {
         "Restart service": "重新啟動服務"
-      }
-    },
-    "session-location-missing": {
-      "titles": {
-        "Missing session directory": "會話目錄缺失"
-      }
-    },
-    "session-preview-tabs": {
-      "titles": {
-        "Session preview tabs": "會話預覽分頁"
-      }
-    },
-    "session-tabs": {
-      "titles": {
-        "Tabs": "分頁"
       }
     },
     "session.background": {
@@ -563,6 +588,11 @@
     "session.copy": {
       "titles": {
         "Copy session transcript": "複製會話記錄"
+      }
+    },
+    "session.copy.id": {
+      "titles": {
+        "Copy session ID": "複製會話 ID"
       }
     },
     "session.delete": {
@@ -663,9 +693,10 @@
     },
     "session.move": {
       "titles": {
-        "Move session": "移動會話"
+        "Move session": "移動會話",
+        "Manage workspaces": "管理工作區"
       },
-      "description": "移動到另一個專案目錄"
+      "description": "管理工作區"
     },
     "session.new": {
       "titles": {
@@ -698,7 +729,8 @@
     "session.queued_prompts": {
       "titles": {
         "Manage queued prompts": "管理佇列中的提示詞",
-        "View queued prompts": "檢視佇列中的提示詞"
+        "View queued prompts": "檢視佇列中的提示詞",
+        "View pending prompts": "檢視佇列中的提示詞"
       }
     },
     "session.quick_switch.1": {
@@ -923,14 +955,9 @@
         "Delete stash entry": "刪除暫存條目"
       }
     },
-    "state-composite": {
+    "stats.open": {
       "titles": {
-        "Nested composite lifecycle": "巢狀組合生命週期"
-      }
-    },
-    "state-feedback": {
-      "titles": {
-        "Dense state feedback": "密集狀態回饋"
+        "Usage statistics": "使用統計"
       }
     },
     "terminal.close": {
@@ -951,7 +978,8 @@
     "terminal.title.toggle": {
       "titles": {
         "Disable terminal title": "停用終端機標題",
-        "Toggle terminal title": "切換終端標題"
+        "Toggle terminal title": "切換終端標題",
+        "Enable terminal title": "啟用終端機標題"
       }
     },
     "terminal.toggle": {
@@ -961,15 +989,11 @@
         "Show terminal pane": "顯示終端窗格"
       }
     },
-    "theme-performance": {
-      "titles": {
-        "Theme performance": "主題效能"
-      }
-    },
     "theme.mode.lock": {
       "titles": {
         "Lock theme mode": "鎖定主題模式",
-        "Lock or unlock theme mode": "鎖定或解鎖主題模式"
+        "Lock or unlock theme mode": "鎖定或解鎖主題模式",
+        "Unlock theme mode": "解鎖主題模式"
       }
     },
     "theme.switch": {
@@ -981,7 +1005,8 @@
     "theme.switch_mode": {
       "titles": {
         "Switch to light mode": "切換到淺色模式",
-        "Switch between light and dark theme mode": "在明暗主題模式間切換"
+        "Switch between light and dark theme mode": "在明暗主題模式間切換",
+        "Switch to dark mode": "切換到深色模式"
       }
     },
     "variant.cycle": {
@@ -1076,13 +1101,11 @@
   "slash_commands": {
     "/connect": "連結模型提供者",
     "/compact": "壓縮會話上下文（別名: /summarize）",
-    "/details": "切換工具詳細資訊顯示",
     "/diff": "開啟差異視圖",
     "/editor": "開啟外部編輯器",
     "/exit": "結束應用程式（別名: /quit, /q）",
     "/export": "匯出會話記錄",
     "/help": "顯示說明",
-    "/init": "建立或更新 AGENTS.md",
     "/models": "列出可用模型（別名: /mo）",
     "/new": "新增會話（別名: /clear）",
     "/redo": "重做",
@@ -1101,10 +1124,22 @@
     "/skills": "選擇技能",
     "/variants": "切換模型變體",
     "/status": "檢視狀態",
-    "/org": "切換組織（別名: /orgs, /switch-org）",
-    "/warp": "切換目前會話使用的工作區",
-    "/move": "將會話移動到另一個專案目錄",
-    "/workspaces": "管理工作區",
-    "/debug": "檢視偵錯資訊"
+    "/debug": "檢視偵錯資訊",
+    "/clear": "新增會話",
+    "/continue": "切換會話",
+    "/open": "開啟會話或專案",
+    "/projects": "開啟會話或專案",
+    "/project": "開啟會話或專案",
+    "/q": "結束應用程式",
+    "/quit": "結束應用程式",
+    "/restart": "重新啟動服務",
+    "/resume": "切換會話",
+    "/settings": "開啟設定",
+    "/stats": "檢視使用統計",
+    "/terminal": "新增終端機",
+    "/toggle-thinking": "切換思考過程可見性",
+    "/upgrade": "更新 OpenCode",
+    "/web": "配對裝置",
+    "/worktrees": "管理工作區"
   }
 }

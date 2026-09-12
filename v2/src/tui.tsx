@@ -1,7 +1,7 @@
 /** @jsxImportSource @opentui/solid */
 
-import { Plugin } from "@opencode-ai/plugin/tui"
-import type { Context, KeymapCommand } from "@opencode-ai/plugin/tui/context"
+import { Plugin } from "@opencode/plugin/tui"
+import type { Context, KeymapCommand } from "@opencode/plugin/tui/context"
 import { createEffect, createSignal, onCleanup, untrack } from "solid-js"
 import path from "node:path"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
@@ -224,7 +224,6 @@ function languageCommand(context: Context, onLanguageChanged: () => void): Keyma
     suggested: true,
     slash: {
       name: "i18n",
-      aliases: ["语言"],
     },
     run: async () => {
       const config = readConfigSync()

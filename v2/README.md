@@ -79,7 +79,7 @@ opencode2 plugin add opencode-i18n-v2
 
 ### 语言包维护工具
 
-`tools/extract-commands.ts`：直接读 OpenCode 源码（`anomalyco/opencode` 的 `beta` 分支）提取全量命令清单，
+`tools/extract-commands.ts`：直接读 OpenCode 源码（`anomalyco/opencode`，按本机安装的 release tag 取源，如 `v2.0.2`）提取全量命令清单，
 合并运行时 dump 的动态标题变体，与语言包 diff 出缺失 id / 缺失变体 / 多余条目：
 
 ```bash
@@ -98,6 +98,6 @@ V2 版与 V1 共享同一份状态文件（`~/.local/state/opencode/i18n-state.j
 
 ## 与 V1 的差异
 
-- 包名 `opencode-i18n-v2`，面向 OpenCode 2（`@opencode-ai/plugin@beta`）。
+- 包名 `opencode-i18n-v2`，面向 OpenCode 2（`@opencode/plugin@^2.0.0`，与本机 CLI 2.0.x 配套；旧 beta 期 SDK `@opencode-ai/plugin@beta` 已弃用）。
 - TUI 入口使用 V2 的 `setup(context)`，通过 keymap layer 接入命令目录和斜杠命令。
 - server 工具改用 V2 的 `ctx.tool.transform` 注册，输入用 `effect` Schema 声明。

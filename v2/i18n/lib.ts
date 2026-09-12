@@ -186,7 +186,7 @@ function localeCodesIn(entries: { name: string; isFile(): boolean }[]) {
     .sort((a, b) => a.localeCompare(b))
 }
 
-function mergeLocaleNames(...groups: readonly LocaleCode[][]) {
+function mergeLocaleNames(groups: readonly (readonly LocaleCode[])[]) {
   return Array.from(new Set(groups.flat())).filter(Boolean)
 }
 
@@ -235,7 +235,7 @@ function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: read
   if (!index) return undefined
 
   const locales: Record<LocaleCode, I18nLocaleConfig> = {}
-  for (const locale of mergeLocaleNames(index.locales, discoveredLocales)) {
+  for (const locale of mergeLocaleNames([index.locales, discoveredLocales])) {
     const value = readLocale(locale)
     if (value === undefined) continue
     locales[locale] = normalizeLocaleConfig(value, locale)
@@ -275,7 +275,7 @@ export function readConfigSync(): I18nConfig | undefined {
 
 export async function readConfig(): Promise<I18nConfig | undefined> {
   const index = normalizeIndexConfig((await readJsonFile<unknown>(CONFIG_PATH)) ?? (await readJsonFile<unknown>(PACKAGE_CONFIG_PATH)))
-  const names = mergeLocaleNames(index?.locales ?? [], await discoverLocales())
+  const names = mergeLocaleNames([index?.locales ?? [], await discoverLocales()])
   const files = new Map(
     await Promise.all(names.map(async (locale) => [locale, await readLocaleFile(locale)] as const)),
   )
