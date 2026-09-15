@@ -1,0 +1,1145 @@
+{
+  "name": "繁體中文",
+  "language_picker": {
+    "question": "選擇 OpenCode 介面語言",
+    "option_descriptions": {
+      "en": "切換到英文介面",
+      "zh-Hans": "切換到簡體中文介面",
+      "zh-Hant": "切換到繁體中文介面"
+    }
+  },
+  "commands": {
+    "agent.cycle": {
+      "titles": {
+        "Agent cycle": "下一個 AI 代理",
+        "Next agent": "下一個 AI 代理"
+      }
+    },
+    "agent.cycle.reverse": {
+      "titles": {
+        "Agent cycle reverse": "上一個 AI 代理",
+        "Previous agent": "上一個 AI 代理"
+      }
+    },
+    "agent.list": {
+      "titles": {
+        "Switch agent": "切換 AI 代理",
+        "List agents": "列出智慧體"
+      }
+    },
+    "app.clear": {
+      "titles": {
+        "Clear the screen in mini": "清空 mini 模式螢幕",
+        "Clear screen": "清空螢幕"
+      }
+    },
+    "app.console": {
+      "titles": {
+        "Toggle console": "切換主控台"
+      }
+    },
+    "app.debug": {
+      "titles": {
+        "Toggle debug panel": "切換除錯面板"
+      }
+    },
+    "app.exit": {
+      "titles": {
+        "Exit the app": "結束應用程式",
+        "Exit the application": "結束應用程式",
+        "Close diff viewer": "關閉差異視圖",
+        "Dismiss form": "關閉表單",
+        "Cancel permission rejection": "取消拒絕權限",
+        "Reject permission": "拒絕權限"
+      }
+    },
+    "app.scrap": {
+      "titles": {
+        "Open scrap screen": "開啟草稿畫面"
+      }
+    },
+    "app.storybook": {
+      "titles": {
+        "Open storybook": "開啟 Storybook"
+      }
+    },
+    "app.toggle.animations": {
+      "titles": {
+        "Disable animations": "停用動畫",
+        "Toggle animations": "切換動畫",
+        "Enable animations": "啟用動畫"
+      }
+    },
+    "app.toggle.diffwrap": {
+      "titles": {
+        "Disable diff wrapping": "停用差異換行",
+        "Toggle diff wrapping": "切換差異換行",
+        "Enable diff wrapping": "啟用差異換行"
+      }
+    },
+    "app.toggle.file_context": {
+      "titles": {
+        "Disable file context": "停用檔案上下文",
+        "Toggle file context": "切換檔案內容",
+        "Enable file context": "啟用檔案上下文"
+      }
+    },
+    "app.toggle.paste_summary": {
+      "titles": {
+        "Enable paste summary": "啟用貼上摘要",
+        "Toggle paste summary": "切換貼上摘要",
+        "Disable paste summary": "停用貼上摘要"
+      }
+    },
+    "command.palette.show": {
+      "titles": {
+        "Show command palette": "顯示指令面板",
+        "List available commands": "列出可用命令",
+        "Open command palette": "開啟命令面板"
+      }
+    },
+    "composer.shell.down": {
+      "titles": {
+        "Next shell": "下一個 shell"
+      }
+    },
+    "composer.shell.kill": {
+      "titles": {
+        "Kill shell command": "終止 shell 命令"
+      }
+    },
+    "composer.shell.select": {
+      "titles": {
+        "View shell output": "檢視 shell 輸出"
+      }
+    },
+    "composer.shell.up": {
+      "titles": {
+        "Previous shell": "上一個 shell"
+      }
+    },
+    "composer.subagent.down": {
+      "titles": {
+        "Next subagent": "下一個子代理"
+      }
+    },
+    "composer.subagent.interrupt": {
+      "titles": {
+        "Interrupt subagent": "中斷子代理"
+      }
+    },
+    "composer.subagent.select": {
+      "titles": {
+        "Navigate to subagent": "跳轉到子代理"
+      }
+    },
+    "composer.subagent.toggle-activity": {
+      "titles": {
+        "Toggle active subagents": "切換活動子代理"
+      }
+    },
+    "composer.subagent.up": {
+      "titles": {
+        "Previous subagent": "上一個子代理"
+      }
+    },
+    "composer.terminal.down": {
+      "titles": {
+        "Next terminal": "下一個終端機"
+      }
+    },
+    "composer.terminal.select": {
+      "titles": {
+        "Select terminal": "選擇終端機"
+      }
+    },
+    "composer.terminal.up": {
+      "titles": {
+        "Previous terminal": "上一個終端機"
+      }
+    },
+    "diff.close": {
+      "titles": {
+        "Close diff viewer": "關閉差異視圖"
+      }
+    },
+    "diff.collapse": {
+      "titles": {
+        "Collapse diff viewer item": "折疊差異項目",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
+      }
+    },
+    "diff.down": {
+      "titles": {
+        "Move diff viewer down": "向下移動差異視圖"
+      }
+    },
+    "diff.expand": {
+      "titles": {
+        "Expand diff viewer item": "展開差異項目",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
+      }
+    },
+    "diff.expand_all": {
+      "titles": {
+        "Expand all diff viewer folders": "展開所有差異視圖資料夾",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
+      }
+    },
+    "diff.first": {
+      "titles": {
+        "Go to the start of the diff": "跳至差異開頭"
+      }
+    },
+    "diff.half_page.down": {
+      "titles": {
+        "Scroll diff viewer down half a page": "差異視圖向下捲動半頁",
+        "Scroll down half a page": "向下捲動半頁"
+      }
+    },
+    "diff.half_page.up": {
+      "titles": {
+        "Scroll diff viewer up half a page": "差異視圖向上捲動半頁",
+        "Scroll up half a page": "向上捲動半頁"
+      }
+    },
+    "diff.help": {
+      "titles": {
+        "Show more diff viewer shortcuts": "顯示更多差異視圖快捷鍵"
+      }
+    },
+    "diff.last": {
+      "titles": {
+        "Go to the end of the diff": "跳至差異結尾"
+      }
+    },
+    "diff.mark_reviewed": {
+      "titles": {
+        "Toggle selected diff file reviewed": "切換所選差異檔案已審閱狀態"
+      }
+    },
+    "diff.next_file": {
+      "titles": {
+        "Jump to next diff file": "跳至下一個差異檔案"
+      }
+    },
+    "diff.next_hunk": {
+      "titles": {
+        "Jump to next diff hunk": "跳至下一個差異區塊"
+      }
+    },
+    "diff.open": {
+      "titles": {
+        "Open diff viewer": "開啟差異視圖"
+      }
+    },
+    "diff.page.down": {
+      "titles": {
+        "Page diff viewer down": "向下翻頁差異視圖"
+      }
+    },
+    "diff.page.up": {
+      "titles": {
+        "Page diff viewer up": "向上翻頁差異視圖"
+      }
+    },
+    "diff.previous_file": {
+      "titles": {
+        "Jump to previous diff file": "跳至上一個差異檔案"
+      }
+    },
+    "diff.previous_hunk": {
+      "titles": {
+        "Jump to previous diff hunk": "跳至上一個差異區塊"
+      }
+    },
+    "diff.single_patch": {
+      "titles": {
+        "Toggle single patch view": "切換單一 Patch 視圖"
+      }
+    },
+    "diff.switch_focus": {
+      "titles": {
+        "Switch diff viewer focus": "切換差異視圖焦點",
+        "Deprecated: keyboard navigation always controls the diff": "已棄用：永遠由鍵盤導覽控制差異視圖"
+      }
+    },
+    "diff.switch_source": {
+      "titles": {
+        "Switch diff viewer source": "切換差異來源"
+      }
+    },
+    "diff.toggle": {
+      "titles": {
+        "Toggle diff viewer item": "切換差異項目",
+        "Deprecated: file tree is mouse-controlled": "已棄用：檔案樹由滑鼠控制"
+      }
+    },
+    "diff.toggle_file_tree": {
+      "titles": {
+        "Toggle diff viewer file tree": "切換差異視圖檔案樹"
+      }
+    },
+    "diff.toggle_view": {
+      "titles": {
+        "Toggle diff viewer split or unified view": "切換分欄/統一視圖"
+      }
+    },
+    "diff.up": {
+      "titles": {
+        "Move diff viewer up": "向上移動差異視圖"
+      }
+    },
+    "docs.open": {
+      "titles": {
+        "Open docs": "開啟說明文件",
+        "Open documentation": "開啟文件"
+      }
+    },
+    "help.show": {
+      "titles": {
+        "Help": "說明",
+        "Open help dialog": "開啟說明對話方塊"
+      }
+    },
+    "mcp.list": {
+      "titles": {
+        "MCP servers": "MCP 伺服器",
+        "List MCP servers": "列出 MCP 伺服器"
+      }
+    },
+    "messages.copy": {
+      "titles": {
+        "Copy last assistant message": "複製最後一則助理回覆",
+        "Copy message": "複製訊息"
+      }
+    },
+    "model.cycle_favorite": {
+      "titles": {
+        "Favorite cycle": "下一個收藏項",
+        "Next favorite model": "下一個收藏模型"
+      }
+    },
+    "model.cycle_favorite_reverse": {
+      "titles": {
+        "Favorite cycle reverse": "上一個收藏項",
+        "Previous favorite model": "上一個收藏模型"
+      }
+    },
+    "model.cycle_recent": {
+      "titles": {
+        "Model cycle": "下一個模型",
+        "Next recently used model": "下一個最近使用的模型"
+      }
+    },
+    "model.cycle_recent_reverse": {
+      "titles": {
+        "Model cycle reverse": "上一個模型",
+        "Previous recently used model": "上一個最近使用的模型"
+      }
+    },
+    "model.dialog.favorite": {
+      "titles": {
+        "Toggle model favorite status": "切換模型收藏",
+        "Favorite": "收藏模型"
+      }
+    },
+    "model.dialog.provider": {
+      "titles": {
+        "Open provider list from model dialog": "從模型對話方塊開啟提供者清單",
+        "View all integrations": "檢視所有整合",
+        "Connect an integration": "連接整合"
+      }
+    },
+    "model.list": {
+      "titles": {
+        "Switch model": "切換模型",
+        "List available models": "列出可用模型"
+      }
+    },
+    "open.menu": {
+      "titles": {
+        "Open session or project": "開啟會話或專案",
+        "Open recent sessions and projects": "開啟最近的會話和專案"
+      }
+    },
+    "opencode.debug": {
+      "titles": {
+        "View debug info": "檢視偵錯資訊"
+      }
+    },
+    "opencode.settings": {
+      "titles": {
+        "Open settings": "開啟設定"
+      }
+    },
+    "opencode.status": {
+      "titles": {
+        "View status": "檢視狀態"
+      }
+    },
+    "opencode.update": {
+      "titles": {
+        "Update OpenCode": "更新 OpenCode"
+      }
+    },
+    "pane.focus.left": {
+      "titles": {
+        "Focus session pane": "聚焦會話窗格"
+      }
+    },
+    "pane.focus.right": {
+      "titles": {
+        "Focus terminal pane": "聚焦終端窗格",
+        "Focus right pane": "聚焦右側窗格"
+      }
+    },
+    "permission.mode": {
+      "titles": {
+        "Enable auto-approve permissions": "啟用自動核准權限",
+        "Disable auto-approve permissions": "停用自動核准權限",
+        "Toggle auto-approve permissions": "切換權限自動核准"
+      },
+      "description": "切換目前會話的權限自動核准"
+    },
+    "plugins.install": {
+      "titles": {
+        "Install plugin": "安裝外掛"
+      }
+    },
+    "plugins.list": {
+      "titles": {
+        "Plugins": "外掛",
+        "Open plugin manager dialog": "開啟外掛管理對話方塊"
+      }
+    },
+    "plugins.toggle": {
+      "titles": {
+        "Toggle plugin": "切換插件",
+        "disable": "停用",
+        "enable": "啟用"
+      }
+    },
+    "prompt.autocomplete.complete": {
+      "titles": {
+        "Complete autocomplete item": "補全目前項目"
+      }
+    },
+    "prompt.autocomplete.destructive": {
+      "titles": {
+        "Confirm autocomplete action": "確認自動補全操作"
+      }
+    },
+    "prompt.autocomplete.hide": {
+      "titles": {
+        "Hide autocomplete": "隱藏補全選單"
+      }
+    },
+    "prompt.autocomplete.next": {
+      "titles": {
+        "Next autocomplete item": "下一個補全項",
+        "Move to next autocomplete item": "下一個自動補全項"
+      }
+    },
+    "prompt.autocomplete.prev": {
+      "titles": {
+        "Previous autocomplete item": "上一個補全項",
+        "Move to previous autocomplete item": "上一個自動補全項"
+      }
+    },
+    "prompt.autocomplete.select": {
+      "titles": {
+        "Select autocomplete item": "選取目前補全項"
+      }
+    },
+    "prompt.clear": {
+      "titles": {
+        "Clear prompt": "清空提示詞",
+        "Clear input field": "清空輸入框",
+        "Dismiss autocomplete": "關閉自動補全",
+        "Clear prompt or exit": "清空提示詞或退出",
+        "Clear answer edit": "清空答案編輯內容"
+      }
+    },
+    "prompt.editor": {
+      "titles": {
+        "Open editor": "開啟編輯器",
+        "Open external editor": "開啟外部編輯器"
+      }
+    },
+    "prompt.editor_context.clear": {
+      "titles": {
+        "Clear editor context": "清空編輯器上下文",
+        "Remove editor context": "移除編輯器上下文"
+      }
+    },
+    "prompt.history.next": {
+      "titles": {
+        "Next prompt history": "下一則提示詞歷史",
+        "Next history item": "下一則歷史"
+      }
+    },
+    "prompt.history.previous": {
+      "titles": {
+        "Previous prompt history": "上一則提示詞歷史",
+        "Previous history item": "上一則歷史"
+      }
+    },
+    "prompt.images.view": {
+      "titles": {
+        "View image attachments": "檢視圖片附件"
+      }
+    },
+    "prompt.paste": {
+      "titles": {
+        "Paste": "貼上",
+        "Paste from clipboard": "從剪貼簿貼上"
+      }
+    },
+    "prompt.queue": {
+      "titles": {
+        "Queue prompt": "將提示詞排入佇列"
+      }
+    },
+    "prompt.skills": {
+      "titles": {
+        "Skills": "技能",
+        "Open skill selector": "開啟技能選擇器"
+      }
+    },
+    "prompt.stash": {
+      "titles": {
+        "Stash prompt": "暫存提示詞"
+      }
+    },
+    "prompt.stash.list": {
+      "titles": {
+        "List stashed prompts": "列出暫存的提示詞",
+        "Stash list": "暫存清單"
+      }
+    },
+    "prompt.stash.pop": {
+      "titles": {
+        "Pop stashed prompt": "取出暫存的提示詞",
+        "Stash pop": "取出暫存"
+      }
+    },
+    "prompt.submit": {
+      "titles": {
+        "Submit prompt": "送出提示詞"
+      }
+    },
+    "provider.connect": {
+      "titles": {
+        "Connect an integration": "連接整合",
+        "Connect integration": "連結整合"
+      }
+    },
+    "queued_prompt.delete": {
+      "titles": {
+        "Delete queued prompt": "刪除佇列中的提示詞",
+        "Delete pending prompt": "刪除佇列中的提示詞"
+      }
+    },
+    "server.pair": {
+      "titles": {
+        "Pair device": "配對裝置"
+      }
+    },
+    "service.restart": {
+      "titles": {
+        "Restart service": "重新啟動服務"
+      }
+    },
+    "session.background": {
+      "titles": {
+        "Background blocking tools": "背景執行阻塞中的工具",
+        "Background blocking session tools": "背景化阻塞中的會話工具",
+        "Background subagents": "背景子智慧體"
+      }
+    },
+    "session.cd": {
+      "titles": {
+        "Change working directory": "變更工作目錄"
+      }
+    },
+    "session.child.first": {
+      "titles": {
+        "Toggle subagent picker": "切換子代理選擇器",
+        "View subagents": "檢視子智慧體"
+      }
+    },
+    "session.child.next": {
+      "titles": {
+        "Go to next child session": "進入下一個子會話"
+      }
+    },
+    "session.child.previous": {
+      "titles": {
+        "Go to previous child session": "進入上一個子會話"
+      }
+    },
+    "session.compact": {
+      "titles": {
+        "Compact session": "壓縮會話上下文",
+        "Compact the session": "壓縮會話上下文"
+      }
+    },
+    "session.copy": {
+      "titles": {
+        "Copy session transcript": "複製會話記錄"
+      }
+    },
+    "session.copy.id": {
+      "titles": {
+        "Copy session ID": "複製會話 ID"
+      }
+    },
+    "session.delete": {
+      "titles": {
+        "delete": "刪除會話",
+        "Delete session": "刪除會話"
+      }
+    },
+    "session.export": {
+      "titles": {
+        "Export session transcript": "匯出會話記錄",
+        "Export session to editor": "匯出會話到編輯器"
+      }
+    },
+    "session.first": {
+      "titles": {
+        "First message": "第一則訊息",
+        "Navigate to first message": "跳到第一則訊息"
+      }
+    },
+    "session.fork": {
+      "titles": {
+        "Fork session": "分叉會話",
+        "Fork session from message": "從此訊息分叉會話"
+      }
+    },
+    "session.half.page.down": {
+      "titles": {
+        "Half page down": "向下捲動半頁",
+        "Scroll messages down by half page": "訊息向下捲半頁"
+      }
+    },
+    "session.half.page.up": {
+      "titles": {
+        "Half page up": "向上捲動半頁",
+        "Scroll messages up by half page": "訊息向上捲半頁"
+      }
+    },
+    "session.interrupt": {
+      "titles": {
+        "Interrupt session": "中斷會話",
+        "Interrupt current session": "中斷目前會話"
+      }
+    },
+    "session.last": {
+      "titles": {
+        "Last message": "最後一則訊息",
+        "Navigate to last message": "跳到最後一則訊息"
+      }
+    },
+    "session.line.down": {
+      "titles": {
+        "Line down": "向下移動一行",
+        "Scroll messages down by one line": "訊息向下捲一行"
+      }
+    },
+    "session.line.up": {
+      "titles": {
+        "Line up": "向上移動一行",
+        "Scroll messages up by one line": "訊息向上捲一行"
+      }
+    },
+    "session.list": {
+      "titles": {
+        "Switch session": "切換會話",
+        "List all sessions": "列出所有會話"
+      }
+    },
+    "session.message.next": {
+      "titles": {
+        "Next message": "下一則訊息",
+        "Navigate to next message": "跳到下一則訊息"
+      }
+    },
+    "session.message.previous": {
+      "titles": {
+        "Previous message": "上一則訊息",
+        "Navigate to previous message": "跳到上一則訊息"
+      }
+    },
+    "session.message.user.next": {
+      "titles": {
+        "Next user message": "下一則使用者訊息",
+        "Navigate to next user message": "跳到下一則使用者訊息"
+      }
+    },
+    "session.message.user.previous": {
+      "titles": {
+        "Previous user message": "上一則使用者訊息",
+        "Navigate to previous user message": "跳到上一則使用者訊息"
+      }
+    },
+    "session.messages_last_user": {
+      "titles": {
+        "Jump to last user message": "跳至最後一則使用者訊息",
+        "Navigate to last user message": "跳到最後一則使用者訊息"
+      }
+    },
+    "session.move": {
+      "titles": {
+        "Move session": "移動會話",
+        "Manage workspaces": "管理工作區"
+      },
+      "description": "管理工作區"
+    },
+    "session.new": {
+      "titles": {
+        "New session": "新增會話",
+        "Create a new session": "新增會話"
+      }
+    },
+    "session.page.down": {
+      "titles": {
+        "Page down": "向下翻頁",
+        "Scroll messages down by one page": "訊息向下捲一頁"
+      }
+    },
+    "session.page.up": {
+      "titles": {
+        "Page up": "向上翻頁",
+        "Scroll messages up by one page": "訊息向上捲一頁"
+      }
+    },
+    "session.parent": {
+      "titles": {
+        "Go to parent session": "返回父會話"
+      }
+    },
+    "session.pin.toggle": {
+      "titles": {
+        "Pin or unpin session in the session list": "在會話清單中釘選或取消釘選該會話"
+      }
+    },
+    "session.queued_prompts": {
+      "titles": {
+        "Manage queued prompts": "管理佇列中的提示詞",
+        "View queued prompts": "檢視佇列中的提示詞",
+        "View pending prompts": "檢視佇列中的提示詞"
+      }
+    },
+    "session.quick_switch.1": {
+      "titles": {
+        "Switch to session in quick slot 1": "切換到快速槽位 1 的會話"
+      }
+    },
+    "session.quick_switch.2": {
+      "titles": {
+        "Switch to session in quick slot 2": "切換到快速槽位 2 的會話"
+      }
+    },
+    "session.quick_switch.3": {
+      "titles": {
+        "Switch to session in quick slot 3": "切換到快速槽位 3 的會話"
+      }
+    },
+    "session.quick_switch.4": {
+      "titles": {
+        "Switch to session in quick slot 4": "切換到快速槽位 4 的會話"
+      }
+    },
+    "session.quick_switch.5": {
+      "titles": {
+        "Switch to session in quick slot 5": "切換到快速槽位 5 的會話"
+      }
+    },
+    "session.quick_switch.6": {
+      "titles": {
+        "Switch to session in quick slot 6": "切換到快速槽位 6 的會話"
+      }
+    },
+    "session.quick_switch.7": {
+      "titles": {
+        "Switch to session in quick slot 7": "切換到快速槽位 7 的會話"
+      }
+    },
+    "session.quick_switch.8": {
+      "titles": {
+        "Switch to session in quick slot 8": "切換到快速槽位 8 的會話"
+      }
+    },
+    "session.quick_switch.9": {
+      "titles": {
+        "Switch to session in quick slot 9": "切換到快速槽位 9 的會話"
+      }
+    },
+    "session.redo": {
+      "titles": {
+        "Redo": "重做",
+        "Redo message": "重做訊息"
+      }
+    },
+    "session.rename": {
+      "titles": {
+        "Rename session": "重新命名會話",
+        "rename": "重新命名會話"
+      }
+    },
+    "session.share": {
+      "titles": {
+        "Share session": "分享會話",
+        "Share current session": "分享目前會話"
+      }
+    },
+    "session.sidebar.toggle": {
+      "titles": {
+        "Hide sidebar": "隱藏側邊欄",
+        "Show sidebar": "顯示側邊欄",
+        "Toggle sidebar": "切換側邊欄"
+      }
+    },
+    "session.tab.close": {
+      "titles": {
+        "Close tab": "關閉分頁",
+        "Close current session tab": "關閉目前會話分頁"
+      }
+    },
+    "session.tab.history.back": {
+      "titles": {
+        "Go back in session tab history": "會話分頁歷史後退"
+      }
+    },
+    "session.tab.history.forward": {
+      "titles": {
+        "Go forward in session tab history": "會話分頁歷史前進"
+      }
+    },
+    "session.tab.next": {
+      "titles": {
+        "Next tab": "下一個分頁",
+        "Switch to next open session tab": "切換到下一個已開啟會話分頁"
+      }
+    },
+    "session.tab.next_unread": {
+      "titles": {
+        "Next unread tab": "下一個未讀分頁",
+        "Switch to next unread session tab": "切換到下一個未讀會話分頁"
+      }
+    },
+    "session.tab.previous": {
+      "titles": {
+        "Previous tab": "上一個分頁",
+        "Switch to previous open session tab": "切換到上一個已開啟會話分頁"
+      }
+    },
+    "session.tab.previous_unread": {
+      "titles": {
+        "Previous unread tab": "上一個未讀分頁",
+        "Switch to previous unread session tab": "切換到上一個未讀會話分頁"
+      }
+    },
+    "session.tab.reopen": {
+      "titles": {
+        "Reopen closed tab": "重新開啟已關閉的分頁",
+        "Reopen last closed session tab": "重新開啟最近關閉的會話分頁"
+      }
+    },
+    "session.tab.select.1": {
+      "titles": {
+        "Switch to tab 1": "切換到分頁 1",
+        "Switch to session tab 1": "切換到會話分頁 1"
+      }
+    },
+    "session.tab.select.10": {
+      "titles": {
+        "Switch to tab 10": "切換到分頁 10",
+        "Switch to session tab 10": "切換到會話分頁 10"
+      }
+    },
+    "session.tab.select.2": {
+      "titles": {
+        "Switch to tab 2": "切換到分頁 2",
+        "Switch to session tab 2": "切換到會話分頁 2"
+      }
+    },
+    "session.tab.select.3": {
+      "titles": {
+        "Switch to tab 3": "切換到分頁 3",
+        "Switch to session tab 3": "切換到會話分頁 3"
+      }
+    },
+    "session.tab.select.4": {
+      "titles": {
+        "Switch to tab 4": "切換到分頁 4",
+        "Switch to session tab 4": "切換到會話分頁 4"
+      }
+    },
+    "session.tab.select.5": {
+      "titles": {
+        "Switch to tab 5": "切換到分頁 5",
+        "Switch to session tab 5": "切換到會話分頁 5"
+      }
+    },
+    "session.tab.select.6": {
+      "titles": {
+        "Switch to tab 6": "切換到分頁 6",
+        "Switch to session tab 6": "切換到會話分頁 6"
+      }
+    },
+    "session.tab.select.7": {
+      "titles": {
+        "Switch to tab 7": "切換到分頁 7",
+        "Switch to session tab 7": "切換到會話分頁 7"
+      }
+    },
+    "session.tab.select.8": {
+      "titles": {
+        "Switch to tab 8": "切換到分頁 8",
+        "Switch to session tab 8": "切換到會話分頁 8"
+      }
+    },
+    "session.tab.select.9": {
+      "titles": {
+        "Switch to tab 9": "切換到分頁 9",
+        "Switch to session tab 9": "切換到會話分頁 9"
+      }
+    },
+    "session.terminal": {
+      "titles": {
+        "New terminal": "新增終端機"
+      }
+    },
+    "session.timeline": {
+      "titles": {
+        "Jump to message": "跳至訊息",
+        "Show session timeline": "顯示會話時間線"
+      }
+    },
+    "session.toggle.exploration_grouping": {
+      "titles": {
+        "Show tool calls individually": "個別顯示工具呼叫",
+        "Toggle related tool call grouping": "切換相關工具呼叫分組",
+        "Group related tool calls": "分組相關工具呼叫"
+      }
+    },
+    "session.toggle.scrollbar": {
+      "titles": {
+        "Toggle session scrollbar": "切換會話捲動條"
+      }
+    },
+    "session.toggle.thinking": {
+      "titles": {
+        "Expand thinking": "展開思考過程",
+        "Toggle thinking blocks visibility": "切換思考區塊顯示"
+      }
+    },
+    "session.undo": {
+      "titles": {
+        "Undo previous message": "復原上一則訊息",
+        "Undo message": "復原訊息"
+      }
+    },
+    "session.unshare": {
+      "titles": {
+        "Unshare current session": "取消分享目前會話",
+        "Unshare session": "取消分享會話"
+      }
+    },
+    "stash.delete": {
+      "titles": {
+        "Delete stash entry": "刪除暫存條目"
+      }
+    },
+    "stats.open": {
+      "titles": {
+        "Usage statistics": "使用統計"
+      }
+    },
+    "terminal.close": {
+      "titles": {
+        "Close terminal pane": "關閉終端窗格"
+      }
+    },
+    "terminal.select": {
+      "titles": {
+        "Select terminal": "選擇終端機"
+      }
+    },
+    "terminal.suspend": {
+      "titles": {
+        "Suspend terminal": "暫停終端機"
+      }
+    },
+    "terminal.title.toggle": {
+      "titles": {
+        "Disable terminal title": "停用終端機標題",
+        "Toggle terminal title": "切換終端標題",
+        "Enable terminal title": "啟用終端機標題"
+      }
+    },
+    "terminal.toggle": {
+      "titles": {
+        "Toggle terminal pane": "切換終端窗格",
+        "Hide terminal pane": "隱藏終端窗格",
+        "Show terminal pane": "顯示終端窗格"
+      }
+    },
+    "theme.mode.lock": {
+      "titles": {
+        "Lock theme mode": "鎖定主題模式",
+        "Lock or unlock theme mode": "鎖定或解鎖主題模式",
+        "Unlock theme mode": "解鎖主題模式"
+      }
+    },
+    "theme.switch": {
+      "titles": {
+        "Switch theme": "切換主題",
+        "List available themes": "列出可用主題"
+      }
+    },
+    "theme.switch_mode": {
+      "titles": {
+        "Switch to light mode": "切換到淺色模式",
+        "Switch between light and dark theme mode": "在明暗主題模式間切換",
+        "Switch to dark mode": "切換到深色模式"
+      }
+    },
+    "variant.cycle": {
+      "titles": {
+        "Variant cycle": "下一個變體",
+        "Cycle model variants": "切換模型變體",
+        "Cycle model variant": "切換模型變體"
+      }
+    },
+    "variant.list": {
+      "titles": {
+        "Switch model variant": "切換模型變體",
+        "List model variants": "列出模型變體"
+      }
+    },
+    "which-key.end": {
+      "titles": {
+        "Jump to last which-key binding": "跳到最後一個快捷鍵提示綁定"
+      }
+    },
+    "which-key.group.next": {
+      "titles": {
+        "Next which-key group": "下一組快捷鍵提示"
+      }
+    },
+    "which-key.group.previous": {
+      "titles": {
+        "Previous which-key group": "上一組快捷鍵提示"
+      }
+    },
+    "which-key.home": {
+      "titles": {
+        "Jump to first which-key binding": "跳到第一個快捷鍵提示綁定"
+      }
+    },
+    "which-key.layout.toggle": {
+      "titles": {
+        "Switch which-key layout": "切換快捷鍵提示版面"
+      }
+    },
+    "which-key.page.down": {
+      "titles": {
+        "Page which-key down": "快捷鍵提示向下翻頁"
+      }
+    },
+    "which-key.page.up": {
+      "titles": {
+        "Page which-key up": "快捷鍵提示向上翻頁"
+      }
+    },
+    "which-key.pending.toggle": {
+      "titles": {
+        "Toggle which-key pending preview": "切換待按快捷鍵預覽"
+      }
+    },
+    "which-key.scroll.down": {
+      "titles": {
+        "Scroll which-key down": "向下捲動快捷鍵提示"
+      }
+    },
+    "which-key.scroll.up": {
+      "titles": {
+        "Scroll which-key up": "向上捲動快捷鍵提示"
+      }
+    },
+    "which-key.toggle": {
+      "titles": {
+        "Toggle which-key panel": "切換快捷鍵提示面板"
+      }
+    }
+  },
+  "groups": {
+    "Agent": "智慧體",
+    "Autocomplete": "自動補全",
+    "Composer": "輸入區",
+    "Dialog": "對話方塊",
+    "Integration": "整合",
+    "Prompt": "提示詞",
+    "Session": "會話",
+    "System": "系統",
+    "VCS": "版本控制",
+    "Suggested": "建議",
+    "Workspace": "工作區",
+    "Model": "模型",
+    "Provider": "提供者",
+    "Providers": "提供者",
+    "Permission": "權限",
+    "Question": "詢問",
+    "Form": "表單",
+    "Debug": "除錯"
+  },
+  "slash_commands": {
+    "/connect": "連結模型提供者",
+    "/compact": "壓縮會話上下文（別名: /summarize）",
+    "/diff": "開啟差異視圖",
+    "/editor": "開啟外部編輯器",
+    "/exit": "結束應用程式（別名: /quit, /q）",
+    "/export": "匯出會話記錄",
+    "/help": "顯示說明",
+    "/models": "列出可用模型（別名: /mo）",
+    "/new": "新增會話（別名: /clear）",
+    "/redo": "重做",
+    "/sessions": "切換會話（別名: /resume, /continue）",
+    "/share": "分享會話",
+    "/themes": "切換主題",
+    "/thinking": "切換思考過程可見性（別名: /toggle-thinking）",
+    "/undo": "復原上一則訊息",
+    "/unshare": "取消分享",
+    "/rename": "重新命名會話",
+    "/timeline": "跳至訊息",
+    "/fork": "分叉會話",
+    "/copy": "複製會話記錄",
+    "/agents": "切換 AI 代理",
+    "/mcps": "切換 MCP",
+    "/skills": "選擇技能",
+    "/variants": "切換模型變體",
+    "/status": "檢視狀態",
+    "/debug": "檢視偵錯資訊",
+    "/clear": "新增會話",
+    "/continue": "切換會話",
+    "/open": "開啟會話或專案",
+    "/projects": "開啟會話或專案",
+    "/project": "開啟會話或專案",
+    "/q": "結束應用程式",
+    "/quit": "結束應用程式",
+    "/restart": "重新啟動服務",
+    "/resume": "切換會話",
+    "/settings": "開啟設定",
+    "/stats": "檢視使用統計",
+    "/terminal": "新增終端機",
+    "/toggle-thinking": "切換思考過程可見性",
+    "/upgrade": "更新 OpenCode",
+    "/web": "配對裝置",
+    "/worktrees": "管理工作區"
+  }
+}
