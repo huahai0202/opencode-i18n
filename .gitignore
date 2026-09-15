@@ -1,4 +1,4 @@
-node_modules/
-*.tgz
-*.log
+node_modules
+package-lock.json
+bun.lock
 .DS_Store
