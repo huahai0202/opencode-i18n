@@ -22,6 +22,7 @@ export type I18nLocaleConfig = {
   commands: Record<string, Record<string, string>>
   descriptions: Record<string, string>
   slash_commands: Record<string, string>
+  tips?: string[]
 }
 
 export type I18nConfig = {
@@ -126,6 +127,9 @@ function languagePicker(value: unknown): I18nLocaleConfig["language_picker"] {
 function normalizeLocaleConfig(value: unknown, fallbackName: string): I18nLocaleConfig {
   const locale = isObject(value) ? value : {}
   const name = typeof locale.name === "string" && locale.name.trim() ? locale.name.trim() : fallbackName
+  const tips = Array.isArray(locale.tips)
+    ? locale.tips.filter((tip): tip is string => typeof tip === "string").map((tip) => tip.trim()).filter((tip) => tip.length > 0)
+    : []
 
   return {
     name,
@@ -133,6 +137,7 @@ function normalizeLocaleConfig(value: unknown, fallbackName: string): I18nLocale
     commands: commandGroups(locale.commands),
     descriptions: stringRecord(locale.descriptions),
     slash_commands: stringRecord(locale.slash_commands),
+    tips,
   }
 }
 

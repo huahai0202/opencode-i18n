@@ -7,6 +7,7 @@ import {
   writeState,
   type I18nLocaleConfig,
 } from "../../i18n/lib.ts"
+import { createHomeBottom } from "./tips-view.tsx"
 
 type TranslationSnapshot = {
   enabled: boolean
@@ -171,38 +172,53 @@ function titleDescription(command: KeymapCommand, snapshot: TranslationSnapshot)
   return snapshot.descriptions.get(english)
 }
 
-function translateCommand(command: KeymapCommand, snapshot: TranslationSnapshot) {
+function translateCommand(command: KeymapCommand, snapshot: TranslationSnapshot, api: TuiPluginApi) {
   if (!snapshot.enabled) return command
 
   const english = typeof command.title === "string" ? command.title : command.name
   const entry = snapshot.translations.get(english)
   const originalDescription = typeof command.desc === "string" && command.desc.trim() ? command.desc : undefined
   const description = originalDescription ? titleDescription(command, snapshot) ?? slashDescription(command, snapshot) : undefined
-  if (!entry && !description) return command
 
-  return {
-    ...command,
-    ...(entry
-      ? {
-          title: entry,
-          i18nOriginalTitle: english,
-        }
-      : {}),
-    ...(description
-      ? {
-          desc: description,
-          i18nOriginalDesc: originalDescription,
-        }
-      : {}),
+  let output = { ...command }
+
+  if (entry) {
+    output = {
+      ...output,
+      title: entry,
+      i18nOriginalTitle: english,
+    }
   }
+
+  if (description) {
+    output = {
+      ...output,
+      desc: description,
+      i18nOriginalDesc: originalDescription,
+    }
+  }
+
+  if (command.name === "tips.toggle") {
+    output = {
+      ...output,
+      run: () => {
+        api.kv.set("tips_hidden", true)
+        api.ui.dialog.clear()
+      },
+    }
+  }
+
+  if (entry || description || command.name === "tips.toggle") return output
+
+  return command
 }
 
-function translateEntries(entries: readonly CommandEntry[], snapshot: TranslationSnapshot) {
+function translateEntries(entries: readonly CommandEntry[], snapshot: TranslationSnapshot, api: TuiPluginApi) {
   if (!snapshot.enabled) return entries
 
   return entries.map((entry) => ({
     ...entry,
-    command: translateCommand(entry.command, snapshot),
+    command: translateCommand(entry.command, snapshot, api),
   }))
 }
 
@@ -217,14 +233,14 @@ function patchKeymap(api: TuiPluginApi) {
     const snapshot = readSnapshot()
     if (!snapshot.enabled) return getCommands(query)
 
-    return getCommands(query).map((command) => translateCommand(command, snapshot))
+    return getCommands(query).map((command) => translateCommand(command, snapshot, api))
   }
 
   keymap.getCommandEntries = (query?: CommandQuery) => {
     const snapshot = readSnapshot()
     if (!snapshot.enabled) return getCommandEntries(query)
 
-    return translateEntries(getCommandEntries(query), snapshot)
+    return translateEntries(getCommandEntries(query), snapshot, api)
   }
 
   keymap[KEYMAP_PATCHED] = true
@@ -252,6 +268,31 @@ function registerI18nCommand(api: TuiPluginApi) {
   })
 }
 
+function localeHasTips(localeConfig: I18nLocaleConfig | undefined) {
+  return (localeConfig?.tips ?? []).length > 0
+}
+
+function activeLocaleHasTips() {
+  const config = readConfigSync()
+  const state = readStateSync()
+  if (!state.enabled) return false
+  const locale = resolveLocale(config, state)
+  return locale ? localeHasTips(config?.locales?.[locale]) : false
+}
+
+function registerTipsSlot(api: TuiPluginApi) {
+  api.slots.register({
+    order: 90,
+    slots: {
+      home_bottom: createHomeBottom(api),
+    },
+  })
+}
+
+function syncBuiltinTips(api: TuiPluginApi) {
+  api.kv.set("tips_hidden", activeLocaleHasTips())
+}
+
 function openLanguagePicker(api: TuiPluginApi) {
   const config = readConfigSync()
   const state = readStateSync()
@@ -272,7 +313,7 @@ function openLanguagePicker(api: TuiPluginApi) {
       options,
       onSelect(opt: { value: string }) {
         api.ui.dialog.clear()
-        void writeState({ locale: opt.value, enabled: opt.value !== "en" })
+        void writeState({ locale: opt.value, enabled: opt.value !== "en" }).then(() => void syncBuiltinTips(api))
         api.ui.toast({ message: `已切换到 ${info.labels.get(opt.value) ?? opt.value}` })
       },
     }),
@@ -282,6 +323,8 @@ function openLanguagePicker(api: TuiPluginApi) {
 const tui: TuiPlugin = async (api) => {
   patchKeymap(api)
   registerI18nCommand(api)
+  registerTipsSlot(api)
+  syncBuiltinTips(api)
 }
 
 const plugin = {
