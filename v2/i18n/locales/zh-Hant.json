@@ -302,6 +302,13 @@
         "Open help dialog": "開啟說明對話方塊"
       }
     },
+    "location.reload": {
+      "titles": {
+        "Reload configuration": "重新載入設定",
+        "Reload locations": "重新載入位置"
+      },
+      "description": "重新載入設定"
+    },
     "mcp.list": {
       "titles": {
         "MCP servers": "MCP 伺服器",
@@ -550,6 +557,12 @@
       "titles": {
         "Restart service": "重新啟動服務"
       }
+    },
+    "session.aside": {
+      "titles": {
+        "Ask a side question": "附帶提問"
+      },
+      "description": "基於目前會話上下文單次回答，不寫入對話記錄"
     },
     "session.background": {
       "titles": {
@@ -1083,6 +1096,7 @@
     "Autocomplete": "自動補全",
     "Composer": "輸入區",
     "Dialog": "對話方塊",
+    "Execute": "執行",
     "Integration": "整合",
     "Prompt": "提示詞",
     "Session": "會話",
@@ -1099,46 +1113,53 @@
     "Debug": "除錯"
   },
   "slash_commands": {
+    "/agents": "切換 AI 代理",
+    "/btw": "附帶提問（基於會話上下文單次回答，不寫入歷史）",
+    "/cd": "變更工作目錄",
+    "/clear": "新增會話",
+    "/compact": "壓縮會話上下文",
     "/connect": "連結模型提供者",
-    "/compact": "壓縮會話上下文（別名: /summarize）",
+    "/continue": "切換會話",
+    "/copy": "複製會話記錄",
+    "/debug": "檢視偵錯資訊",
     "/diff": "開啟差異視圖",
     "/editor": "開啟外部編輯器",
+    "/effort": "切換模型變體（思考強度）",
     "/exit": "結束應用程式（別名: /quit, /q）",
     "/export": "匯出會話記錄",
-    "/help": "顯示說明",
-    "/models": "列出可用模型（別名: /mo）",
-    "/new": "新增會話（別名: /clear）",
-    "/redo": "重做",
-    "/sessions": "切換會話（別名: /resume, /continue）",
-    "/share": "分享會話",
-    "/themes": "切換主題",
-    "/thinking": "切換思考過程可見性（別名: /toggle-thinking）",
-    "/undo": "復原上一則訊息",
-    "/unshare": "取消分享",
-    "/rename": "重新命名會話",
-    "/timeline": "跳至訊息",
     "/fork": "分叉會話",
-    "/copy": "複製會話記錄",
-    "/agents": "切換 AI 代理",
+    "/help": "顯示說明",
     "/mcps": "切換 MCP",
-    "/skills": "選擇技能",
-    "/variants": "切換模型變體",
-    "/status": "檢視狀態",
-    "/debug": "檢視偵錯資訊",
-    "/clear": "新增會話",
-    "/continue": "切換會話",
+    "/models": "列出可用模型",
+    "/new": "新增會話（別名: /clear）",
     "/open": "開啟會話或專案",
-    "/projects": "開啟會話或專案",
+    "/pair": "配對裝置",
+    "/plugins": "插件",
     "/project": "開啟會話或專案",
+    "/projects": "開啟會話或專案",
     "/q": "結束應用程式",
     "/quit": "結束應用程式",
+    "/redo": "重做",
+    "/reload": "重新載入設定",
+    "/rename": "重新命名會話",
     "/restart": "重新啟動服務",
     "/resume": "切換會話",
+    "/sessions": "切換會話（別名: /resume, /continue）",
     "/settings": "開啟設定",
+    "/share": "分享會話",
+    "/skills": "選擇技能",
     "/stats": "檢視使用統計",
+    "/status": "檢視狀態",
     "/terminal": "新增終端機",
+    "/themes": "切換主題",
+    "/thinking": "切換模型變體（思考強度）",
+    "/timeline": "跳至訊息",
     "/toggle-thinking": "切換思考過程可見性",
+    "/undo": "復原上一則訊息",
+    "/unshare": "取消分享",
+    "/update": "更新 OpenCode",
     "/upgrade": "更新 OpenCode",
+    "/variants": "切換模型變體",
     "/web": "配對裝置",
     "/worktrees": "管理工作區"
   }

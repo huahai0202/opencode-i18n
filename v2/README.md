@@ -79,7 +79,7 @@ opencode2 plugin add opencode-i18n-v2
 
 ### 语言包维护工具
 
-`tools/extract-commands.ts`：直接读 OpenCode 源码（`anomalyco/opencode`，按本机安装的 release tag 取源，如 `v2.0.2`）提取全量命令清单，
+`tools/extract-commands.ts`：直接读 OpenCode 源码（`anomalyco/opencode`，按本机安装的 release tag 取源，如 `v2.0.10`）提取全量命令清单，
 合并运行时 dump 的动态标题变体，与语言包 diff 出缺失 id / 缺失变体 / 多余条目：
 
 ```bash

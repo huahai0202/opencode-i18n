@@ -302,6 +302,13 @@
         "Open help dialog": "打开帮助对话框"
       }
     },
+    "location.reload": {
+      "titles": {
+        "Reload configuration": "重新加载配置",
+        "Reload locations": "重新加载位置"
+      },
+      "description": "重新加载配置"
+    },
     "mcp.list": {
       "titles": {
         "MCP servers": "MCP 服务器",
@@ -550,6 +557,12 @@
       "titles": {
         "Restart service": "重启服务"
       }
+    },
+    "session.aside": {
+      "titles": {
+        "Ask a side question": "附带提问"
+      },
+      "description": "基于当前会话上下文单次回答，不计入对话记录"
     },
     "session.background": {
       "titles": {
@@ -1083,6 +1096,7 @@
     "Autocomplete": "自动补全",
     "Composer": "输入区",
     "Dialog": "对话框",
+    "Execute": "执行",
     "Integration": "集成",
     "Prompt": "提示词",
     "Session": "会话",
@@ -1099,46 +1113,53 @@
     "Debug": "调试"
   },
   "slash_commands": {
+    "/agents": "切换智能体",
+    "/btw": "附带提问（基于会话上下文单次回答，不写入历史）",
+    "/cd": "更改工作目录",
+    "/clear": "新建会话",
+    "/compact": "压缩会话上下文",
     "/connect": "连接模型服务商",
-    "/compact": "压缩会话上下文（别名: /summarize）",
+    "/continue": "切换会话",
+    "/copy": "复制会话全文",
+    "/debug": "查看调试信息",
     "/diff": "打开差异视图",
     "/editor": "打开外部编辑器",
+    "/effort": "切换模型变体（思考强度）",
     "/exit": "退出应用（别名: /quit, /q）",
     "/export": "导出会话全文",
-    "/help": "显示帮助",
-    "/models": "列出可用模型（别名: /mo）",
-    "/new": "新建会话（别名: /clear）",
-    "/redo": "重做",
-    "/sessions": "切换会话（别名: /resume, /continue）",
-    "/share": "分享会话",
-    "/themes": "切换主题",
-    "/thinking": "切换思考过程可见性（别名: /toggle-thinking）",
-    "/undo": "撤销上一条消息",
-    "/unshare": "取消分享",
-    "/rename": "重命名会话",
-    "/timeline": "跳转到消息",
     "/fork": "分叉会话",
-    "/copy": "复制会话全文",
-    "/agents": "切换智能体",
+    "/help": "显示帮助",
     "/mcps": "切换 MCP",
-    "/skills": "选择技能",
-    "/variants": "切换模型变体",
-    "/status": "查看状态",
-    "/debug": "查看调试信息",
-    "/clear": "新建会话",
-    "/continue": "切换会话",
+    "/models": "列出可用模型",
+    "/new": "新建会话（别名: /clear）",
     "/open": "打开会话或项目",
-    "/projects": "打开会话或项目",
+    "/pair": "配对设备",
+    "/plugins": "插件",
     "/project": "打开会话或项目",
+    "/projects": "打开会话或项目",
     "/q": "退出应用",
     "/quit": "退出应用",
+    "/redo": "重做",
+    "/reload": "重新加载配置",
+    "/rename": "重命名会话",
     "/restart": "重启服务",
     "/resume": "切换会话",
+    "/sessions": "切换会话（别名: /resume, /continue）",
     "/settings": "打开设置",
+    "/share": "分享会话",
+    "/skills": "选择技能",
     "/stats": "查看使用统计",
+    "/status": "查看状态",
     "/terminal": "新建终端",
+    "/themes": "切换主题",
+    "/thinking": "切换模型变体（思考强度）",
+    "/timeline": "跳转到消息",
     "/toggle-thinking": "切换思考过程可见性",
+    "/undo": "撤销上一条消息",
+    "/unshare": "取消分享",
+    "/update": "更新 OpenCode",
     "/upgrade": "更新 OpenCode",
+    "/variants": "切换模型变体",
     "/web": "配对设备",
     "/worktrees": "管理工作区"
   }

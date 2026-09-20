@@ -2,7 +2,7 @@
  * Static command inventory extractor for locale-pack maintenance.
  *
  * Reads the OpenCode source (anomalyco/opencode, pinned to the installed
- * release tag, e.g. v2.0.2) plus the runtime commands-dump.json, merges them
+ * release tag, e.g. v2.0.10) plus the runtime commands-dump.json, merges them
  * into one inventory, and diffs it against each locale pack: missing ids /
  * missing title variants / missing groups / stale ids.
  *
@@ -60,13 +60,20 @@ const INTERACTIVE = /^(input|dialog|autocomplete|permission|question)\./
 
 // ── Static source extraction ────────────────────────────────────────────────
 
-type Entry = { titles: Set<string>; description?: string; groups: Set<string>; palette: boolean; sources: Set<string> }
+type Entry = {
+  titles: Set<string>
+  description?: string
+  groups: Set<string>
+  palette: boolean
+  sources: Set<string>
+  slashes: Set<string>
+}
 const inventory = new Map<string, Entry>()
 
 function entry(id: string) {
   if (INTERACTIVE.test(id) && id !== "permission.mode") return undefined
   let e = inventory.get(id)
-  if (!e) inventory.set(id, (e = { titles: new Set(), groups: new Set(), palette: false, sources: new Set() }))
+  if (!e) inventory.set(id, (e = { titles: new Set(), groups: new Set(), palette: false, sources: new Set(), slashes: new Set() }))
   return e
 }
 
@@ -198,13 +205,20 @@ for await (const file of walk(TUI_SRC)) {
     const grp = obj.match(/\bgroup:\s*"((?:[^"\\]|\\.)*)"/)?.[1] ?? obj.match(/\bcategory:\s*"((?:[^"\\]|\\.)*)"/)?.[1]
     if (grp) e.groups.add(grp)
     if (/\bpalette:\s*true/.test(obj)) e.palette = true
+    const slashMatch = obj.match(/\bslash:\s*\{\s*name:\s*"([^"\\]+)"(?:[^{}]*aliases:\s*\[([^\]]+)\])?/s)
+    if (slashMatch) {
+      e.slashes.add(slashMatch[1])
+      if (slashMatch[2]) {
+        for (const a of literals(slashMatch[2])) e.slashes.add(a)
+      }
+    }
   }
 }
 
 /** 3) 合并运行时 dump（只补标题变体和源码里没有的第三方命令） */
 let dumpEntries = 0
 if (!NO_DUMP && existsSync(DUMP_PATH)) {
-  const dump: { id: string; titles?: string[]; description?: string; group?: string; palette?: boolean }[] =
+  const dump: { id: string; titles?: string[]; description?: string; group?: string; palette?: boolean; slash?: string[] }[] =
     JSON.parse(readFileSync(DUMP_PATH, "utf8"))
   for (const d of dump) {
     const e = entry(d.id)
@@ -213,6 +227,7 @@ if (!NO_DUMP && existsSync(DUMP_PATH)) {
     if (d.description && !e.description) e.description = d.description
     if (d.group) e.groups.add(d.group)
     if (d.palette) e.palette = true
+    for (const s of d.slash ?? []) e.slashes.add(s)
     dumpEntries++
   }
 }
@@ -244,6 +259,7 @@ const report = (await loadLocales()).map(({ code, data }) => {
   const missingIds: string[] = []
   const missingVariants: [string, string][] = []
   const missingGroups: string[] = []
+  const missingSlash: string[] = []
   for (const [id, e] of [...inventory.entries()].sort()) {
     const cmd = data.commands[id]
     const titles = [...e.titles].filter((t) => t && !t.startsWith("_"))
@@ -253,10 +269,16 @@ const report = (await loadLocales()).map(({ code, data }) => {
     } else {
       for (const t of titles) if (!cmd.titles[t]?.trim()) missingVariants.push([id, t])
     }
-    if (e.sources.size > 0) for (const g of e.groups) if (g && !data.groups[g]?.trim()) missingGroups.push(g)
+    if (e.sources.size > 0) {
+      for (const g of e.groups) if (g && !data.groups[g]?.trim()) missingGroups.push(g)
+      for (const s of e.slashes) {
+        const slashName = s.startsWith("/") ? s : `/${s}`
+        if (!data.slash_commands[slashName]?.trim()) missingSlash.push(slashName)
+      }
+    }
   }
   const stale = Object.keys(data.commands).filter((id) => !inventory.has(id))
-  return { code, missingIds, missingVariants, missingGroups: [...new Set(missingGroups)], stale }
+  return { code, missingIds, missingVariants, missingGroups: [...new Set(missingGroups)], missingSlash: [...new Set(missingSlash)], stale }
 })
 
 // ── Report ──────────────────────────────────────────────────────────────────
@@ -265,8 +287,8 @@ console.log(`源码: ${SRC}  dump: ${NO_DUMP ? "(未用)" : DUMP_PATH}`)
 console.log(`静态清单: ${inventory.size} 个命令 (dump 贡献 ${dumpEntries} 条)\n`)
 
 for (const r of report) {
-  const totalIssues = r.missingIds.length + r.missingVariants.length + r.missingGroups.length
-  console.log(`── ${r.code} ──  缺 id: ${r.missingIds.length}  缺变体: ${r.missingVariants.length}  缺分组: ${r.missingGroups.length}  多余: ${r.stale.length}`)
+  const totalIssues = r.missingIds.length + r.missingVariants.length + r.missingGroups.length + r.missingSlash.length
+  console.log(`── ${r.code} ──  缺 id: ${r.missingIds.length}  缺变体: ${r.missingVariants.length}  缺分组: ${r.missingGroups.length}  缺斜杠: ${r.missingSlash.length}  多余: ${r.stale.length}`)
   if (totalIssues === 0 && r.stale.length === 0) { console.log("  ✓ 完整\n"); continue }
   for (const id of r.missingIds) {
     const e = inventory.get(id)!
@@ -275,6 +297,7 @@ for (const r of report) {
   }
   for (const [id, t] of r.missingVariants) console.log(`  [缺变体] ${id}: ${JSON.stringify(t)}`)
   for (const g of r.missingGroups) console.log(`  [缺分组] ${g}`)
+  for (const s of r.missingSlash) console.log(`  [缺斜杠] ${s}`)
   for (const id of r.stale) console.log(`  [多余] ${id}`)
   console.log()
 }
