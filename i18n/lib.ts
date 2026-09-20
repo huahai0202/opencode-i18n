@@ -13,14 +13,23 @@ export type I18nState = {
   updatedAt?: string
 }
 
+export type I18nCommandEntry = {
+  /** English title variant -> localized title. Variants cover dynamic titles ("Hide sidebar"/"Show sidebar"). */
+  titles: Record<string, string>
+  /** Localized description (applies to every title variant of this command). */
+  description?: string
+}
+
 export type I18nLocaleConfig = {
   name: string
   language_picker: {
     question?: string
     option_descriptions: Record<string, string>
   }
-  commands: Record<string, Record<string, string>>
-  descriptions: Record<string, string>
+  /** Keyed by stable command id, e.g. "session.new". */
+  commands: Record<string, I18nCommandEntry>
+  /** Localized command group names, e.g. "Agent" -> "智能体". */
+  groups: Record<string, string>
   slash_commands: Record<string, string>
 }
 
@@ -99,15 +108,22 @@ function stringRecord(value: unknown): Record<string, string> {
   return result
 }
 
-function commandGroups(value: unknown): Record<string, Record<string, string>> {
+function commandEntry(value: unknown): I18nCommandEntry {
+  if (!isObject(value)) return { titles: {} }
+  const description = typeof value.description === "string" && value.description.trim() ? value.description.trim() : undefined
+  return { titles: stringRecord(value.titles), description }
+}
+
+/** Only the id-keyed format is supported: { "<id>": { titles: { "English": "..." }, description: "..." } }. */
+function commandTable(value: unknown): Record<string, I18nCommandEntry> {
   if (!isObject(value)) return {}
-
-  const result: Record<string, Record<string, string>> = {}
-  for (const [group, commands] of Object.entries(value)) {
-    result[group] = stringRecord(commands)
-  }
-
-  return result
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter((entry): entry is [string, JsonObject] =>
+        isObject(entry[1]) && ("titles" in entry[1] || "description" in entry[1]),
+      )
+      .map(([key, entry]) => [key, commandEntry(entry)]),
+  )
 }
 
 function languagePicker(value: unknown): I18nLocaleConfig["language_picker"] {
@@ -130,8 +146,8 @@ function normalizeLocaleConfig(value: unknown, fallbackName: string): I18nLocale
   return {
     name,
     language_picker: languagePicker(locale.language_picker),
-    commands: commandGroups(locale.commands),
-    descriptions: stringRecord(locale.descriptions),
+    commands: commandTable(locale.commands),
+    groups: stringRecord(locale.groups),
     slash_commands: stringRecord(locale.slash_commands),
   }
 }
@@ -162,62 +178,64 @@ function localeCodeFromFile(file: string) {
   return file.endsWith(".json") ? file.slice(0, -".json".length) : undefined
 }
 
-function mergeLocaleNames(indexLocales: readonly LocaleCode[], discoveredLocales: readonly LocaleCode[]) {
-  return Array.from(new Set([...indexLocales, ...discoveredLocales])).filter(Boolean)
+function localeCodesIn(entries: { name: string; isFile(): boolean }[]) {
+  return entries
+    .filter((entry) => entry.isFile())
+    .map((entry) => localeCodeFromFile(entry.name))
+    .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
+    .sort((a, b) => a.localeCompare(b))
 }
 
-function discoverLocalesInSync(root: string) {
-  try {
-    return readdirSync(root, { withFileTypes: true })
-      .filter((entry) => entry.isFile())
-      .map((entry) => localeCodeFromFile(entry.name))
-      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
-      .sort((a, b) => a.localeCompare(b))
-  } catch {
-    return []
-  }
+function mergeLocaleNames(groups: readonly (readonly LocaleCode[])[]) {
+  return Array.from(new Set(groups.flat())).filter(Boolean)
 }
+
+/** Read order is priority order: the user directory overrides bundled defaults. */
+const LOCALE_ROOTS = [LOCALES_ROOT, PACKAGE_LOCALES_ROOT] as const
 
 function discoverLocalesSync() {
-  return Array.from(new Set([...discoverLocalesInSync(LOCALES_ROOT), ...discoverLocalesInSync(PACKAGE_LOCALES_ROOT)])).sort(
-    (a, b) => a.localeCompare(b),
+  return mergeLocaleNames(
+    LOCALE_ROOTS.map((root) => {
+      try {
+        return localeCodesIn(readdirSync(root, { withFileTypes: true }))
+      } catch {
+        return []
+      }
+    }),
   )
 }
 
-async function discoverLocalesIn(root: string) {
-  try {
-    return (await readdir(root, { withFileTypes: true }))
-      .filter((entry) => entry.isFile())
-      .map((entry) => localeCodeFromFile(entry.name))
-      .filter((locale): locale is string => typeof locale === "string" && locale.length > 0)
-      .sort((a, b) => a.localeCompare(b))
-  } catch {
-    return []
-  }
-}
-
 async function discoverLocales() {
-  const [user, pkg] = await Promise.all([discoverLocalesIn(LOCALES_ROOT), discoverLocalesIn(PACKAGE_LOCALES_ROOT)])
-  return Array.from(new Set([...user, ...pkg])).sort((a, b) => a.localeCompare(b))
+  return mergeLocaleNames(
+    await Promise.all(
+      LOCALE_ROOTS.map(async (root) => {
+        try {
+          return localeCodesIn(await readdir(root, { withFileTypes: true }))
+        } catch {
+          return [] as string[]
+        }
+      }),
+    ),
+  )
 }
 
 function readLocaleFileSync(locale: LocaleCode) {
-  const user = readJsonFileSync<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
-  if (user !== undefined) return user
-  return readJsonFileSync<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+  return LOCALE_ROOTS.map((root) => readJsonFileSync<unknown>(path.join(root, `${locale}.json`))).find((value) => value !== undefined)
 }
 
 async function readLocaleFile(locale: LocaleCode) {
-  const user = await readJsonFile<unknown>(path.join(LOCALES_ROOT, `${locale}.json`))
-  if (user !== undefined) return user
-  return await readJsonFile<unknown>(path.join(PACKAGE_LOCALES_ROOT, `${locale}.json`))
+  for (const root of LOCALE_ROOTS) {
+    const value = await readJsonFile<unknown>(path.join(root, `${locale}.json`))
+    if (value !== undefined) return value
+  }
+  return undefined
 }
 
 function buildConfig(index: I18nIndexConfig | undefined, discoveredLocales: readonly LocaleCode[], readLocale: (locale: LocaleCode) => unknown): I18nConfig | undefined {
   if (!index) return undefined
 
   const locales: Record<LocaleCode, I18nLocaleConfig> = {}
-  for (const locale of mergeLocaleNames(index.locales, discoveredLocales)) {
+  for (const locale of mergeLocaleNames([index.locales, discoveredLocales])) {
     const value = readLocale(locale)
     if (value === undefined) continue
     locales[locale] = normalizeLocaleConfig(value, locale)
@@ -257,19 +275,11 @@ export function readConfigSync(): I18nConfig | undefined {
 
 export async function readConfig(): Promise<I18nConfig | undefined> {
   const index = normalizeIndexConfig((await readJsonFile<unknown>(CONFIG_PATH)) ?? (await readJsonFile<unknown>(PACKAGE_CONFIG_PATH)))
-  if (!index) return undefined
-
-  const localeNames = mergeLocaleNames(index.locales, await discoverLocales())
-  const entries = await Promise.all(
-    localeNames.map(async (locale) => [
-      locale,
-      normalizeLocaleConfig(await readLocaleFile(locale), locale),
-    ] as const),
+  const names = mergeLocaleNames([index?.locales ?? [], await discoverLocales()])
+  const files = new Map(
+    await Promise.all(names.map(async (locale) => [locale, await readLocaleFile(locale)] as const)),
   )
-  const locales = Object.fromEntries(entries) as Record<LocaleCode, I18nLocaleConfig>
-
-  if (Object.keys(locales).length === 0) return undefined
-  return { defaultLocale: index.defaultLocale, locales }
+  return buildConfig(index, [], (locale) => files.get(locale))
 }
 
 export function localeNames(config: I18nConfig | undefined) {

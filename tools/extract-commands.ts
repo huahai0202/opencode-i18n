@@ -26,7 +26,7 @@
  * silently; after upstream refactors, eyeball the diff once before trusting
  * the report.
  *
- * Usage (run inside v2/):
+ * Usage:
  *   bun tools/extract-commands.ts --src <opencode checkout>
  *   bun tools/extract-commands.ts --src <path> --skeleton zh-Hans   # insert empty placeholders
  *   bun tools/extract-commands.ts --src <path> --no-dump            # source only

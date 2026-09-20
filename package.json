@@ -1,25 +1,31 @@
 {
-  "name": "opencode-i18n",
-  "version": "0.1.7",
-  "description": "OpenCode TUI i18n plugin — localize the interface into 简体中文 / 繁體中文 and more, with one-command install.",
+  "name": "opencode-i18n-v2",
+  "version": "0.4.2",
+  "description": "OpenCode V2 i18n plugin — localize the OpenCode 2 interface into 简体中文 / 繁體中文 and more.",
   "license": "MIT",
   "type": "module",
   "exports": {
-    "./tui": "./plugins/i18n/index.ts",
-    "./server": "./plugins/i18n/server.ts"
+    ".": "./src/index.ts",
+    "./server": "./src/index.ts",
+    "./tui": "./src/tui.tsx"
   },
   "files": [
-    "plugins",
+    "src",
     "i18n",
-    "tools",
     "README.md",
     "LICENSE"
   ],
   "engines": {
-    "opencode": ">=1.18.0"
+    "opencode": ">=2.0.0"
+  },
+  "dependencies": {
+    "@opencode/plugin": "^2.0.0",
+    "effect": "^4.0.0-rc.112"
   },
   "peerDependencies": {
-    "@opencode-ai/plugin": ">=1.14.0"
+    "@opentui/core": ">=0.5.10",
+    "@opentui/solid": ">=0.5.10",
+    "solid-js": ">=1.9.0"
   },
   "devDependencies": {
     "@types/node": "^26.0.1",
